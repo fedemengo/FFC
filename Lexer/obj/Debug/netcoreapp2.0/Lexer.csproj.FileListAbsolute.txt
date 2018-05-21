@@ -1,0 +1,22 @@
+/Users/fedemengo/Google Drive/F/Lexer/obj/Debug/netcoreapp2.0/Lexer.csprojResolveAssemblyReference.cache
+/Users/fedemengo/Google Drive/F/Lexer/obj/Debug/netcoreapp2.0/Lexer.csproj.CoreCompileInputs.cache
+/Users/fedemengo/Google Drive/F/Lexer/obj/Debug/netcoreapp2.0/Lexer.AssemblyInfoInputs.cache
+/Users/fedemengo/Google Drive/F/Lexer/obj/Debug/netcoreapp2.0/Lexer.AssemblyInfo.cs
+/home/filo/filipposoldati7@gmail.com/F/Lexer/bin/Debug/netcoreapp2.0/Lexer.deps.json
+/home/filo/filipposoldati7@gmail.com/F/Lexer/bin/Debug/netcoreapp2.0/Lexer.runtimeconfig.json
+/home/filo/filipposoldati7@gmail.com/F/Lexer/bin/Debug/netcoreapp2.0/Lexer.runtimeconfig.dev.json
+/home/filo/filipposoldati7@gmail.com/F/Lexer/bin/Debug/netcoreapp2.0/Lexer.dll
+/home/filo/filipposoldati7@gmail.com/F/Lexer/bin/Debug/netcoreapp2.0/Lexer.pdb
+/home/filo/filipposoldati7@gmail.com/F/Lexer/obj/Debug/netcoreapp2.0/Lexer.csprojAssemblyReference.cache
+/home/filo/filipposoldati7@gmail.com/F/Lexer/obj/Debug/netcoreapp2.0/Lexer.csproj.CoreCompileInputs.cache
+/home/filo/filipposoldati7@gmail.com/F/Lexer/obj/Debug/netcoreapp2.0/Lexer.AssemblyInfoInputs.cache
+/home/filo/filipposoldati7@gmail.com/F/Lexer/obj/Debug/netcoreapp2.0/Lexer.AssemblyInfo.cs
+/home/filo/filipposoldati7@gmail.com/F/Lexer/obj/Debug/netcoreapp2.0/Lexer.dll
+/home/filo/filipposoldati7@gmail.com/F/Lexer/obj/Debug/netcoreapp2.0/Lexer.pdb
+/Users/fedemengo/Google Drive/F/Lexer/bin/Debug/netcoreapp2.0/Lexer.deps.json
+/Users/fedemengo/Google Drive/F/Lexer/bin/Debug/netcoreapp2.0/Lexer.runtimeconfig.json
+/Users/fedemengo/Google Drive/F/Lexer/bin/Debug/netcoreapp2.0/Lexer.runtimeconfig.dev.json
+/Users/fedemengo/Google Drive/F/Lexer/bin/Debug/netcoreapp2.0/Lexer.dll
+/Users/fedemengo/Google Drive/F/Lexer/bin/Debug/netcoreapp2.0/Lexer.pdb
+/Users/fedemengo/Google Drive/F/Lexer/obj/Debug/netcoreapp2.0/Lexer.dll
+/Users/fedemengo/Google Drive/F/Lexer/obj/Debug/netcoreapp2.0/Lexer.pdb
