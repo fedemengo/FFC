@@ -1,4 +1,5 @@
 Lexer/bin/*
 Lexer/obj/*
 .vscode/
+*.hs
 
