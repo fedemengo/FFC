@@ -1,3 +1,4 @@
+%error-verbose
 %token ID BOOLEAN_VALUE INTEGER_VALUE REAL_VALUE RATIONAL_VALUE COMPLEX_VALUE STRING_VALUE
 %token DOT COMMA COLON SEMICOLON
 %token STAR SLASH
@@ -65,6 +66,7 @@ expression  :  value
             |  func_call
             |  func_def
             |  map_def
+            |  LROUND expression RROUND
 			;
 
 neg_expr    : MINUS expression ;
@@ -88,19 +90,19 @@ bin_op      :   STAR
 			|   XOR
 			;
 
-value       :  BOOLEAN_VALUE
-			|  INTEGER_VALUE
-			|  REAL_VALUE
-			|  RATIONAL_VALUE
-			|  COMPLEX_VALUE
-			|  STRING_VALUE
+value       :   BOOLEAN_VALUE
+			|   INTEGER_VALUE
+			|   REAL_VALUE
+			|   RATIONAL_VALUE
+			|   COMPLEX_VALUE
+			|   STRING_VALUE
 			;
 
-declaration :  ID IS expression
-			|  ID COLON type expression
+declaration :   ID IS expression
+			|   ID COLON type expression
 			;
 
-type        :  INTEGER
+type        :   INTEGER
 	        |   COMPLEX
 			|   RATIONAL
 			|   REAL
@@ -131,8 +133,8 @@ func_def    :  FUNC LROUND param_list RROUND COLON type func_body
 			|  FUNC LROUND param_list RROUND func_body
 			;
 
-func_body   :  DO statement END
-			|  ARROW statement 
+func_body   :  DO stm_list END
+			|  ARROW expression 
 			;
 
 type_list   :  type

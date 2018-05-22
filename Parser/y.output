@@ -1,0 +1,2157 @@
+Terminals which are not used
+
+   DOT
+
+
+State 38 conflicts: 14 shift/reduce
+State 98 conflicts: 14 shift/reduce
+State 130 conflicts: 14 shift/reduce
+
+
+Grammar
+
+    0 $accept: starting $end
+
+    1 starting: stm_list EOF
+
+    2 stm_list: statement SEMICOLON
+    3         | statement SEMICOLON stm_list
+
+    4 statement: assignment
+    5          | expression
+    6          | if_statement
+    7          | loop_statement
+    8          | return_statement
+    9          | break_statement
+   10          | print_statement
+   11          | declaration
+
+   12 assignment: ID ASSIGN expression
+
+   13 func_call: expression LROUND expr_list RROUND
+
+   14 if_statement: IF expression THEN stm_list END
+   15             | IF expression THEN stm_list ELSE stm_list END
+
+   16 loop_statement: loop_header LOOP stm_list END
+
+   17 loop_header: FOR ID IN expr_list
+   18            | FOR expr_list
+   19            | WHILE expression
+
+   20 return_statement: RETURN expression
+
+   21 break_statement: BREAK
+
+   22 print_statement: PRINT LROUND expr_list RROUND
+
+   23 expression: value
+   24           | ID
+   25           | neg_expr
+   26           | expression bin_op expression
+   27           | func_call
+   28           | func_def
+   29           | map_def
+
+   30 neg_expr: MINUS expression
+
+   31 expr_list: expression
+   32          | expression COMMA expr_list
+
+   33 bin_op: STAR
+   34       | SLASH
+   35       | PLUS
+   36       | MINUS
+   37       | LESS
+   38       | LESSEQUAL
+   39       | GREATER
+   40       | GREATEREQUAL
+   41       | EQUAL
+   42       | NOTEQUAL
+   43       | AND
+   44       | OR
+   45       | XOR
+
+   46 value: BOOLEAN_VALUE
+   47      | INTEGER_VALUE
+   48      | REAL_VALUE
+   49      | RATIONAL_VALUE
+   50      | COMPLEX_VALUE
+   51      | STRING_VALUE
+
+   52 declaration: ID IS expression
+   53            | ID COLON type expression
+
+   54 type: INTEGER
+   55     | COMPLEX
+   56     | RATIONAL
+   57     | REAL
+   58     | STRING
+   59     | BOOLEAN
+   60     | array_type
+   61     | map_type
+   62     | func_type
+
+   63 array_type: LSQUARE type RSQUARE
+
+   64 map_type: LCURLY type COLON type RCURLY
+
+   65 map_def: LCURLY RCURLY
+   66        | LCURLY pair_list RCURLY
+
+   67 pair: expression COLON expression
+
+   68 pair_list: pair
+   69          | pair COMMA pair_list
+
+   70 func_type: FUNC LROUND type_list RROUND COLON type
+
+   71 func_def: FUNC LROUND param_list RROUND COLON type func_body
+   72         | FUNC LROUND param_list RROUND func_body
+
+   73 func_body: DO stm_list END
+   74          | ARROW expression
+
+   75 type_list: type
+   76          | type COMMA type_list
+
+   77 parameter: ID COLON type
+
+   78 param_list: parameter
+   79           | parameter COMMA param_list
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+ID (258) 12 17 24 52 53 77
+BOOLEAN_VALUE (259) 46
+INTEGER_VALUE (260) 47
+REAL_VALUE (261) 48
+RATIONAL_VALUE (262) 49
+COMPLEX_VALUE (263) 50
+STRING_VALUE (264) 51
+DOT (265)
+COMMA (266) 32 69 76 79
+COLON (267) 53 64 67 70 71 77
+SEMICOLON (268) 2 3
+STAR (269) 33
+SLASH (270) 34
+PLUS (271) 35
+MINUS (272) 30 36
+INTEGER (273) 54
+COMPLEX (274) 55
+RATIONAL (275) 56
+REAL (276) 57
+STRING (277) 58
+BOOLEAN (278) 59
+ASSIGN (279) 12
+ARROW (280) 74
+LESS (281) 37
+LESSEQUAL (282) 38
+GREATER (283) 39
+GREATEREQUAL (284) 40
+EQUAL (285) 41
+NOTEQUAL (286) 42
+AND (287) 43
+OR (288) 44
+XOR (289) 45
+FUNC (290) 70 71 72
+DO (291) 73
+RETURN (292) 20
+PRINT (293) 22
+IS (294) 52
+IF (295) 14 15
+THEN (296) 14 15
+ELSE (297) 15
+END (298) 14 15 16 73
+WHILE (299) 19
+FOR (300) 17 18
+IN (301) 17
+LOOP (302) 16
+BREAK (303) 21
+LROUND (304) 13 22 70 71 72
+RROUND (305) 13 22 70 71 72
+LSQUARE (306) 63
+RSQUARE (307) 63
+LCURLY (308) 64 65 66
+RCURLY (309) 64 65 66
+EOF (310) 1
+
+
+Nonterminals, with rules where they appear
+
+$accept (56)
+    on left: 0
+starting (57)
+    on left: 1, on right: 0
+stm_list (58)
+    on left: 2 3, on right: 1 3 14 15 16 73
+statement (59)
+    on left: 4 5 6 7 8 9 10 11, on right: 2 3
+assignment (60)
+    on left: 12, on right: 4
+func_call (61)
+    on left: 13, on right: 27
+if_statement (62)
+    on left: 14 15, on right: 6
+loop_statement (63)
+    on left: 16, on right: 7
+loop_header (64)
+    on left: 17 18 19, on right: 16
+return_statement (65)
+    on left: 20, on right: 8
+break_statement (66)
+    on left: 21, on right: 9
+print_statement (67)
+    on left: 22, on right: 10
+expression (68)
+    on left: 23 24 25 26 27 28 29, on right: 5 12 13 14 15 19 20 26
+    30 31 32 52 53 67 74
+neg_expr (69)
+    on left: 30, on right: 25
+expr_list (70)
+    on left: 31 32, on right: 13 17 18 22 32
+bin_op (71)
+    on left: 33 34 35 36 37 38 39 40 41 42 43 44 45,
+    on right: 26
+value (72)
+    on left: 46 47 48 49 50 51, on right: 23
+declaration (73)
+    on left: 52 53, on right: 11
+type (74)
+    on left: 54 55 56 57 58 59 60 61 62, on right: 53 63 64 70 71 75
+    76 77
+array_type (75)
+    on left: 63, on right: 60
+map_type (76)
+    on left: 64, on right: 61
+map_def (77)
+    on left: 65 66, on right: 29
+pair (78)
+    on left: 67, on right: 68 69
+pair_list (79)
+    on left: 68 69, on right: 66 69
+func_type (80)
+    on left: 70, on right: 62
+func_def (81)
+    on left: 71 72, on right: 28
+func_body (82)
+    on left: 73 74, on right: 71 72
+type_list (83)
+    on left: 75 76, on right: 70 76
+parameter (84)
+    on left: 77, on right: 78 79
+param_list (85)
+    on left: 78 79, on right: 71 72 79
+
+
+state 0
+
+    0 $accept: . starting $end
+
+    ID              shift, and go to state 1
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    RETURN          shift, and go to state 10
+    PRINT           shift, and go to state 11
+    IF              shift, and go to state 12
+    WHILE           shift, and go to state 13
+    FOR             shift, and go to state 14
+    BREAK           shift, and go to state 15
+    LCURLY          shift, and go to state 16
+
+    starting          go to state 17
+    stm_list          go to state 18
+    statement         go to state 19
+    assignment        go to state 20
+    func_call         go to state 21
+    if_statement      go to state 22
+    loop_statement    go to state 23
+    loop_header       go to state 24
+    return_statement  go to state 25
+    break_statement   go to state 26
+    print_statement   go to state 27
+    expression        go to state 28
+    neg_expr          go to state 29
+    value             go to state 30
+    declaration       go to state 31
+    map_def           go to state 32
+    func_def          go to state 33
+
+
+state 1
+
+   12 assignment: ID . ASSIGN expression
+   24 expression: ID .
+   52 declaration: ID . IS expression
+   53            | ID . COLON type expression
+
+    COLON   shift, and go to state 34
+    ASSIGN  shift, and go to state 35
+    IS      shift, and go to state 36
+
+    $default  reduce using rule 24 (expression)
+
+
+state 2
+
+   46 value: BOOLEAN_VALUE .
+
+    $default  reduce using rule 46 (value)
+
+
+state 3
+
+   47 value: INTEGER_VALUE .
+
+    $default  reduce using rule 47 (value)
+
+
+state 4
+
+   48 value: REAL_VALUE .
+
+    $default  reduce using rule 48 (value)
+
+
+state 5
+
+   49 value: RATIONAL_VALUE .
+
+    $default  reduce using rule 49 (value)
+
+
+state 6
+
+   50 value: COMPLEX_VALUE .
+
+    $default  reduce using rule 50 (value)
+
+
+state 7
+
+   51 value: STRING_VALUE .
+
+    $default  reduce using rule 51 (value)
+
+
+state 8
+
+   30 neg_expr: MINUS . expression
+
+    ID              shift, and go to state 37
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    LCURLY          shift, and go to state 16
+
+    func_call   go to state 21
+    expression  go to state 38
+    neg_expr    go to state 29
+    value       go to state 30
+    map_def     go to state 32
+    func_def    go to state 33
+
+
+state 9
+
+   71 func_def: FUNC . LROUND param_list RROUND COLON type func_body
+   72         | FUNC . LROUND param_list RROUND func_body
+
+    LROUND  shift, and go to state 39
+
+
+state 10
+
+   20 return_statement: RETURN . expression
+
+    ID              shift, and go to state 37
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    LCURLY          shift, and go to state 16
+
+    func_call   go to state 21
+    expression  go to state 40
+    neg_expr    go to state 29
+    value       go to state 30
+    map_def     go to state 32
+    func_def    go to state 33
+
+
+state 11
+
+   22 print_statement: PRINT . LROUND expr_list RROUND
+
+    LROUND  shift, and go to state 41
+
+
+state 12
+
+   14 if_statement: IF . expression THEN stm_list END
+   15             | IF . expression THEN stm_list ELSE stm_list END
+
+    ID              shift, and go to state 37
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    LCURLY          shift, and go to state 16
+
+    func_call   go to state 21
+    expression  go to state 42
+    neg_expr    go to state 29
+    value       go to state 30
+    map_def     go to state 32
+    func_def    go to state 33
+
+
+state 13
+
+   19 loop_header: WHILE . expression
+
+    ID              shift, and go to state 37
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    LCURLY          shift, and go to state 16
+
+    func_call   go to state 21
+    expression  go to state 43
+    neg_expr    go to state 29
+    value       go to state 30
+    map_def     go to state 32
+    func_def    go to state 33
+
+
+state 14
+
+   17 loop_header: FOR . ID IN expr_list
+   18            | FOR . expr_list
+
+    ID              shift, and go to state 44
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    LCURLY          shift, and go to state 16
+
+    func_call   go to state 21
+    expression  go to state 45
+    neg_expr    go to state 29
+    expr_list   go to state 46
+    value       go to state 30
+    map_def     go to state 32
+    func_def    go to state 33
+
+
+state 15
+
+   21 break_statement: BREAK .
+
+    $default  reduce using rule 21 (break_statement)
+
+
+state 16
+
+   65 map_def: LCURLY . RCURLY
+   66        | LCURLY . pair_list RCURLY
+
+    ID              shift, and go to state 37
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    LCURLY          shift, and go to state 16
+    RCURLY          shift, and go to state 47
+
+    func_call   go to state 21
+    expression  go to state 48
+    neg_expr    go to state 29
+    value       go to state 30
+    map_def     go to state 32
+    pair        go to state 49
+    pair_list   go to state 50
+    func_def    go to state 33
+
+
+state 17
+
+    0 $accept: starting . $end
+
+    $end  shift, and go to state 51
+
+
+state 18
+
+    1 starting: stm_list . EOF
+
+    EOF  shift, and go to state 52
+
+
+state 19
+
+    2 stm_list: statement . SEMICOLON
+    3         | statement . SEMICOLON stm_list
+
+    SEMICOLON  shift, and go to state 53
+
+
+state 20
+
+    4 statement: assignment .
+
+    $default  reduce using rule 4 (statement)
+
+
+state 21
+
+   27 expression: func_call .
+
+    $default  reduce using rule 27 (expression)
+
+
+state 22
+
+    6 statement: if_statement .
+
+    $default  reduce using rule 6 (statement)
+
+
+state 23
+
+    7 statement: loop_statement .
+
+    $default  reduce using rule 7 (statement)
+
+
+state 24
+
+   16 loop_statement: loop_header . LOOP stm_list END
+
+    LOOP  shift, and go to state 54
+
+
+state 25
+
+    8 statement: return_statement .
+
+    $default  reduce using rule 8 (statement)
+
+
+state 26
+
+    9 statement: break_statement .
+
+    $default  reduce using rule 9 (statement)
+
+
+state 27
+
+   10 statement: print_statement .
+
+    $default  reduce using rule 10 (statement)
+
+
+state 28
+
+    5 statement: expression .
+   13 func_call: expression . LROUND expr_list RROUND
+   26 expression: expression . bin_op expression
+
+    STAR          shift, and go to state 55
+    SLASH         shift, and go to state 56
+    PLUS          shift, and go to state 57
+    MINUS         shift, and go to state 58
+    LESS          shift, and go to state 59
+    LESSEQUAL     shift, and go to state 60
+    GREATER       shift, and go to state 61
+    GREATEREQUAL  shift, and go to state 62
+    EQUAL         shift, and go to state 63
+    NOTEQUAL      shift, and go to state 64
+    AND           shift, and go to state 65
+    OR            shift, and go to state 66
+    XOR           shift, and go to state 67
+    LROUND        shift, and go to state 68
+
+    $default  reduce using rule 5 (statement)
+
+    bin_op  go to state 69
+
+
+state 29
+
+   25 expression: neg_expr .
+
+    $default  reduce using rule 25 (expression)
+
+
+state 30
+
+   23 expression: value .
+
+    $default  reduce using rule 23 (expression)
+
+
+state 31
+
+   11 statement: declaration .
+
+    $default  reduce using rule 11 (statement)
+
+
+state 32
+
+   29 expression: map_def .
+
+    $default  reduce using rule 29 (expression)
+
+
+state 33
+
+   28 expression: func_def .
+
+    $default  reduce using rule 28 (expression)
+
+
+state 34
+
+   53 declaration: ID COLON . type expression
+
+    INTEGER   shift, and go to state 70
+    COMPLEX   shift, and go to state 71
+    RATIONAL  shift, and go to state 72
+    REAL      shift, and go to state 73
+    STRING    shift, and go to state 74
+    BOOLEAN   shift, and go to state 75
+    FUNC      shift, and go to state 76
+    LSQUARE   shift, and go to state 77
+    LCURLY    shift, and go to state 78
+
+    type        go to state 79
+    array_type  go to state 80
+    map_type    go to state 81
+    func_type   go to state 82
+
+
+state 35
+
+   12 assignment: ID ASSIGN . expression
+
+    ID              shift, and go to state 37
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    LCURLY          shift, and go to state 16
+
+    func_call   go to state 21
+    expression  go to state 83
+    neg_expr    go to state 29
+    value       go to state 30
+    map_def     go to state 32
+    func_def    go to state 33
+
+
+state 36
+
+   52 declaration: ID IS . expression
+
+    ID              shift, and go to state 37
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    LCURLY          shift, and go to state 16
+
+    func_call   go to state 21
+    expression  go to state 84
+    neg_expr    go to state 29
+    value       go to state 30
+    map_def     go to state 32
+    func_def    go to state 33
+
+
+state 37
+
+   24 expression: ID .
+
+    $default  reduce using rule 24 (expression)
+
+
+state 38
+
+   13 func_call: expression . LROUND expr_list RROUND
+   26 expression: expression . bin_op expression
+   30 neg_expr: MINUS expression .
+
+    STAR          shift, and go to state 55
+    SLASH         shift, and go to state 56
+    PLUS          shift, and go to state 57
+    MINUS         shift, and go to state 58
+    LESS          shift, and go to state 59
+    LESSEQUAL     shift, and go to state 60
+    GREATER       shift, and go to state 61
+    GREATEREQUAL  shift, and go to state 62
+    EQUAL         shift, and go to state 63
+    NOTEQUAL      shift, and go to state 64
+    AND           shift, and go to state 65
+    OR            shift, and go to state 66
+    XOR           shift, and go to state 67
+    LROUND        shift, and go to state 68
+
+    STAR          [reduce using rule 30 (neg_expr)]
+    SLASH         [reduce using rule 30 (neg_expr)]
+    PLUS          [reduce using rule 30 (neg_expr)]
+    MINUS         [reduce using rule 30 (neg_expr)]
+    LESS          [reduce using rule 30 (neg_expr)]
+    LESSEQUAL     [reduce using rule 30 (neg_expr)]
+    GREATER       [reduce using rule 30 (neg_expr)]
+    GREATEREQUAL  [reduce using rule 30 (neg_expr)]
+    EQUAL         [reduce using rule 30 (neg_expr)]
+    NOTEQUAL      [reduce using rule 30 (neg_expr)]
+    AND           [reduce using rule 30 (neg_expr)]
+    OR            [reduce using rule 30 (neg_expr)]
+    XOR           [reduce using rule 30 (neg_expr)]
+    LROUND        [reduce using rule 30 (neg_expr)]
+    $default      reduce using rule 30 (neg_expr)
+
+    bin_op  go to state 69
+
+
+state 39
+
+   71 func_def: FUNC LROUND . param_list RROUND COLON type func_body
+   72         | FUNC LROUND . param_list RROUND func_body
+
+    ID  shift, and go to state 85
+
+    parameter   go to state 86
+    param_list  go to state 87
+
+
+state 40
+
+   13 func_call: expression . LROUND expr_list RROUND
+   20 return_statement: RETURN expression .
+   26 expression: expression . bin_op expression
+
+    STAR          shift, and go to state 55
+    SLASH         shift, and go to state 56
+    PLUS          shift, and go to state 57
+    MINUS         shift, and go to state 58
+    LESS          shift, and go to state 59
+    LESSEQUAL     shift, and go to state 60
+    GREATER       shift, and go to state 61
+    GREATEREQUAL  shift, and go to state 62
+    EQUAL         shift, and go to state 63
+    NOTEQUAL      shift, and go to state 64
+    AND           shift, and go to state 65
+    OR            shift, and go to state 66
+    XOR           shift, and go to state 67
+    LROUND        shift, and go to state 68
+
+    $default  reduce using rule 20 (return_statement)
+
+    bin_op  go to state 69
+
+
+state 41
+
+   22 print_statement: PRINT LROUND . expr_list RROUND
+
+    ID              shift, and go to state 37
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    LCURLY          shift, and go to state 16
+
+    func_call   go to state 21
+    expression  go to state 45
+    neg_expr    go to state 29
+    expr_list   go to state 88
+    value       go to state 30
+    map_def     go to state 32
+    func_def    go to state 33
+
+
+state 42
+
+   13 func_call: expression . LROUND expr_list RROUND
+   14 if_statement: IF expression . THEN stm_list END
+   15             | IF expression . THEN stm_list ELSE stm_list END
+   26 expression: expression . bin_op expression
+
+    STAR          shift, and go to state 55
+    SLASH         shift, and go to state 56
+    PLUS          shift, and go to state 57
+    MINUS         shift, and go to state 58
+    LESS          shift, and go to state 59
+    LESSEQUAL     shift, and go to state 60
+    GREATER       shift, and go to state 61
+    GREATEREQUAL  shift, and go to state 62
+    EQUAL         shift, and go to state 63
+    NOTEQUAL      shift, and go to state 64
+    AND           shift, and go to state 65
+    OR            shift, and go to state 66
+    XOR           shift, and go to state 67
+    THEN          shift, and go to state 89
+    LROUND        shift, and go to state 68
+
+    bin_op  go to state 69
+
+
+state 43
+
+   13 func_call: expression . LROUND expr_list RROUND
+   19 loop_header: WHILE expression .
+   26 expression: expression . bin_op expression
+
+    STAR          shift, and go to state 55
+    SLASH         shift, and go to state 56
+    PLUS          shift, and go to state 57
+    MINUS         shift, and go to state 58
+    LESS          shift, and go to state 59
+    LESSEQUAL     shift, and go to state 60
+    GREATER       shift, and go to state 61
+    GREATEREQUAL  shift, and go to state 62
+    EQUAL         shift, and go to state 63
+    NOTEQUAL      shift, and go to state 64
+    AND           shift, and go to state 65
+    OR            shift, and go to state 66
+    XOR           shift, and go to state 67
+    LROUND        shift, and go to state 68
+
+    $default  reduce using rule 19 (loop_header)
+
+    bin_op  go to state 69
+
+
+state 44
+
+   17 loop_header: FOR ID . IN expr_list
+   24 expression: ID .
+
+    IN  shift, and go to state 90
+
+    $default  reduce using rule 24 (expression)
+
+
+state 45
+
+   13 func_call: expression . LROUND expr_list RROUND
+   26 expression: expression . bin_op expression
+   31 expr_list: expression .
+   32          | expression . COMMA expr_list
+
+    COMMA         shift, and go to state 91
+    STAR          shift, and go to state 55
+    SLASH         shift, and go to state 56
+    PLUS          shift, and go to state 57
+    MINUS         shift, and go to state 58
+    LESS          shift, and go to state 59
+    LESSEQUAL     shift, and go to state 60
+    GREATER       shift, and go to state 61
+    GREATEREQUAL  shift, and go to state 62
+    EQUAL         shift, and go to state 63
+    NOTEQUAL      shift, and go to state 64
+    AND           shift, and go to state 65
+    OR            shift, and go to state 66
+    XOR           shift, and go to state 67
+    LROUND        shift, and go to state 68
+
+    $default  reduce using rule 31 (expr_list)
+
+    bin_op  go to state 69
+
+
+state 46
+
+   18 loop_header: FOR expr_list .
+
+    $default  reduce using rule 18 (loop_header)
+
+
+state 47
+
+   65 map_def: LCURLY RCURLY .
+
+    $default  reduce using rule 65 (map_def)
+
+
+state 48
+
+   13 func_call: expression . LROUND expr_list RROUND
+   26 expression: expression . bin_op expression
+   67 pair: expression . COLON expression
+
+    COLON         shift, and go to state 92
+    STAR          shift, and go to state 55
+    SLASH         shift, and go to state 56
+    PLUS          shift, and go to state 57
+    MINUS         shift, and go to state 58
+    LESS          shift, and go to state 59
+    LESSEQUAL     shift, and go to state 60
+    GREATER       shift, and go to state 61
+    GREATEREQUAL  shift, and go to state 62
+    EQUAL         shift, and go to state 63
+    NOTEQUAL      shift, and go to state 64
+    AND           shift, and go to state 65
+    OR            shift, and go to state 66
+    XOR           shift, and go to state 67
+    LROUND        shift, and go to state 68
+
+    bin_op  go to state 69
+
+
+state 49
+
+   68 pair_list: pair .
+   69          | pair . COMMA pair_list
+
+    COMMA  shift, and go to state 93
+
+    $default  reduce using rule 68 (pair_list)
+
+
+state 50
+
+   66 map_def: LCURLY pair_list . RCURLY
+
+    RCURLY  shift, and go to state 94
+
+
+state 51
+
+    0 $accept: starting $end .
+
+    $default  accept
+
+
+state 52
+
+    1 starting: stm_list EOF .
+
+    $default  reduce using rule 1 (starting)
+
+
+state 53
+
+    2 stm_list: statement SEMICOLON .
+    3         | statement SEMICOLON . stm_list
+
+    ID              shift, and go to state 1
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    RETURN          shift, and go to state 10
+    PRINT           shift, and go to state 11
+    IF              shift, and go to state 12
+    WHILE           shift, and go to state 13
+    FOR             shift, and go to state 14
+    BREAK           shift, and go to state 15
+    LCURLY          shift, and go to state 16
+
+    $default  reduce using rule 2 (stm_list)
+
+    stm_list          go to state 95
+    statement         go to state 19
+    assignment        go to state 20
+    func_call         go to state 21
+    if_statement      go to state 22
+    loop_statement    go to state 23
+    loop_header       go to state 24
+    return_statement  go to state 25
+    break_statement   go to state 26
+    print_statement   go to state 27
+    expression        go to state 28
+    neg_expr          go to state 29
+    value             go to state 30
+    declaration       go to state 31
+    map_def           go to state 32
+    func_def          go to state 33
+
+
+state 54
+
+   16 loop_statement: loop_header LOOP . stm_list END
+
+    ID              shift, and go to state 1
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    RETURN          shift, and go to state 10
+    PRINT           shift, and go to state 11
+    IF              shift, and go to state 12
+    WHILE           shift, and go to state 13
+    FOR             shift, and go to state 14
+    BREAK           shift, and go to state 15
+    LCURLY          shift, and go to state 16
+
+    stm_list          go to state 96
+    statement         go to state 19
+    assignment        go to state 20
+    func_call         go to state 21
+    if_statement      go to state 22
+    loop_statement    go to state 23
+    loop_header       go to state 24
+    return_statement  go to state 25
+    break_statement   go to state 26
+    print_statement   go to state 27
+    expression        go to state 28
+    neg_expr          go to state 29
+    value             go to state 30
+    declaration       go to state 31
+    map_def           go to state 32
+    func_def          go to state 33
+
+
+state 55
+
+   33 bin_op: STAR .
+
+    $default  reduce using rule 33 (bin_op)
+
+
+state 56
+
+   34 bin_op: SLASH .
+
+    $default  reduce using rule 34 (bin_op)
+
+
+state 57
+
+   35 bin_op: PLUS .
+
+    $default  reduce using rule 35 (bin_op)
+
+
+state 58
+
+   36 bin_op: MINUS .
+
+    $default  reduce using rule 36 (bin_op)
+
+
+state 59
+
+   37 bin_op: LESS .
+
+    $default  reduce using rule 37 (bin_op)
+
+
+state 60
+
+   38 bin_op: LESSEQUAL .
+
+    $default  reduce using rule 38 (bin_op)
+
+
+state 61
+
+   39 bin_op: GREATER .
+
+    $default  reduce using rule 39 (bin_op)
+
+
+state 62
+
+   40 bin_op: GREATEREQUAL .
+
+    $default  reduce using rule 40 (bin_op)
+
+
+state 63
+
+   41 bin_op: EQUAL .
+
+    $default  reduce using rule 41 (bin_op)
+
+
+state 64
+
+   42 bin_op: NOTEQUAL .
+
+    $default  reduce using rule 42 (bin_op)
+
+
+state 65
+
+   43 bin_op: AND .
+
+    $default  reduce using rule 43 (bin_op)
+
+
+state 66
+
+   44 bin_op: OR .
+
+    $default  reduce using rule 44 (bin_op)
+
+
+state 67
+
+   45 bin_op: XOR .
+
+    $default  reduce using rule 45 (bin_op)
+
+
+state 68
+
+   13 func_call: expression LROUND . expr_list RROUND
+
+    ID              shift, and go to state 37
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    LCURLY          shift, and go to state 16
+
+    func_call   go to state 21
+    expression  go to state 45
+    neg_expr    go to state 29
+    expr_list   go to state 97
+    value       go to state 30
+    map_def     go to state 32
+    func_def    go to state 33
+
+
+state 69
+
+   26 expression: expression bin_op . expression
+
+    ID              shift, and go to state 37
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    LCURLY          shift, and go to state 16
+
+    func_call   go to state 21
+    expression  go to state 98
+    neg_expr    go to state 29
+    value       go to state 30
+    map_def     go to state 32
+    func_def    go to state 33
+
+
+state 70
+
+   54 type: INTEGER .
+
+    $default  reduce using rule 54 (type)
+
+
+state 71
+
+   55 type: COMPLEX .
+
+    $default  reduce using rule 55 (type)
+
+
+state 72
+
+   56 type: RATIONAL .
+
+    $default  reduce using rule 56 (type)
+
+
+state 73
+
+   57 type: REAL .
+
+    $default  reduce using rule 57 (type)
+
+
+state 74
+
+   58 type: STRING .
+
+    $default  reduce using rule 58 (type)
+
+
+state 75
+
+   59 type: BOOLEAN .
+
+    $default  reduce using rule 59 (type)
+
+
+state 76
+
+   70 func_type: FUNC . LROUND type_list RROUND COLON type
+
+    LROUND  shift, and go to state 99
+
+
+state 77
+
+   63 array_type: LSQUARE . type RSQUARE
+
+    INTEGER   shift, and go to state 70
+    COMPLEX   shift, and go to state 71
+    RATIONAL  shift, and go to state 72
+    REAL      shift, and go to state 73
+    STRING    shift, and go to state 74
+    BOOLEAN   shift, and go to state 75
+    FUNC      shift, and go to state 76
+    LSQUARE   shift, and go to state 77
+    LCURLY    shift, and go to state 78
+
+    type        go to state 100
+    array_type  go to state 80
+    map_type    go to state 81
+    func_type   go to state 82
+
+
+state 78
+
+   64 map_type: LCURLY . type COLON type RCURLY
+
+    INTEGER   shift, and go to state 70
+    COMPLEX   shift, and go to state 71
+    RATIONAL  shift, and go to state 72
+    REAL      shift, and go to state 73
+    STRING    shift, and go to state 74
+    BOOLEAN   shift, and go to state 75
+    FUNC      shift, and go to state 76
+    LSQUARE   shift, and go to state 77
+    LCURLY    shift, and go to state 78
+
+    type        go to state 101
+    array_type  go to state 80
+    map_type    go to state 81
+    func_type   go to state 82
+
+
+state 79
+
+   53 declaration: ID COLON type . expression
+
+    ID              shift, and go to state 37
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    LCURLY          shift, and go to state 16
+
+    func_call   go to state 21
+    expression  go to state 102
+    neg_expr    go to state 29
+    value       go to state 30
+    map_def     go to state 32
+    func_def    go to state 33
+
+
+state 80
+
+   60 type: array_type .
+
+    $default  reduce using rule 60 (type)
+
+
+state 81
+
+   61 type: map_type .
+
+    $default  reduce using rule 61 (type)
+
+
+state 82
+
+   62 type: func_type .
+
+    $default  reduce using rule 62 (type)
+
+
+state 83
+
+   12 assignment: ID ASSIGN expression .
+   13 func_call: expression . LROUND expr_list RROUND
+   26 expression: expression . bin_op expression
+
+    STAR          shift, and go to state 55
+    SLASH         shift, and go to state 56
+    PLUS          shift, and go to state 57
+    MINUS         shift, and go to state 58
+    LESS          shift, and go to state 59
+    LESSEQUAL     shift, and go to state 60
+    GREATER       shift, and go to state 61
+    GREATEREQUAL  shift, and go to state 62
+    EQUAL         shift, and go to state 63
+    NOTEQUAL      shift, and go to state 64
+    AND           shift, and go to state 65
+    OR            shift, and go to state 66
+    XOR           shift, and go to state 67
+    LROUND        shift, and go to state 68
+
+    $default  reduce using rule 12 (assignment)
+
+    bin_op  go to state 69
+
+
+state 84
+
+   13 func_call: expression . LROUND expr_list RROUND
+   26 expression: expression . bin_op expression
+   52 declaration: ID IS expression .
+
+    STAR          shift, and go to state 55
+    SLASH         shift, and go to state 56
+    PLUS          shift, and go to state 57
+    MINUS         shift, and go to state 58
+    LESS          shift, and go to state 59
+    LESSEQUAL     shift, and go to state 60
+    GREATER       shift, and go to state 61
+    GREATEREQUAL  shift, and go to state 62
+    EQUAL         shift, and go to state 63
+    NOTEQUAL      shift, and go to state 64
+    AND           shift, and go to state 65
+    OR            shift, and go to state 66
+    XOR           shift, and go to state 67
+    LROUND        shift, and go to state 68
+
+    $default  reduce using rule 52 (declaration)
+
+    bin_op  go to state 69
+
+
+state 85
+
+   77 parameter: ID . COLON type
+
+    COLON  shift, and go to state 103
+
+
+state 86
+
+   78 param_list: parameter .
+   79           | parameter . COMMA param_list
+
+    COMMA  shift, and go to state 104
+
+    $default  reduce using rule 78 (param_list)
+
+
+state 87
+
+   71 func_def: FUNC LROUND param_list . RROUND COLON type func_body
+   72         | FUNC LROUND param_list . RROUND func_body
+
+    RROUND  shift, and go to state 105
+
+
+state 88
+
+   22 print_statement: PRINT LROUND expr_list . RROUND
+
+    RROUND  shift, and go to state 106
+
+
+state 89
+
+   14 if_statement: IF expression THEN . stm_list END
+   15             | IF expression THEN . stm_list ELSE stm_list END
+
+    ID              shift, and go to state 1
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    RETURN          shift, and go to state 10
+    PRINT           shift, and go to state 11
+    IF              shift, and go to state 12
+    WHILE           shift, and go to state 13
+    FOR             shift, and go to state 14
+    BREAK           shift, and go to state 15
+    LCURLY          shift, and go to state 16
+
+    stm_list          go to state 107
+    statement         go to state 19
+    assignment        go to state 20
+    func_call         go to state 21
+    if_statement      go to state 22
+    loop_statement    go to state 23
+    loop_header       go to state 24
+    return_statement  go to state 25
+    break_statement   go to state 26
+    print_statement   go to state 27
+    expression        go to state 28
+    neg_expr          go to state 29
+    value             go to state 30
+    declaration       go to state 31
+    map_def           go to state 32
+    func_def          go to state 33
+
+
+state 90
+
+   17 loop_header: FOR ID IN . expr_list
+
+    ID              shift, and go to state 37
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    LCURLY          shift, and go to state 16
+
+    func_call   go to state 21
+    expression  go to state 45
+    neg_expr    go to state 29
+    expr_list   go to state 108
+    value       go to state 30
+    map_def     go to state 32
+    func_def    go to state 33
+
+
+state 91
+
+   32 expr_list: expression COMMA . expr_list
+
+    ID              shift, and go to state 37
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    LCURLY          shift, and go to state 16
+
+    func_call   go to state 21
+    expression  go to state 45
+    neg_expr    go to state 29
+    expr_list   go to state 109
+    value       go to state 30
+    map_def     go to state 32
+    func_def    go to state 33
+
+
+state 92
+
+   67 pair: expression COLON . expression
+
+    ID              shift, and go to state 37
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    LCURLY          shift, and go to state 16
+
+    func_call   go to state 21
+    expression  go to state 110
+    neg_expr    go to state 29
+    value       go to state 30
+    map_def     go to state 32
+    func_def    go to state 33
+
+
+state 93
+
+   69 pair_list: pair COMMA . pair_list
+
+    ID              shift, and go to state 37
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    LCURLY          shift, and go to state 16
+
+    func_call   go to state 21
+    expression  go to state 48
+    neg_expr    go to state 29
+    value       go to state 30
+    map_def     go to state 32
+    pair        go to state 49
+    pair_list   go to state 111
+    func_def    go to state 33
+
+
+state 94
+
+   66 map_def: LCURLY pair_list RCURLY .
+
+    $default  reduce using rule 66 (map_def)
+
+
+state 95
+
+    3 stm_list: statement SEMICOLON stm_list .
+
+    $default  reduce using rule 3 (stm_list)
+
+
+state 96
+
+   16 loop_statement: loop_header LOOP stm_list . END
+
+    END  shift, and go to state 112
+
+
+state 97
+
+   13 func_call: expression LROUND expr_list . RROUND
+
+    RROUND  shift, and go to state 113
+
+
+state 98
+
+   13 func_call: expression . LROUND expr_list RROUND
+   26 expression: expression . bin_op expression
+   26           | expression bin_op expression .
+
+    STAR          shift, and go to state 55
+    SLASH         shift, and go to state 56
+    PLUS          shift, and go to state 57
+    MINUS         shift, and go to state 58
+    LESS          shift, and go to state 59
+    LESSEQUAL     shift, and go to state 60
+    GREATER       shift, and go to state 61
+    GREATEREQUAL  shift, and go to state 62
+    EQUAL         shift, and go to state 63
+    NOTEQUAL      shift, and go to state 64
+    AND           shift, and go to state 65
+    OR            shift, and go to state 66
+    XOR           shift, and go to state 67
+    LROUND        shift, and go to state 68
+
+    STAR          [reduce using rule 26 (expression)]
+    SLASH         [reduce using rule 26 (expression)]
+    PLUS          [reduce using rule 26 (expression)]
+    MINUS         [reduce using rule 26 (expression)]
+    LESS          [reduce using rule 26 (expression)]
+    LESSEQUAL     [reduce using rule 26 (expression)]
+    GREATER       [reduce using rule 26 (expression)]
+    GREATEREQUAL  [reduce using rule 26 (expression)]
+    EQUAL         [reduce using rule 26 (expression)]
+    NOTEQUAL      [reduce using rule 26 (expression)]
+    AND           [reduce using rule 26 (expression)]
+    OR            [reduce using rule 26 (expression)]
+    XOR           [reduce using rule 26 (expression)]
+    LROUND        [reduce using rule 26 (expression)]
+    $default      reduce using rule 26 (expression)
+
+    bin_op  go to state 69
+
+
+state 99
+
+   70 func_type: FUNC LROUND . type_list RROUND COLON type
+
+    INTEGER   shift, and go to state 70
+    COMPLEX   shift, and go to state 71
+    RATIONAL  shift, and go to state 72
+    REAL      shift, and go to state 73
+    STRING    shift, and go to state 74
+    BOOLEAN   shift, and go to state 75
+    FUNC      shift, and go to state 76
+    LSQUARE   shift, and go to state 77
+    LCURLY    shift, and go to state 78
+
+    type        go to state 114
+    array_type  go to state 80
+    map_type    go to state 81
+    func_type   go to state 82
+    type_list   go to state 115
+
+
+state 100
+
+   63 array_type: LSQUARE type . RSQUARE
+
+    RSQUARE  shift, and go to state 116
+
+
+state 101
+
+   64 map_type: LCURLY type . COLON type RCURLY
+
+    COLON  shift, and go to state 117
+
+
+state 102
+
+   13 func_call: expression . LROUND expr_list RROUND
+   26 expression: expression . bin_op expression
+   53 declaration: ID COLON type expression .
+
+    STAR          shift, and go to state 55
+    SLASH         shift, and go to state 56
+    PLUS          shift, and go to state 57
+    MINUS         shift, and go to state 58
+    LESS          shift, and go to state 59
+    LESSEQUAL     shift, and go to state 60
+    GREATER       shift, and go to state 61
+    GREATEREQUAL  shift, and go to state 62
+    EQUAL         shift, and go to state 63
+    NOTEQUAL      shift, and go to state 64
+    AND           shift, and go to state 65
+    OR            shift, and go to state 66
+    XOR           shift, and go to state 67
+    LROUND        shift, and go to state 68
+
+    $default  reduce using rule 53 (declaration)
+
+    bin_op  go to state 69
+
+
+state 103
+
+   77 parameter: ID COLON . type
+
+    INTEGER   shift, and go to state 70
+    COMPLEX   shift, and go to state 71
+    RATIONAL  shift, and go to state 72
+    REAL      shift, and go to state 73
+    STRING    shift, and go to state 74
+    BOOLEAN   shift, and go to state 75
+    FUNC      shift, and go to state 76
+    LSQUARE   shift, and go to state 77
+    LCURLY    shift, and go to state 78
+
+    type        go to state 118
+    array_type  go to state 80
+    map_type    go to state 81
+    func_type   go to state 82
+
+
+state 104
+
+   79 param_list: parameter COMMA . param_list
+
+    ID  shift, and go to state 85
+
+    parameter   go to state 86
+    param_list  go to state 119
+
+
+state 105
+
+   71 func_def: FUNC LROUND param_list RROUND . COLON type func_body
+   72         | FUNC LROUND param_list RROUND . func_body
+
+    COLON  shift, and go to state 120
+    ARROW  shift, and go to state 121
+    DO     shift, and go to state 122
+
+    func_body  go to state 123
+
+
+state 106
+
+   22 print_statement: PRINT LROUND expr_list RROUND .
+
+    $default  reduce using rule 22 (print_statement)
+
+
+state 107
+
+   14 if_statement: IF expression THEN stm_list . END
+   15             | IF expression THEN stm_list . ELSE stm_list END
+
+    ELSE  shift, and go to state 124
+    END   shift, and go to state 125
+
+
+state 108
+
+   17 loop_header: FOR ID IN expr_list .
+
+    $default  reduce using rule 17 (loop_header)
+
+
+state 109
+
+   32 expr_list: expression COMMA expr_list .
+
+    $default  reduce using rule 32 (expr_list)
+
+
+state 110
+
+   13 func_call: expression . LROUND expr_list RROUND
+   26 expression: expression . bin_op expression
+   67 pair: expression COLON expression .
+
+    STAR          shift, and go to state 55
+    SLASH         shift, and go to state 56
+    PLUS          shift, and go to state 57
+    MINUS         shift, and go to state 58
+    LESS          shift, and go to state 59
+    LESSEQUAL     shift, and go to state 60
+    GREATER       shift, and go to state 61
+    GREATEREQUAL  shift, and go to state 62
+    EQUAL         shift, and go to state 63
+    NOTEQUAL      shift, and go to state 64
+    AND           shift, and go to state 65
+    OR            shift, and go to state 66
+    XOR           shift, and go to state 67
+    LROUND        shift, and go to state 68
+
+    $default  reduce using rule 67 (pair)
+
+    bin_op  go to state 69
+
+
+state 111
+
+   69 pair_list: pair COMMA pair_list .
+
+    $default  reduce using rule 69 (pair_list)
+
+
+state 112
+
+   16 loop_statement: loop_header LOOP stm_list END .
+
+    $default  reduce using rule 16 (loop_statement)
+
+
+state 113
+
+   13 func_call: expression LROUND expr_list RROUND .
+
+    $default  reduce using rule 13 (func_call)
+
+
+state 114
+
+   75 type_list: type .
+   76          | type . COMMA type_list
+
+    COMMA  shift, and go to state 126
+
+    $default  reduce using rule 75 (type_list)
+
+
+state 115
+
+   70 func_type: FUNC LROUND type_list . RROUND COLON type
+
+    RROUND  shift, and go to state 127
+
+
+state 116
+
+   63 array_type: LSQUARE type RSQUARE .
+
+    $default  reduce using rule 63 (array_type)
+
+
+state 117
+
+   64 map_type: LCURLY type COLON . type RCURLY
+
+    INTEGER   shift, and go to state 70
+    COMPLEX   shift, and go to state 71
+    RATIONAL  shift, and go to state 72
+    REAL      shift, and go to state 73
+    STRING    shift, and go to state 74
+    BOOLEAN   shift, and go to state 75
+    FUNC      shift, and go to state 76
+    LSQUARE   shift, and go to state 77
+    LCURLY    shift, and go to state 78
+
+    type        go to state 128
+    array_type  go to state 80
+    map_type    go to state 81
+    func_type   go to state 82
+
+
+state 118
+
+   77 parameter: ID COLON type .
+
+    $default  reduce using rule 77 (parameter)
+
+
+state 119
+
+   79 param_list: parameter COMMA param_list .
+
+    $default  reduce using rule 79 (param_list)
+
+
+state 120
+
+   71 func_def: FUNC LROUND param_list RROUND COLON . type func_body
+
+    INTEGER   shift, and go to state 70
+    COMPLEX   shift, and go to state 71
+    RATIONAL  shift, and go to state 72
+    REAL      shift, and go to state 73
+    STRING    shift, and go to state 74
+    BOOLEAN   shift, and go to state 75
+    FUNC      shift, and go to state 76
+    LSQUARE   shift, and go to state 77
+    LCURLY    shift, and go to state 78
+
+    type        go to state 129
+    array_type  go to state 80
+    map_type    go to state 81
+    func_type   go to state 82
+
+
+state 121
+
+   74 func_body: ARROW . expression
+
+    ID              shift, and go to state 37
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    LCURLY          shift, and go to state 16
+
+    func_call   go to state 21
+    expression  go to state 130
+    neg_expr    go to state 29
+    value       go to state 30
+    map_def     go to state 32
+    func_def    go to state 33
+
+
+state 122
+
+   73 func_body: DO . stm_list END
+
+    ID              shift, and go to state 1
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    RETURN          shift, and go to state 10
+    PRINT           shift, and go to state 11
+    IF              shift, and go to state 12
+    WHILE           shift, and go to state 13
+    FOR             shift, and go to state 14
+    BREAK           shift, and go to state 15
+    LCURLY          shift, and go to state 16
+
+    stm_list          go to state 131
+    statement         go to state 19
+    assignment        go to state 20
+    func_call         go to state 21
+    if_statement      go to state 22
+    loop_statement    go to state 23
+    loop_header       go to state 24
+    return_statement  go to state 25
+    break_statement   go to state 26
+    print_statement   go to state 27
+    expression        go to state 28
+    neg_expr          go to state 29
+    value             go to state 30
+    declaration       go to state 31
+    map_def           go to state 32
+    func_def          go to state 33
+
+
+state 123
+
+   72 func_def: FUNC LROUND param_list RROUND func_body .
+
+    $default  reduce using rule 72 (func_def)
+
+
+state 124
+
+   15 if_statement: IF expression THEN stm_list ELSE . stm_list END
+
+    ID              shift, and go to state 1
+    BOOLEAN_VALUE   shift, and go to state 2
+    INTEGER_VALUE   shift, and go to state 3
+    REAL_VALUE      shift, and go to state 4
+    RATIONAL_VALUE  shift, and go to state 5
+    COMPLEX_VALUE   shift, and go to state 6
+    STRING_VALUE    shift, and go to state 7
+    MINUS           shift, and go to state 8
+    FUNC            shift, and go to state 9
+    RETURN          shift, and go to state 10
+    PRINT           shift, and go to state 11
+    IF              shift, and go to state 12
+    WHILE           shift, and go to state 13
+    FOR             shift, and go to state 14
+    BREAK           shift, and go to state 15
+    LCURLY          shift, and go to state 16
+
+    stm_list          go to state 132
+    statement         go to state 19
+    assignment        go to state 20
+    func_call         go to state 21
+    if_statement      go to state 22
+    loop_statement    go to state 23
+    loop_header       go to state 24
+    return_statement  go to state 25
+    break_statement   go to state 26
+    print_statement   go to state 27
+    expression        go to state 28
+    neg_expr          go to state 29
+    value             go to state 30
+    declaration       go to state 31
+    map_def           go to state 32
+    func_def          go to state 33
+
+
+state 125
+
+   14 if_statement: IF expression THEN stm_list END .
+
+    $default  reduce using rule 14 (if_statement)
+
+
+state 126
+
+   76 type_list: type COMMA . type_list
+
+    INTEGER   shift, and go to state 70
+    COMPLEX   shift, and go to state 71
+    RATIONAL  shift, and go to state 72
+    REAL      shift, and go to state 73
+    STRING    shift, and go to state 74
+    BOOLEAN   shift, and go to state 75
+    FUNC      shift, and go to state 76
+    LSQUARE   shift, and go to state 77
+    LCURLY    shift, and go to state 78
+
+    type        go to state 114
+    array_type  go to state 80
+    map_type    go to state 81
+    func_type   go to state 82
+    type_list   go to state 133
+
+
+state 127
+
+   70 func_type: FUNC LROUND type_list RROUND . COLON type
+
+    COLON  shift, and go to state 134
+
+
+state 128
+
+   64 map_type: LCURLY type COLON type . RCURLY
+
+    RCURLY  shift, and go to state 135
+
+
+state 129
+
+   71 func_def: FUNC LROUND param_list RROUND COLON type . func_body
+
+    ARROW  shift, and go to state 121
+    DO     shift, and go to state 122
+
+    func_body  go to state 136
+
+
+state 130
+
+   13 func_call: expression . LROUND expr_list RROUND
+   26 expression: expression . bin_op expression
+   74 func_body: ARROW expression .
+
+    STAR          shift, and go to state 55
+    SLASH         shift, and go to state 56
+    PLUS          shift, and go to state 57
+    MINUS         shift, and go to state 58
+    LESS          shift, and go to state 59
+    LESSEQUAL     shift, and go to state 60
+    GREATER       shift, and go to state 61
+    GREATEREQUAL  shift, and go to state 62
+    EQUAL         shift, and go to state 63
+    NOTEQUAL      shift, and go to state 64
+    AND           shift, and go to state 65
+    OR            shift, and go to state 66
+    XOR           shift, and go to state 67
+    LROUND        shift, and go to state 68
+
+    STAR          [reduce using rule 74 (func_body)]
+    SLASH         [reduce using rule 74 (func_body)]
+    PLUS          [reduce using rule 74 (func_body)]
+    MINUS         [reduce using rule 74 (func_body)]
+    LESS          [reduce using rule 74 (func_body)]
+    LESSEQUAL     [reduce using rule 74 (func_body)]
+    GREATER       [reduce using rule 74 (func_body)]
+    GREATEREQUAL  [reduce using rule 74 (func_body)]
+    EQUAL         [reduce using rule 74 (func_body)]
+    NOTEQUAL      [reduce using rule 74 (func_body)]
+    AND           [reduce using rule 74 (func_body)]
+    OR            [reduce using rule 74 (func_body)]
+    XOR           [reduce using rule 74 (func_body)]
+    LROUND        [reduce using rule 74 (func_body)]
+    $default      reduce using rule 74 (func_body)
+
+    bin_op  go to state 69
+
+
+state 131
+
+   73 func_body: DO stm_list . END
+
+    END  shift, and go to state 137
+
+
+state 132
+
+   15 if_statement: IF expression THEN stm_list ELSE stm_list . END
+
+    END  shift, and go to state 138
+
+
+state 133
+
+   76 type_list: type COMMA type_list .
+
+    $default  reduce using rule 76 (type_list)
+
+
+state 134
+
+   70 func_type: FUNC LROUND type_list RROUND COLON . type
+
+    INTEGER   shift, and go to state 70
+    COMPLEX   shift, and go to state 71
+    RATIONAL  shift, and go to state 72
+    REAL      shift, and go to state 73
+    STRING    shift, and go to state 74
+    BOOLEAN   shift, and go to state 75
+    FUNC      shift, and go to state 76
+    LSQUARE   shift, and go to state 77
+    LCURLY    shift, and go to state 78
+
+    type        go to state 139
+    array_type  go to state 80
+    map_type    go to state 81
+    func_type   go to state 82
+
+
+state 135
+
+   64 map_type: LCURLY type COLON type RCURLY .
+
+    $default  reduce using rule 64 (map_type)
+
+
+state 136
+
+   71 func_def: FUNC LROUND param_list RROUND COLON type func_body .
+
+    $default  reduce using rule 71 (func_def)
+
+
+state 137
+
+   73 func_body: DO stm_list END .
+
+    $default  reduce using rule 73 (func_body)
+
+
+state 138
+
+   15 if_statement: IF expression THEN stm_list ELSE stm_list END .
+
+    $default  reduce using rule 15 (if_statement)
+
+
+state 139
+
+   70 func_type: FUNC LROUND type_list RROUND COLON type .
+
+    $default  reduce using rule 70 (func_type)
