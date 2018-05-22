@@ -3,9 +3,9 @@ A compiler for the F language (and it's definition)
 
 TODOs
 
-- * Lexer
+- Lexer
     - [ ] Bug detection
 
-- * Parser
+- Parser
     - [ ] Operator precedence
     - [ ] Tuples

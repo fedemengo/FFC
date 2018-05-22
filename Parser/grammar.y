@@ -59,14 +59,14 @@ break_statement : BREAK ;
 
 print_statement : PRINT LROUND expr_list RROUND ;
 
-expression  :  value
-			|  ID
-            |  neg_expr
-			|  expression bin_op expression
-            |  func_call
-            |  func_def
-            |  map_def
-            |  LROUND expression RROUND
+expression  :   func_call
+            |   func_def
+            |   map_def
+			|   expression bin_op expression
+            |   neg_expr
+            |   LROUND expression RROUND
+			|   ID
+            |   value
 			;
 
 neg_expr    : MINUS expression ;
