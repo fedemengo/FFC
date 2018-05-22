@@ -21,6 +21,8 @@ merge is func(a: [integer], b: [integer]) do
 	end
 end
 
+// commento
+
 split is func(v: [integer], pos: integer) do
 	i is 0;
 	a is [integer];

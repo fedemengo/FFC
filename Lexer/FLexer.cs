@@ -108,6 +108,16 @@ namespace Lexer
                         sr.Advance();
                         return new Token(ETokens.NOTEQUAL, sr.GetPosition());
                     }
+                    else if(sr.GetChar() == '/')
+                    {
+                        sr.Advance();
+                        while(sr.GetChar() != '\n' && sr.GetChar() != '\0')
+                        {
+                            sr.Advance();
+                        }
+                        sr.Advance();
+                        return NextToken(sr);
+                    }
                     return new Token(ETokens.SLASH, sr.GetPosition());
                 case '(' : sr.Advance(); return new Token(ETokens.LROUND, sr.GetPosition());
                 case ')' : sr.Advance(); return new Token(ETokens.RROUND, sr.GetPosition());
