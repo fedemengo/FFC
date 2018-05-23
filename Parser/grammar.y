@@ -19,6 +19,12 @@
 
 %start starting
 
+%left LESS LESSEQUAL GREATER GREATEREQUAL EQUAL NOTEQUAL
+%left AND OR XOR
+%left PLUS MINUS
+%left STAR SLASH
+%left NEG
+
 %%
 
 starting    :   stm_list EOF
@@ -59,11 +65,20 @@ break_stm	: 	BREAK ;
 
 print_stm	: 	PRINT LROUND expr_list RROUND ;
 
-expression  :   expression cmp_op expression
-			|   expression logic_op expression
-			|   expression add_op expression
-			|   expression mul_op expression
-            |   neg_expr
+expression  :   expression LESS expression
+			|	expression LESSEQUAL expression
+			|	expression GREATER expression
+			|	expression GREATEREQUAL expression
+			|	expression EQUAL expression
+			|	expression NOTEQUAL expression
+			|	expression AND expression
+			|	expression OR expression
+			|	expression XOR expression
+			|	expression PLUS expression
+			|	expression MINUS expression
+			|	expression STAR expression
+			|	expression SLASH expression
+			| 	MINUS expression
             |   func_def
 			|	func_call
             |   map_def
@@ -72,32 +87,25 @@ expression  :   expression cmp_op expression
             |   value
 			;
 
-neg_expr    : 	MINUS expression ;
 
 expr_list   : 	expression
             | 	expression COMMA expr_list
             ;
 
-cmp_op		:	LESS
+/*bin_op		:	LESS
 			|   LESSEQUAL
 			|   GREATER
 			|   GREATEREQUAL
 			|   EQUAL
 			|   NOTEQUAL
-			;
-
-logic_op	:	AND
+			|	AND
 			|   OR
 			|   XOR
-			;
-
-add_op		:	PLUS
+			|	PLUS
             |   MINUS
-			;
-
-mul_op      :   STAR
+			|	STAR
             |   SLASH
-			;
+			;*/
 
 value       :   BOOLEAN_VALUE
 			|   INTEGER_VALUE
