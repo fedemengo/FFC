@@ -29,65 +29,74 @@ stm_list    :   statement SEMICOLON
 
 statement   :   assignment
             |   expression
-            |   if_statement
-            |   loop_statement
-            |   return_statement
-            |   break_statement
-            |   print_statement
+            |   if_stm
+            |   loop_stm
+            |   return_stm
+            |   break_stm
+            |   print_stm
             |   declaration
 			;
 
 assignment  :   ID ASSIGN expression ;
 
-func_call   :   expression LROUND expr_list RROUND ;
+func_call   :   expression LROUND expr_list RROUND ;	/* 2 conflict (1 + lambda) */
 
-if_statement:   IF expression THEN stm_list END
+if_stm		:   IF expression THEN stm_list END
             |   IF expression THEN stm_list ELSE stm_list END
             ;
 
-loop_statement: loop_header LOOP stm_list END
+loop_stm	: 	loop_header LOOP stm_list END
             ; 
         
-loop_header : FOR ID IN expr_list 
-            | FOR expr_list
-            | WHILE expression
+loop_header : 	FOR ID IN expr_list 
+            | 	FOR expr_list
+            | 	WHILE expression
             ;
 
-return_statement : RETURN expression ;
+return_stm	: 	RETURN expression ;
 
-break_statement : BREAK ;
+break_stm	: 	BREAK ;
 
-print_statement : PRINT LROUND expr_list RROUND ;
+print_stm	: 	PRINT LROUND expr_list RROUND ;
 
-expression  :   func_call
-            |   func_def
-            |   map_def
-			|   expression bin_op expression
+expression  :   expression cmp_op expression
+			|   expression logic_op expression
+			|   expression add_op expression
+			|   expression mul_op expression
             |   neg_expr
+            |   func_def
+			|	func_call
+            |   map_def
             |   LROUND expression RROUND
 			|   ID
             |   value
 			;
 
-neg_expr    : MINUS expression ;
+neg_expr    : 	MINUS expression ;
 
-expr_list   : expression
-            | expression COMMA expr_list
+expr_list   : 	expression
+            | 	expression COMMA expr_list
             ;
 
-bin_op      :   STAR
-            |   SLASH
-            |   PLUS
-            |   MINUS
-            |   LESS
+cmp_op		:	LESS
 			|   LESSEQUAL
 			|   GREATER
 			|   GREATEREQUAL
 			|   EQUAL
 			|   NOTEQUAL
-			|   AND
+			;
+
+logic_op	:	AND
 			|   OR
 			|   XOR
+			;
+
+add_op		:	PLUS
+            |   MINUS
+			;
+
+mul_op      :   STAR
+            |   SLASH
 			;
 
 value       :   BOOLEAN_VALUE
@@ -113,38 +122,38 @@ type        :   INTEGER
 			|   func_type
 			;
 
-array_type  :  LSQUARE type RSQUARE ;
+array_type  :  	LSQUARE type RSQUARE ;
 
-map_type    :  LCURLY type COLON type RCURLY ;
+map_type    :  	LCURLY type COLON type RCURLY ;
 
-map_def     :  LCURLY RCURLY
-			|  LCURLY pair_list RCURLY
+map_def     :  	LCURLY RCURLY
+			|  	LCURLY pair_list RCURLY
 			;
 
-pair        :  expression COLON expression ;
+pair        :  	expression COLON expression ;
 
-pair_list   :  pair
-			|  pair COMMA pair_list 
+pair_list   :  	pair
+			|  	pair COMMA pair_list 
 			;
 
-func_type   :  FUNC LROUND type_list RROUND COLON type ;
+func_type   :  	FUNC LROUND type_list RROUND COLON type ;
 
-func_def    :  FUNC LROUND param_list RROUND COLON type func_body
-			|  FUNC LROUND param_list RROUND func_body
+func_def    :  	FUNC LROUND param_list RROUND COLON type func_body
+			|  	FUNC LROUND param_list RROUND func_body
 			;
 
-func_body   :  DO stm_list END
-			|  ARROW expression 
+func_body   :  	DO stm_list END
+			|  	ARROW expression	/* 1 conflict with func_call */
 			;
 
-type_list   :  type
-			|  type COMMA type_list
+type_list   :  	type
+			|  	type COMMA type_list
 			;
 
-parameter   :  ID COLON type ;
+parameter   :  	ID COLON type ;
 
-param_list  :  parameter
-			|  parameter COMMA param_list
+param_list  :  	parameter
+			|  	parameter COMMA param_list
 			;
 
 %%
