@@ -12,8 +12,9 @@
 
 %token FUNC DO RETURN PRINT
 %token IS IF THEN ELSE END
-%token WHILE FOR IN LOOP BREAK
+%token WHILE FOR IN LOOP BREAK CONTINUE
 %token LROUND RROUND LSQUARE RSQUARE LCURLY RCURLY
+%token ELLIPSIS
 
 %token EOF
 
@@ -27,141 +28,173 @@
 
 %%
 
-starting    :   stm_list EOF
+starting    :	dec_list EOF ;
 
-stm_list    :   statement SEMICOLON
-            |   statement SEMICOLON stm_list
-            ;
-
-statement   :   assignment
-            |   expression
-            |   if_stm
-            |   loop_stm
-            |   return_stm
-            |   break_stm
-            |   print_stm
-            |   declaration
+dec_list	: declaration
+			| declaration SEMICOLON dec_list
 			;
 
-assignment  :   ID ASSIGN expression ;
+declaration	:	ID opt_type IS expr ;
 
-func_call   :   expression LROUND expr_list RROUND ;	/* 2 conflict (1 + lambda) */
+opt_type	:	/* empty */
+			|	COLON type
+			;
 
-if_stm		:   IF expression THEN stm_list END
-            |   IF expression THEN stm_list ELSE stm_list END
-            ;
+type		:	INTEGER
+			|	COMPLEX
+			|	RATIONAL
+			|	REAL
+			|	STRING
+			|	BOOLEAN
+			|	func_type
+			|	tuple_type
+			|	array_type
+			|	map_type
+			;
 
-loop_stm	: 	loop_header LOOP stm_list END
-            ; 
-        
-loop_header : 	FOR ID IN expr_list 
-            | 	FOR expr_list
-            | 	WHILE expression
-            ;
+expr		:	secondary
+			|	secondary LESS expr
+			|	secondary LESSEQUAL expr
+			|	secondary GREATER expr
+			|	secondary GREATEREQUAL expr
+			|	secondary EQUAL expr
+			|	secondary NOTEQUAL expr
+			|	secondary AND expr
+			|	secondary OR expr
+			|	secondary XOR expr
+			|	secondary PLUS expr
+			|	secondary MINUS expr
+			|	secondary STAR expr
+			|	secondary SLASH expr
+			|	MINUS secondary NEG
+//			|	expr ELLIPSIS expr /* shall it just be a special case for FOR loops or a whole new type? */ //causes a hell of errors
+			;
 
-return_stm	: 	RETURN expression ;
-
-break_stm	: 	BREAK ;
-
-print_stm	: 	PRINT LROUND expr_list RROUND ;
-
-expression  :   expression LESS expression
-			|	expression LESSEQUAL expression
-			|	expression GREATER expression
-			|	expression GREATEREQUAL expression
-			|	expression EQUAL expression
-			|	expression NOTEQUAL expression
-			|	expression AND expression
-			|	expression OR expression
-			|	expression XOR expression
-			|	expression PLUS expression
-			|	expression MINUS expression
-			|	expression STAR expression
-			|	expression SLASH expression
-			| 	MINUS expression
-            |   func_def
+secondary	:	primary
 			|	func_call
-            |   map_def
-            |   LROUND expression RROUND
-			|   ID
-            |   value
+			|	secondary indexer
 			;
 
 
-expr_list   : 	expression
-            | 	expression COMMA expr_list
-            ;
-
-/*bin_op		:	LESS
-			|   LESSEQUAL
-			|   GREATER
-			|   GREATEREQUAL
-			|   EQUAL
-			|   NOTEQUAL
-			|	AND
-			|   OR
-			|   XOR
-			|	PLUS
-            |   MINUS
-			|	STAR
-            |   SLASH
-			;*/
-
-value       :   BOOLEAN_VALUE
-			|   INTEGER_VALUE
-			|   REAL_VALUE
-			|   RATIONAL_VALUE
-			|   COMPLEX_VALUE
-			|   STRING_VALUE
+primary		: 	value
+			|	cond
+			|	func_def /* lot of shift reduce */
+			|	array_def /* reduce reduce*/
+			|	map_def
+			|	tuple_def
+			|	LROUND expr RROUND
 			;
 
-declaration :   ID IS expression
-			|   ID COLON type expression
+value		:	BOOLEAN_VALUE
+			|	INTEGER_VALUE
+			|	REAL_VALUE
+			|	RATIONAL_VALUE
+			|	COMPLEX_VALUE
+			|	STRING_VALUE
+			|	ID
 			;
 
-type        :   INTEGER
-	        |   COMPLEX
-			|   RATIONAL
-			|   REAL
-			|   STRING
-			|   BOOLEAN
-			|   array_type
-			|   map_type
-			|   func_type
+cond		:	IF expr THEN expr ELSE expr END ;
+
+func_def	:	FUNC LROUND opt_params RROUND opt_type func_body ;
+
+opt_params	:	/* empty */
+			|	param_list
 			;
 
-array_type  :  	LSQUARE type RSQUARE ;
-
-map_type    :  	LCURLY type COLON type RCURLY ;
-
-map_def     :  	LCURLY RCURLY
-			|  	LCURLY pair_list RCURLY
+param_list	:	param
+			| 	param_list COMMA param
 			;
 
-pair        :  	expression COLON expression ;
+param		:	ID COLON type ;
 
-pair_list   :  	pair
-			|  	pair COMMA pair_list 
+func_body	:	DO stm_list END
+			|	ARROW expr
 			;
 
-func_type   :  	FUNC LROUND type_list RROUND COLON type ;
-
-func_def    :  	FUNC LROUND param_list RROUND COLON type func_body
-			|  	FUNC LROUND param_list RROUND func_body
+stm_list	:	statement
+			|	stm_list statement
 			;
 
-func_body   :  	DO stm_list END
-			|  	ARROW expression	/* 1 conflict with func_call */
+statement	:	func_call 
+			|	assignment
+			|	declaration
+			|	if_stm
+			|	loop_stm
+			|	return_stm
+			|	break_stm
+			|	cont_stm
+			|	print_stm
 			;
 
-type_list   :  	type
-			|  	type COMMA type_list
+func_call	:	secondary LROUND opt_exprs RROUND
+
+opt_exprs	:	/* empty */
+			|	expr_list
 			;
 
-parameter   :  	ID COLON type ;
-
-param_list  :  	parameter
-			|  	parameter COMMA param_list
+expr_list	:	expr
+			|	expr_list COMMA expr
 			;
 
-%%
+assignment	:	secondary ASSIGN expr ;
+
+if_stm		:	IF expr THEN stm_list END
+			|	IF expr THEN stm_list ELSE stm_list END
+			;
+
+loop_stm	:	loop_header LOOP stm_list END ;
+
+loop_header	:	/* empty */
+			|	FOR ID IN expr
+			|	FOR expr
+			|	WHILE expr
+			;
+
+return_stm	:	RETURN 
+			|	RETURN expr
+			;
+
+break_stm	:	BREAK ;
+
+cont_stm	:	CONTINUE ;
+
+print_stm	:	PRINT LROUND opt_exprs RROUND ;
+
+array_def	:	LSQUARE opt_exprs RSQUARE
+
+map_def		:	LCURLY pair_list RCURLY ;
+
+pair_list	:	/* empty */
+			|	pair
+			|	pair_list COMMA pair
+			;
+
+pair		:	expr COLON expr ;
+
+tuple_def	:	LROUND tuple_elist RROUND ;
+
+tuple_elist :	tuple_elem
+			|	tuple_elist COMMA tuple_elem
+			;
+
+tuple_elem	:	ID IS expr
+			|	expr
+			;
+
+indexer		:	LSQUARE expr RSQUARE
+			|	DOT	ID
+			|	DOT INTEGER_VALUE
+			;
+
+func_type	:	FUNC LROUND type_list RROUND COLON type ;
+
+type_list	:	type
+			|	type_list COMMA type
+			;
+
+array_type	:	LSQUARE type RSQUARE ; /* can be the same as array def */
+
+tuple_type	: 	LROUND type_list RROUND ; /* tuple properties name during type definition ? */
+
+map_type	:	LCURLY type COLON type RCURLY ;

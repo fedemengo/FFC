@@ -97,7 +97,14 @@ namespace Lexer
                         sr.Advance(); return new Token(ETokens.GREATEREQUAL, sr.GetPosition());
                     }
                     return new Token(ETokens.GREATER, sr.GetPosition());
-                case '.' : sr.Advance(); return new Token(ETokens.DOT, sr.GetPosition());
+                case '.' : 
+                    sr.Advance();
+                    if(sr.GetChar() == '.')
+                    {
+                        sr.Advance();
+                        return new Token(ETokens.ELLIPSES, sr.GetPosition());
+                    }
+                    return new Token(ETokens.DOT, sr.GetPositions());
                 case '+' : sr.Advance(); return new Token(ETokens.PLUS, sr.GetPosition());
                 case '-' : sr.Advance(); return new Token(ETokens.MINUS, sr.GetPosition());
                 case '*' : sr.Advance(); return new Token(ETokens.STAR, sr.GetPosition());
@@ -231,6 +238,7 @@ namespace Lexer
                             case "true" : return new Token(ETokens.BOOLEAN_VALUE, new List<object>{true}, sr.GetPosition());
                             case "false" : return new Token(ETokens.BOOLEAN_VALUE, new List<object>{false}, sr.GetPosition());
                             case "break" : return new Token(ETokens.BREAK, sr.GetPosition());
+                            case "continue" : return new Token(ETokens.CONTINUE, sr.GetPosition());
                             case "return" : return new Token(ETokens.RETURN, sr.GetPosition());
                             case "string" : return new Token(ETokens.STRING, sr.GetPosition());
                             case "for": return new Token(ETokens.FOR, sr.GetPosition());
