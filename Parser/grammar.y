@@ -30,11 +30,11 @@
 
 starting    :	dec_list EOF ;
 
-dec_list	: declaration
-			| declaration SEMICOLON dec_list
+dec_list	: 	declaration
+			| 	declaration dec_list
 			;
 
-declaration	:	ID opt_type IS expr ;
+declaration	:	ID opt_type IS expr SEMICOLON ;
 
 opt_type	:	/* empty */
 			|	COLON type
@@ -67,7 +67,7 @@ expr		:	secondary
 			|	secondary STAR expr
 			|	secondary SLASH expr
 			|	MINUS secondary NEG
-//			|	expr ELLIPSIS expr /* shall it just be a special case for FOR loops or a whole new type? */ //causes a hell of errors
+			|	secondary ELLIPSIS secondary /* shall it just be a special case for FOR loops or a whole new type? */ //causes a hell of errors
 			;
 
 secondary	:	primary
@@ -75,11 +75,10 @@ secondary	:	primary
 			|	secondary indexer
 			;
 
-
 primary		: 	value
 			|	cond
 			|	func_def /* lot of shift reduce */
-			|	array_def /* reduce reduce*/
+			|	array_def
 			|	map_def
 			|	tuple_def
 			|	LROUND expr RROUND
@@ -109,14 +108,14 @@ param_list	:	param
 param		:	ID COLON type ;
 
 func_body	:	DO stm_list END
-			|	ARROW expr
+			|	ARROW LROUND expr RROUND	/* expression within () */
 			;
 
 stm_list	:	statement
 			|	stm_list statement
 			;
 
-statement	:	func_call 
+statement	:	func_call SEMICOLON
 			|	assignment
 			|	declaration
 			|	if_stm
@@ -137,7 +136,7 @@ expr_list	:	expr
 			|	expr_list COMMA expr
 			;
 
-assignment	:	secondary ASSIGN expr ;
+assignment	:	secondary ASSIGN expr SEMICOLON ;
 
 if_stm		:	IF expr THEN stm_list END
 			|	IF expr THEN stm_list ELSE stm_list END
@@ -151,15 +150,15 @@ loop_header	:	/* empty */
 			|	WHILE expr
 			;
 
-return_stm	:	RETURN 
-			|	RETURN expr
+return_stm	:	RETURN SEMICOLON
+			|	RETURN expr SEMICOLON
 			;
 
-break_stm	:	BREAK ;
+break_stm	:	BREAK SEMICOLON ;
 
-cont_stm	:	CONTINUE ;
+cont_stm	:	CONTINUE SEMICOLON ;
 
-print_stm	:	PRINT LROUND opt_exprs RROUND ;
+print_stm	:	PRINT LROUND opt_exprs RROUND SEMICOLON ;
 
 array_def	:	LSQUARE opt_exprs RSQUARE
 
