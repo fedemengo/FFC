@@ -81,7 +81,7 @@ primary		: 	value
 			|	array_def
 			|	map_def
 			|	tuple_def
-			|	LROUND expr RROUND
+//			|	LROUND expr RROUND
 			;
 
 value		:	BOOLEAN_VALUE
@@ -108,7 +108,7 @@ param_list	:	param
 param		:	ID COLON type ;
 
 func_body	:	DO stm_list END
-			|	ARROW LROUND expr RROUND	/* expression within () */
+			|	ARROW LROUND expr RROUND						/* expression within () */
 			;
 
 stm_list	:	statement
