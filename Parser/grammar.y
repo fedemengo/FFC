@@ -108,7 +108,7 @@ param_list	:	param
 param		:	ID COLON type ;
 
 func_body	:	DO stm_list END
-			|	ARROW LROUND expr RROUND						/* expression within () */
+			|	ARROW LROUND expr RROUND	/* possible fix: recognize new line before END token */
 			;
 
 stm_list	:	statement
@@ -192,8 +192,8 @@ type_list	:	type
 			|	type_list COMMA type
 			;
 
-array_type	:	LSQUARE type RSQUARE ; /* can be the same as array def */
+array_type	:	LSQUARE type RSQUARE ;
 
-tuple_type	: 	LROUND type_list RROUND ; /* tuple properties name during type definition ? */
+tuple_type	: 	LROUND type_list RROUND ;
 
 map_type	:	LCURLY type COLON type RCURLY ;
