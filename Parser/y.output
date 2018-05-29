@@ -1,4 +1,6 @@
+State 45 conflicts: 17 shift/reduce
 State 63 conflicts: 1 shift/reduce
+State 126 conflicts: 3 shift/reduce
 
 
 Grammar
@@ -76,7 +78,7 @@ Grammar
    56 param: ID COLON type
 
    57 func_body: DO stm_list END
-   58          | ARROW LROUND expr RROUND
+   58          | ARROW expr
 
    59 stm_list: statement
    60         | stm_list statement
@@ -205,8 +207,8 @@ IN (301) 80
 LOOP (302) 78
 BREAK (303) 85
 CONTINUE (304) 86
-LROUND (305) 42 51 58 70 87 94 102 106
-RROUND (306) 42 51 58 70 87 94 102 106
+LROUND (305) 42 51 70 87 94 102 106
+RROUND (306) 42 51 70 87 94 102 106
 LSQUARE (307) 88 99 105
 RSQUARE (308) 88 99 105
 LCURLY (309) 89 107
@@ -901,7 +903,24 @@ state 45
     LSQUARE       shift, and go to state 88
     ELLIPSIS      shift, and go to state 89
 
-    $default  reduce using rule 17 (expr)
+    DOT           [reduce using rule 17 (expr)]
+    STAR          [reduce using rule 17 (expr)]
+    SLASH         [reduce using rule 17 (expr)]
+    PLUS          [reduce using rule 17 (expr)]
+    MINUS         [reduce using rule 17 (expr)]
+    LESS          [reduce using rule 17 (expr)]
+    LESSEQUAL     [reduce using rule 17 (expr)]
+    GREATER       [reduce using rule 17 (expr)]
+    GREATEREQUAL  [reduce using rule 17 (expr)]
+    EQUAL         [reduce using rule 17 (expr)]
+    NOTEQUAL      [reduce using rule 17 (expr)]
+    AND           [reduce using rule 17 (expr)]
+    OR            [reduce using rule 17 (expr)]
+    XOR           [reduce using rule 17 (expr)]
+    LROUND        [reduce using rule 17 (expr)]
+    LSQUARE       [reduce using rule 17 (expr)]
+    ELLIPSIS      [reduce using rule 17 (expr)]
+    $default      reduce using rule 17 (expr)
 
     indexer  go to state 90
 
@@ -2050,6 +2069,9 @@ state 126
     LROUND   shift, and go to state 87
     LSQUARE  shift, and go to state 88
 
+    DOT       [reduce using rule 32 (expr)]
+    LROUND    [reduce using rule 32 (expr)]
+    LSQUARE   [reduce using rule 32 (expr)]
     $default  reduce using rule 32 (expr)
 
     indexer  go to state 90
@@ -2252,9 +2274,32 @@ state 145
 
 state 146
 
-   58 func_body: ARROW . LROUND expr RROUND
+   58 func_body: ARROW . expr
 
-    LROUND  shift, and go to state 150
+    ID              shift, and go to state 31
+    BOOLEAN_VALUE   shift, and go to state 32
+    INTEGER_VALUE   shift, and go to state 33
+    REAL_VALUE      shift, and go to state 34
+    RATIONAL_VALUE  shift, and go to state 35
+    COMPLEX_VALUE   shift, and go to state 36
+    STRING_VALUE    shift, and go to state 37
+    MINUS           shift, and go to state 38
+    FUNC            shift, and go to state 39
+    IF              shift, and go to state 40
+    LROUND          shift, and go to state 41
+    LSQUARE         shift, and go to state 42
+    LCURLY          shift, and go to state 43
+
+    expr       go to state 150
+    secondary  go to state 45
+    primary    go to state 46
+    value      go to state 47
+    cond       go to state 48
+    func_def   go to state 49
+    func_call  go to state 50
+    array_def  go to state 51
+    map_def    go to state 52
+    tuple_def  go to state 53
 
 
 state 147
@@ -2320,32 +2365,9 @@ state 149
 
 state 150
 
-   58 func_body: ARROW LROUND . expr RROUND
+   58 func_body: ARROW expr .
 
-    ID              shift, and go to state 31
-    BOOLEAN_VALUE   shift, and go to state 32
-    INTEGER_VALUE   shift, and go to state 33
-    REAL_VALUE      shift, and go to state 34
-    RATIONAL_VALUE  shift, and go to state 35
-    COMPLEX_VALUE   shift, and go to state 36
-    STRING_VALUE    shift, and go to state 37
-    MINUS           shift, and go to state 38
-    FUNC            shift, and go to state 39
-    IF              shift, and go to state 40
-    LROUND          shift, and go to state 41
-    LSQUARE         shift, and go to state 42
-    LCURLY          shift, and go to state 43
-
-    expr       go to state 173
-    secondary  go to state 45
-    primary    go to state 46
-    value      go to state 47
-    cond       go to state 48
-    func_def   go to state 49
-    func_call  go to state 50
-    array_def  go to state 51
-    map_def    go to state 52
-    tuple_def  go to state 53
+    $default  reduce using rule 58 (func_body)
 
 
 state 151
@@ -2373,7 +2395,7 @@ state 152
     RATIONAL_VALUE  shift, and go to state 35
     COMPLEX_VALUE   shift, and go to state 36
     STRING_VALUE    shift, and go to state 37
-    SEMICOLON       shift, and go to state 174
+    SEMICOLON       shift, and go to state 173
     MINUS           shift, and go to state 38
     FUNC            shift, and go to state 39
     IF              shift, and go to state 40
@@ -2381,7 +2403,7 @@ state 152
     LSQUARE         shift, and go to state 42
     LCURLY          shift, and go to state 43
 
-    expr       go to state 175
+    expr       go to state 174
     secondary  go to state 45
     primary    go to state 46
     value      go to state 47
@@ -2397,7 +2419,7 @@ state 153
 
    87 print_stm: PRINT . LROUND opt_exprs RROUND SEMICOLON
 
-    LROUND  shift, and go to state 176
+    LROUND  shift, and go to state 175
 
 
 state 154
@@ -2420,7 +2442,7 @@ state 154
     LSQUARE         shift, and go to state 42
     LCURLY          shift, and go to state 43
 
-    expr       go to state 177
+    expr       go to state 176
     secondary  go to state 45
     primary    go to state 46
     value      go to state 47
@@ -2450,7 +2472,7 @@ state 155
     LSQUARE         shift, and go to state 42
     LCURLY          shift, and go to state 43
 
-    expr       go to state 178
+    expr       go to state 177
     secondary  go to state 45
     primary    go to state 46
     value      go to state 47
@@ -2467,7 +2489,7 @@ state 156
    80 loop_header: FOR . ID IN expr
    81            | FOR . expr
 
-    ID              shift, and go to state 179
+    ID              shift, and go to state 178
     BOOLEAN_VALUE   shift, and go to state 32
     INTEGER_VALUE   shift, and go to state 33
     REAL_VALUE      shift, and go to state 34
@@ -2481,7 +2503,7 @@ state 156
     LSQUARE         shift, and go to state 42
     LCURLY          shift, and go to state 43
 
-    expr       go to state 180
+    expr       go to state 179
     secondary  go to state 45
     primary    go to state 46
     value      go to state 47
@@ -2497,14 +2519,14 @@ state 157
 
    85 break_stm: BREAK . SEMICOLON
 
-    SEMICOLON  shift, and go to state 181
+    SEMICOLON  shift, and go to state 180
 
 
 state 158
 
    86 cont_stm: CONTINUE . SEMICOLON
 
-    SEMICOLON  shift, and go to state 182
+    SEMICOLON  shift, and go to state 181
 
 
 state 159
@@ -2521,7 +2543,7 @@ state 160
    75 assignment: secondary . ASSIGN expr SEMICOLON
 
     DOT      shift, and go to state 73
-    ASSIGN   shift, and go to state 183
+    ASSIGN   shift, and go to state 182
     LROUND   shift, and go to state 87
     LSQUARE  shift, and go to state 88
 
@@ -2544,7 +2566,7 @@ state 161
     RETURN          shift, and go to state 152
     PRINT           shift, and go to state 153
     IF              shift, and go to state 154
-    END             shift, and go to state 184
+    END             shift, and go to state 183
     WHILE           shift, and go to state 155
     FOR             shift, and go to state 156
     BREAK           shift, and go to state 157
@@ -2561,7 +2583,7 @@ state 161
     value        go to state 47
     cond         go to state 48
     func_def     go to state 49
-    statement    go to state 185
+    statement    go to state 184
     func_call    go to state 163
     assignment   go to state 164
     if_stm       go to state 165
@@ -2588,7 +2610,7 @@ state 163
    34 secondary: func_call .
    61 statement: func_call . SEMICOLON
 
-    SEMICOLON  shift, and go to state 186
+    SEMICOLON  shift, and go to state 185
 
     $default  reduce using rule 34 (secondary)
 
@@ -2618,7 +2640,7 @@ state 167
 
    78 loop_stm: loop_header . LOOP stm_list END
 
-    LOOP  shift, and go to state 187
+    LOOP  shift, and go to state 186
 
 
 state 168
@@ -2658,26 +2680,19 @@ state 172
 
 state 173
 
-   58 func_body: ARROW LROUND expr . RROUND
-
-    RROUND  shift, and go to state 188
-
-
-state 174
-
    83 return_stm: RETURN SEMICOLON .
 
     $default  reduce using rule 83 (return_stm)
 
 
-state 175
+state 174
 
    84 return_stm: RETURN expr . SEMICOLON
 
-    SEMICOLON  shift, and go to state 189
+    SEMICOLON  shift, and go to state 187
 
 
-state 176
+state 175
 
    87 print_stm: PRINT LROUND . opt_exprs RROUND SEMICOLON
 
@@ -2704,61 +2719,61 @@ state 176
     cond       go to state 48
     func_def   go to state 49
     func_call  go to state 50
-    opt_exprs  go to state 190
+    opt_exprs  go to state 188
     expr_list  go to state 68
     array_def  go to state 51
     map_def    go to state 52
     tuple_def  go to state 53
 
 
-state 177
+state 176
 
    50 cond: IF expr . THEN expr ELSE expr END
    76 if_stm: IF expr . THEN stm_list END
    77       | IF expr . THEN stm_list ELSE stm_list END
 
-    THEN  shift, and go to state 191
+    THEN  shift, and go to state 189
 
 
-state 178
+state 177
 
    82 loop_header: WHILE expr .
 
     $default  reduce using rule 82 (loop_header)
 
 
-state 179
+state 178
 
    49 value: ID .
    80 loop_header: FOR ID . IN expr
 
-    IN  shift, and go to state 192
+    IN  shift, and go to state 190
 
     $default  reduce using rule 49 (value)
 
 
-state 180
+state 179
 
    81 loop_header: FOR expr .
 
     $default  reduce using rule 81 (loop_header)
 
 
-state 181
+state 180
 
    85 break_stm: BREAK SEMICOLON .
 
     $default  reduce using rule 85 (break_stm)
 
 
-state 182
+state 181
 
    86 cont_stm: CONTINUE SEMICOLON .
 
     $default  reduce using rule 86 (cont_stm)
 
 
-state 183
+state 182
 
    75 assignment: secondary ASSIGN . expr SEMICOLON
 
@@ -2776,7 +2791,7 @@ state 183
     LSQUARE         shift, and go to state 42
     LCURLY          shift, and go to state 43
 
-    expr       go to state 193
+    expr       go to state 191
     secondary  go to state 45
     primary    go to state 46
     value      go to state 47
@@ -2788,28 +2803,28 @@ state 183
     tuple_def  go to state 53
 
 
-state 184
+state 183
 
    57 func_body: DO stm_list END .
 
     $default  reduce using rule 57 (func_body)
 
 
-state 185
+state 184
 
    60 stm_list: stm_list statement .
 
     $default  reduce using rule 60 (stm_list)
 
 
-state 186
+state 185
 
    61 statement: func_call SEMICOLON .
 
     $default  reduce using rule 61 (statement)
 
 
-state 187
+state 186
 
    78 loop_stm: loop_header LOOP . stm_list END
 
@@ -2840,7 +2855,7 @@ state 187
     value        go to state 47
     cond         go to state 48
     func_def     go to state 49
-    stm_list     go to state 194
+    stm_list     go to state 192
     statement    go to state 162
     func_call    go to state 163
     assignment   go to state 164
@@ -2856,28 +2871,21 @@ state 187
     tuple_def    go to state 53
 
 
-state 188
-
-   58 func_body: ARROW LROUND expr RROUND .
-
-    $default  reduce using rule 58 (func_body)
-
-
-state 189
+state 187
 
    84 return_stm: RETURN expr SEMICOLON .
 
     $default  reduce using rule 84 (return_stm)
 
 
-state 190
+state 188
 
    87 print_stm: PRINT LROUND opt_exprs . RROUND SEMICOLON
 
-    RROUND  shift, and go to state 195
+    RROUND  shift, and go to state 193
 
 
-state 191
+state 189
 
    50 cond: IF expr THEN . expr ELSE expr END
    76 if_stm: IF expr THEN . stm_list END
@@ -2907,12 +2915,12 @@ state 191
 
     declaration  go to state 159
     expr         go to state 132
-    secondary    go to state 196
+    secondary    go to state 194
     primary      go to state 46
     value        go to state 47
     cond         go to state 48
     func_def     go to state 49
-    stm_list     go to state 197
+    stm_list     go to state 195
     statement    go to state 162
     func_call    go to state 163
     assignment   go to state 164
@@ -2928,7 +2936,7 @@ state 191
     tuple_def    go to state 53
 
 
-state 192
+state 190
 
    80 loop_header: FOR ID IN . expr
 
@@ -2946,7 +2954,7 @@ state 192
     LSQUARE         shift, and go to state 42
     LCURLY          shift, and go to state 43
 
-    expr       go to state 198
+    expr       go to state 196
     secondary  go to state 45
     primary    go to state 46
     value      go to state 47
@@ -2958,14 +2966,14 @@ state 192
     tuple_def  go to state 53
 
 
-state 193
+state 191
 
    75 assignment: secondary ASSIGN expr . SEMICOLON
 
-    SEMICOLON  shift, and go to state 199
+    SEMICOLON  shift, and go to state 197
 
 
-state 194
+state 192
 
    60 stm_list: stm_list . statement
    78 loop_stm: loop_header LOOP stm_list . END
@@ -2981,7 +2989,7 @@ state 194
     RETURN          shift, and go to state 152
     PRINT           shift, and go to state 153
     IF              shift, and go to state 154
-    END             shift, and go to state 200
+    END             shift, and go to state 198
     WHILE           shift, and go to state 155
     FOR             shift, and go to state 156
     BREAK           shift, and go to state 157
@@ -2998,7 +3006,7 @@ state 194
     value        go to state 47
     cond         go to state 48
     func_def     go to state 49
-    statement    go to state 185
+    statement    go to state 184
     func_call    go to state 163
     assignment   go to state 164
     if_stm       go to state 165
@@ -3013,14 +3021,14 @@ state 194
     tuple_def    go to state 53
 
 
-state 195
+state 193
 
    87 print_stm: PRINT LROUND opt_exprs RROUND . SEMICOLON
 
-    SEMICOLON  shift, and go to state 201
+    SEMICOLON  shift, and go to state 199
 
 
-state 196
+state 194
 
    17 expr: secondary .
    18     | secondary . LESS expr
@@ -3046,7 +3054,7 @@ state 196
     SLASH         shift, and go to state 75
     PLUS          shift, and go to state 76
     MINUS         shift, and go to state 77
-    ASSIGN        shift, and go to state 183
+    ASSIGN        shift, and go to state 182
     LESS          shift, and go to state 78
     LESSEQUAL     shift, and go to state 79
     GREATER       shift, and go to state 80
@@ -3065,7 +3073,7 @@ state 196
     indexer  go to state 90
 
 
-state 197
+state 195
 
    60 stm_list: stm_list . statement
    76 if_stm: IF expr THEN stm_list . END
@@ -3082,8 +3090,8 @@ state 197
     RETURN          shift, and go to state 152
     PRINT           shift, and go to state 153
     IF              shift, and go to state 154
-    ELSE            shift, and go to state 202
-    END             shift, and go to state 203
+    ELSE            shift, and go to state 200
+    END             shift, and go to state 201
     WHILE           shift, and go to state 155
     FOR             shift, and go to state 156
     BREAK           shift, and go to state 157
@@ -3100,7 +3108,7 @@ state 197
     value        go to state 47
     cond         go to state 48
     func_def     go to state 49
-    statement    go to state 185
+    statement    go to state 184
     func_call    go to state 163
     assignment   go to state 164
     if_stm       go to state 165
@@ -3115,35 +3123,35 @@ state 197
     tuple_def    go to state 53
 
 
-state 198
+state 196
 
    80 loop_header: FOR ID IN expr .
 
     $default  reduce using rule 80 (loop_header)
 
 
-state 199
+state 197
 
    75 assignment: secondary ASSIGN expr SEMICOLON .
 
     $default  reduce using rule 75 (assignment)
 
 
-state 200
+state 198
 
    78 loop_stm: loop_header LOOP stm_list END .
 
     $default  reduce using rule 78 (loop_stm)
 
 
-state 201
+state 199
 
    87 print_stm: PRINT LROUND opt_exprs RROUND SEMICOLON .
 
     $default  reduce using rule 87 (print_stm)
 
 
-state 202
+state 200
 
    77 if_stm: IF expr THEN stm_list ELSE . stm_list END
 
@@ -3174,7 +3182,7 @@ state 202
     value        go to state 47
     cond         go to state 48
     func_def     go to state 49
-    stm_list     go to state 204
+    stm_list     go to state 202
     statement    go to state 162
     func_call    go to state 163
     assignment   go to state 164
@@ -3190,14 +3198,14 @@ state 202
     tuple_def    go to state 53
 
 
-state 203
+state 201
 
    76 if_stm: IF expr THEN stm_list END .
 
     $default  reduce using rule 76 (if_stm)
 
 
-state 204
+state 202
 
    60 stm_list: stm_list . statement
    77 if_stm: IF expr THEN stm_list ELSE stm_list . END
@@ -3213,7 +3221,7 @@ state 204
     RETURN          shift, and go to state 152
     PRINT           shift, and go to state 153
     IF              shift, and go to state 154
-    END             shift, and go to state 205
+    END             shift, and go to state 203
     WHILE           shift, and go to state 155
     FOR             shift, and go to state 156
     BREAK           shift, and go to state 157
@@ -3230,7 +3238,7 @@ state 204
     value        go to state 47
     cond         go to state 48
     func_def     go to state 49
-    statement    go to state 185
+    statement    go to state 184
     func_call    go to state 163
     assignment   go to state 164
     if_stm       go to state 165
@@ -3245,7 +3253,7 @@ state 204
     tuple_def    go to state 53
 
 
-state 205
+state 203
 
    77 if_stm: IF expr THEN stm_list ELSE stm_list END .
 
