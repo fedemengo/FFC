@@ -1,7 +1,8 @@
-Lexer/bin/
-Lexer/obj/
+*/bin/
+*/obj/
 .old/*/bin/
 .old/*/obj/
+
 .vscode/
 *.hs
 
