@@ -1,5 +1,7 @@
 Lexer/bin/*
 Lexer/obj/*
+AbstractSyntaxTree/bin
+AbstractSyntaxTree/obj
 .vscode/
 *.hs
 
