@@ -104,7 +104,7 @@ namespace Lexer
                         sr.Advance();
                         return new Token(ETokens.ELLIPSES, sr.GetPosition());
                     }
-                    return new Token(ETokens.DOT, sr.GetPositions());
+                    return new Token(ETokens.DOT, sr.GetPosition());
                 case '+' : sr.Advance(); return new Token(ETokens.PLUS, sr.GetPosition());
                 case '-' : sr.Advance(); return new Token(ETokens.MINUS, sr.GetPosition());
                 case '*' : sr.Advance(); return new Token(ETokens.STAR, sr.GetPosition());
