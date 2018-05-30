@@ -40,12 +40,12 @@ dec_list	: 	declaration
 declaration	:	ID opt_type IS expr SEMICOLON
 			;
 
-opt_type	:	/* empty */
-			|	COLON type
+opt_type	:	/* empty */		{ $$ = null; }
+			|	COLON type		{ $$ = $1 }
 			;
 
-type		:	INTEGER
-			|	COMPLEX
+type		:	INTEGER			{ $$ = new IntegerType(); }
+			|	COMPLEX			
 			|	RATIONAL
 			|	REAL
 			|	STRING
@@ -71,25 +71,25 @@ expr		:	secondary
 			|	secondary STAR expr
 			|	secondary SLASH expr
 			|	MINUS secondary NEG
-			|	secondary ELLIPSIS secondary /* shall it just be a special case for FOR loops or a whole new type? */ //causes a hell of errors
+			|	secondary ELLIPSIS secondary /* check */
 			;
 
-secondary	:	primary { $$ = $1 }
+secondary	:	primary 					{ $$ = $1 }
 			|	func_call
 			|	secondary indexer
 			;
 
-primary		: 	value
+primary		: 	value					{ $$ = $1; }
 			|	cond
-			|	func_def /* lot of shift reduce */
+			|	func_def
 			|	array_def
 			|	map_def
 			|	tuple_def
 //			|	LROUND expr RROUND
 			;
 
-value		:	BOOLEAN_VALUE
-			|	INTEGER_VALUE
+value		:	BOOLEAN_VALUE			{ $$ = new BooleanValue((bool) $1.values[0]); }
+			|	INTEGER_VALUE			
 			|	REAL_VALUE
 			|	RATIONAL_VALUE
 			|	COMPLEX_VALUE
@@ -97,7 +97,7 @@ value		:	BOOLEAN_VALUE
 			|	ID
 			;
 
-cond		:	IF expr THEN expr ELSE expr END
+cond		:	IF expr THEN expr ELSE expr END		{ $$ = new Conditional($2, $4, $6); }
 			;
 
 func_def	:	FUNC LROUND opt_params RROUND opt_type func_body
@@ -107,15 +107,15 @@ opt_params	:	/* empty */
 			|	param_list
 			;
 
-param_list	:	param
-			| 	param_list COMMA param
+param_list	:	param 								{ $$ = $1; }
+			| 	param_list COMMA param				{ $1.params.Add($3); $$ = $1; }
 			;
 
-param		:	ID COLON type
+param		:	ID COLON type 						{ $$ = new Parameter($1, $3); }
 			;
 
-func_body	:	DO stm_list END
-			|	ARROW LROUND expr RROUND	/* possible fix: recognize new line before END token */
+func_body	:	DO stm_list END						{ $$ = $1; }
+			|	ARROW LROUND expr RROUND
 			;
 
 stm_list	:	statement
@@ -147,7 +147,7 @@ expr_list	:	expr
 assignment	:	secondary ASSIGN expr SEMICOLON
 			;
 
-if_stm		:	IF expr THEN stm_list END { if($1) { $2 } else {$3} }
+if_stm		:	IF expr THEN stm_list END 						{ if($1) { $2 } else {$3} }
 			|	IF expr THEN stm_list ELSE stm_list END
 			;
 
@@ -160,7 +160,7 @@ loop_header	:	/* empty */
 			|	WHILE expr
 			;
 
-return_stm	:	RETURN SEMICOLON
+return_stm	:	RETURN SEMICOLON				/* possible fix: recognize new line before END token */
 			|	RETURN expr SEMICOLON
 			;
 
