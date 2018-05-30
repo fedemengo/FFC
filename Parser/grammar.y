@@ -1,4 +1,6 @@
-%error-verbose
+%defines
+%tokentype ETokens
+
 %token ID BOOLEAN_VALUE INTEGER_VALUE REAL_VALUE RATIONAL_VALUE COMPLEX_VALUE STRING_VALUE
 %token DOT COMMA COLON SEMICOLON
 %token STAR SLASH
@@ -28,13 +30,15 @@
 
 %%
 
-starting    :	dec_list EOF ;
+starting    :	dec_list EOF { Console.WriteLine("Ciao"); }
+			;
 
 dec_list	: 	declaration
 			| 	declaration dec_list
 			;
 
-declaration	:	ID opt_type IS expr SEMICOLON ;
+declaration	:	ID opt_type IS expr SEMICOLON
+			;
 
 opt_type	:	/* empty */
 			|	COLON type
@@ -70,7 +74,7 @@ expr		:	secondary
 			|	secondary ELLIPSIS secondary /* shall it just be a special case for FOR loops or a whole new type? */ //causes a hell of errors
 			;
 
-secondary	:	primary
+secondary	:	primary { $$ = $1 }
 			|	func_call
 			|	secondary indexer
 			;
@@ -93,9 +97,11 @@ value		:	BOOLEAN_VALUE
 			|	ID
 			;
 
-cond		:	IF expr THEN expr ELSE expr END ;
+cond		:	IF expr THEN expr ELSE expr END
+			;
 
-func_def	:	FUNC LROUND opt_params RROUND opt_type func_body ;
+func_def	:	FUNC LROUND opt_params RROUND opt_type func_body
+			;
 
 opt_params	:	/* empty */
 			|	param_list
@@ -105,7 +111,8 @@ param_list	:	param
 			| 	param_list COMMA param
 			;
 
-param		:	ID COLON type ;
+param		:	ID COLON type
+			;
 
 func_body	:	DO stm_list END
 			|	ARROW LROUND expr RROUND	/* possible fix: recognize new line before END token */
@@ -127,6 +134,7 @@ statement	:	func_call SEMICOLON
 			;
 
 func_call	:	secondary LROUND opt_exprs RROUND
+			;
 
 opt_exprs	:	/* empty */
 			|	expr_list
@@ -136,13 +144,15 @@ expr_list	:	expr
 			|	expr_list COMMA expr
 			;
 
-assignment	:	secondary ASSIGN expr SEMICOLON ;
+assignment	:	secondary ASSIGN expr SEMICOLON
+			;
 
-if_stm		:	IF expr THEN stm_list END
+if_stm		:	IF expr THEN stm_list END { if($1) { $2 } else {$3} }
 			|	IF expr THEN stm_list ELSE stm_list END
 			;
 
-loop_stm	:	loop_header LOOP stm_list END ;
+loop_stm	:	loop_header LOOP stm_list END
+			;
 
 loop_header	:	/* empty */
 			|	FOR ID IN expr
@@ -154,24 +164,31 @@ return_stm	:	RETURN SEMICOLON
 			|	RETURN expr SEMICOLON
 			;
 
-break_stm	:	BREAK SEMICOLON ;
+break_stm	:	BREAK SEMICOLON
+			;
 
-cont_stm	:	CONTINUE SEMICOLON ;
+cont_stm	:	CONTINUE SEMICOLON
+			;
 
-print_stm	:	PRINT LROUND opt_exprs RROUND SEMICOLON ;
+print_stm	:	PRINT LROUND opt_exprs RROUND SEMICOLON
+			;
 
-array_def	:	LSQUARE opt_exprs RSQUARE
+array_def	:	LSQUARE opt_exprs RSQUARE 
+			;
 
-map_def		:	LCURLY pair_list RCURLY ;
+map_def		:	LCURLY pair_list RCURLY 
+			;
 
 pair_list	:	/* empty */
 			|	pair
 			|	pair_list COMMA pair
 			;
 
-pair		:	expr COLON expr ;
+pair		:	expr COLON expr 
+			;
 
-tuple_def	:	LROUND tuple_elist RROUND ;
+tuple_def	:	LROUND tuple_elist RROUND 
+			;
 
 tuple_elist :	tuple_elem
 			|	tuple_elist COMMA tuple_elem
@@ -186,14 +203,18 @@ indexer		:	LSQUARE expr RSQUARE
 			|	DOT INTEGER_VALUE
 			;
 
-func_type	:	FUNC LROUND type_list RROUND COLON type ;
+func_type	:	FUNC LROUND type_list RROUND COLON type 
+			;
 
 type_list	:	type
 			|	type_list COMMA type
 			;
 
-array_type	:	LSQUARE type RSQUARE ;
+array_type	:	LSQUARE type RSQUARE 
+			;
 
-tuple_type	: 	LROUND type_list RROUND ;
+tuple_type	: 	LROUND type_list RROUND
+			;
 
-map_type	:	LCURLY type COLON type RCURLY ;
+map_type	:	LCURLY type COLON type RCURLY 
+			;
