@@ -28,5 +28,9 @@ namespace Lexer
             Row = copy.Row;
             Column = copy.Column;
         }
+        public override string ToString()
+        {
+            return "[" + Row + ", " + Column + "]";
+        }
     }
 }

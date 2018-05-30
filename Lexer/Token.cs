@@ -6,14 +6,17 @@ namespace Lexer
     {
         public ETokens type{get; set;}
         public List<object> values = new List<object>();
-        public Position position;
-        public Token(ETokens tokenType, Position pos)
+        //Position is in a [L, R) format
+        public Position begin;
+        public Position end;
+        public Token(ETokens tokenType, Position begin, Position end)
         {
             this.type = tokenType;
-            this.position = pos;
+            this.begin = begin;
+            this.end = end;
         }
 
-        public Token(ETokens tokenType, List<object> objs, Position pos) : this(tokenType, pos)
+        public Token(ETokens tokenType, List<object> objs, Position begin, Position end) : this(tokenType, begin, end)
         {
             foreach(object o in objs)
                 values.Add(o);
@@ -32,7 +35,7 @@ namespace Lexer
                 if(i == values.Count - 1)
                     ans += ")";
             }
-            ans += " [" + position.Row + "," + position.Column + "]";
+            ans += " " + begin.ToString() + ", " + end.ToString();
             return ans;
         }
     }
