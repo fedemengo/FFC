@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace Lexer
+namespace FFC
 {
     class Program
     {
         static void Main(string[] args)
         {
-            
+            Console.WriteLine("Hello World!");
         }
     }
 }
