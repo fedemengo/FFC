@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Lexer
 {
-    class Program
+    class FLexerTest
     {
         static void Main(string[] args)
         {
