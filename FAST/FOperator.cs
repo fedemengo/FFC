@@ -23,54 +23,93 @@ namespace FFC.FAST
     }
     class LessOperator : FOperator
     {
+        public LessOperator()
+        {
 
+        }
     }
     class LessEqualOperator : FOperator
     {
+        public LessEqualOperator()
+        {
 
+        }
     }
     class GreaterOperator : FOperator
     {
+        public GreaterOperator()
+        {
 
+        }
     }
     class GreaterEqualOperator : FOperator
     {
+        public GreaterEqualOperator()
+        {
 
+        }
     }
     class EqualOperator : FOperator
     {
+        public EqualOperator()
+        {
 
+        }
     }
     class NotEqualOperator : FOperator
     {
+        public NotEqualOperator()
+        {
 
+        }
     }
     class AndOperator : FOperator
     {
+        public AndOperator()
+        {
 
+        }
     }
     class OrOperator : FOperator
     {
+        public OrOperator()
+        {
 
+        }
     }
     class XorOperator : FOperator
     {
+        public XorOperator()
+        {
 
+        }
     }
     class PlusOperator : FOperator
     {
+        public PlusOperator()
+        {
 
+        }
     }
     class MinusOperator : FOperator
     {
+        public MinusOperator()
+        {
 
+        }
     }
     class StarOperator : FOperator
     {
+        public StarOperator()
+        {
 
+        }
     }
     class SlashOperator : FOperator
     {
+        public SlashOperator()
+        {
 
+        }
     }
 }

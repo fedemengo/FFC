@@ -4,6 +4,10 @@ namespace FFC.FAST
 {
     class ArrayDefinition : FPrimary
     {
-        List<FExpression> values;
+        public List<FExpression> values;
+        public ArrayDefinition(FExpression value)
+        {
+            values = new List<FExpression>{value};
+        }
     }
 }
