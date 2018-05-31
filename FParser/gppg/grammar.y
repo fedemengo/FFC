@@ -33,32 +33,32 @@
 starting    :	dec_list EOF { Console.WriteLine("Ciao"); }
 			;
 
-dec_list	: 	declaration
-			| 	declaration dec_list
+dec_list	: 	declaration				{ $$ = new DeclarationStatementList($1); }
+			| 	dec_list declaration	{ $1.statements.Add($2); $$ = $1; }
 			;
 
-declaration	:	ID opt_type IS expr SEMICOLON
+declaration	:	ID opt_type IS expr SEMICOLON	{ $$ = new DeclarationStatement(new Identifier($1.values[0]), $2, $4); }
 			;
 
 opt_type	:	/* empty */		{ $$ = null; }
-			|	COLON type		{ $$ = $1 }
+			|	COLON type		{ $$ = $1; }
 			;
 
 type		:	INTEGER			{ $$ = new IntegerType(); }
-			|	COMPLEX			
-			|	RATIONAL
-			|	REAL
-			|	STRING
-			|	BOOLEAN
-			|	func_type
-			|	tuple_type
-			|	array_type
-			|	map_type
+			|	COMPLEX			{ $$ = new ComplexType(); }
+			|	RATIONAL		{ $$ = new RationalType(); }
+			|	REAL			{ $$ = new RealType(); }
+			|	STRING			{ $$ = new StringType(); }
+			|	BOOLEAN			{ $$ = new BooleanType(); }
+			|	func_type		{ $$ = $1; }
+			|	tuple_type		{ $$ = $1; }
+			|	array_type		{ $$ = $1; }
+			|	map_type		{ $$ = $1; }
 			;
 
-expr		:	secondary
+expr		:	secondary							{ $$ = $1; }
 			|	secondary LESS expr
-			|	secondary LESSEQUAL expr
+			|	secondary LESSEQUAL expr			
 			|	secondary GREATER expr
 			|	secondary GREATEREQUAL expr
 			|	secondary EQUAL expr
@@ -80,21 +80,21 @@ secondary	:	primary 					{ $$ = $1 }
 			;
 
 primary		: 	value					{ $$ = $1; }
-			|	cond
-			|	func_def
-			|	array_def
-			|	map_def
-			|	tuple_def
+			|	cond					{ $$ = $1; }
+			|	func_def				{ $$ = $1; }
+			|	array_def				{ $$ = $1; }
+			|	map_def					{ $$ = $1; }
+			|	tuple_def				{ $$ = $1; }
 //			|	LROUND expr RROUND
 			;
 
 value		:	BOOLEAN_VALUE			{ $$ = new BooleanValue((bool) $1.values[0]); }
-			|	INTEGER_VALUE			
-			|	REAL_VALUE
-			|	RATIONAL_VALUE
-			|	COMPLEX_VALUE
-			|	STRING_VALUE
-			|	ID
+			|	INTEGER_VALUE			{ $$ = new IntegerValue((int) $1.values[0]); }	
+			|	REAL_VALUE				{ $$ = new RealValue((double) $1.values[0]); }
+			|	RATIONAL_VALUE			{ $$ = new RationalValue((int) $1.values[0], (int) $1.values[1]); }
+			|	COMPLEX_VALUE			{ $$ = new ComplexValue((double) $1.values[0], (double) $1.values[1]); }
+			|	STRING_VALUE			{ $$ = new StringValue((string) $1.values[0]); }
+			|	ID						{ $$ = new Identifier((string) $1.values[0]); }
 			;
 
 cond		:	IF expr THEN expr ELSE expr END		{ $$ = new Conditional($2, $4, $6); }
@@ -103,8 +103,8 @@ cond		:	IF expr THEN expr ELSE expr END		{ $$ = new Conditional($2, $4, $6); }
 func_def	:	FUNC LROUND opt_params RROUND opt_type func_body
 			;
 
-opt_params	:	/* empty */
-			|	param_list
+opt_params	:	/* empty */							{ $$ = null; }
+			|	param_list							{ $$ = $1; }
 			;
 
 param_list	:	param 								{ $$ = $1; }
