@@ -6,6 +6,12 @@ namespace FFC.FAST
     {
         public FSecondary item;
         public Indexer index;
+
+        public IndexedAccess(FSecondary item, Indexer index)
+        {
+            this.item = item;
+            this.index = index;
+        }
     }
     abstract class Indexer : FASTNode
     {
@@ -15,9 +21,20 @@ namespace FFC.FAST
     {
         public Identifier id;
         public IntegerValue index;
+
+        public DotIndexer(Identifier id, IntegerType index)
+        {
+            this.id = id;
+            this.index = index;
+        }
     }
     class SquaresIndexer : Indexer
     {
         public FExpression index;
+
+        public SquaresIndexer(FExpression index)
+        {
+            this.index = index;
+        }
     }
 }
