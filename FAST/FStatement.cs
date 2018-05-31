@@ -46,6 +46,14 @@ namespace FFC.FAST
             this.expr = expr;
         }
     }
+    class DeclarationStatementList
+    {
+        public List<DeclarationStatement> statements;
+        public DeclarationStatementList(DeclarationStatement stm)
+        {
+            statements = new List<DeclarationStatement>{stm};
+        }
+    }
     class IfStatement : FStatement
     {
         public FExpression condition;
