@@ -103,7 +103,7 @@ namespace FFC.FLexer
                     if(sr.GetChar() == '.')
                     {
                         sr.Advance();
-                        return new Token(ETokens.ELLIPSES, begin, sr.GetPosition());
+                        return new Token(ETokens.ELLIPSIS, begin, sr.GetPosition());
                     }
                     return new Token(ETokens.DOT, begin, sr.GetPosition());
                 case '+' : sr.Advance(); return new Token(ETokens.PLUS, begin, sr.GetPosition());
