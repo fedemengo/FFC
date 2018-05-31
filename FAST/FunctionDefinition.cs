@@ -19,7 +19,7 @@ namespace FFC.FAST
         public Identifier id;
         public FType type;
 
-        public Parameter(Indexer id, FType type)
+        public Parameter(Identifier id, FType type)
         {
             this.id = id;
             this.type = type;

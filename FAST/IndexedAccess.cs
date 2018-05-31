@@ -22,7 +22,7 @@ namespace FFC.FAST
         public Identifier id;
         public IntegerValue index;
 
-        public DotIndexer(Identifier id, IntegerType index)
+        public DotIndexer(Identifier id, IntegerValue index)
         {
             this.id = id;
             this.index = index;
