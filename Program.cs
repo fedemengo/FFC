@@ -1,4 +1,5 @@
 ﻿using System;
+using FFC.FLexer;
 
 namespace FFC
 {
@@ -6,7 +7,13 @@ namespace FFC
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            if(args.Length > 0) FLexerTest.Test(args);
+            else
+            {
+                var s = Console.ReadLine();
+                string[] a = {s};
+                FLexerTest.Test(a);
+            }
         }
     }
 }

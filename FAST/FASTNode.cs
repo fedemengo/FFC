@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-
-namespace FAST
+namespace FFC.FAST
 {
     abstract class FASTNode
     {
-        /* inherited by
-            
+        /*
+            inherited by anyone
          */
-        
     }
 }

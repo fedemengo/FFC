@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-namespace Lexer
+namespace FFC.FLexer
 {
     class Token
     {

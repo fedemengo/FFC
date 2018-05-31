@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-namespace FAST
+namespace FFC.FAST
 {
     abstract class FType : FASTNode
     {

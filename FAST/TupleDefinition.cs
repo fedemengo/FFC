@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace FAST
+namespace FFC.FAST
 {
     class TupleDefinition : FPrimary //this count as (Expression)
     {

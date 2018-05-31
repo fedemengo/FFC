@@ -1,6 +1,6 @@
 using System;
 
-namespace Lexer
+namespace FFC.FLexer
 {
     public enum ETokens
     {

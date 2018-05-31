@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Lexer
+namespace FFC.FLexer
 {
     class FLexerTest
     {
-        static void Main(string[] args)
+        static public void Test(string[] args)
         {
             SourceReader code = new SourceReader(args[0]);
             FLexer lexer = new FLexer();
