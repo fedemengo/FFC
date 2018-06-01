@@ -26,11 +26,11 @@
 %left AND OR XOR
 %left PLUS MINUS
 %left STAR SLASH
-%left NEG
+%left NEG	
 
 %%
 
-starting    :	dec_list EOF { Console.WriteLine("Ciao"); }
+starting    :	dec_list EOF { $$ = $1; }
 			;
 
 dec_list	: 	declaration				{ $$ = new DeclarationStatementList($1); }
@@ -57,26 +57,26 @@ type		:	INTEGER			{ $$ = new IntegerType(); }
 			;
 
 expr		:	secondary							{ $$ = $1; }
-			|	secondary LESS expr
-			|	secondary LESSEQUAL expr			
-			|	secondary GREATER expr
-			|	secondary GREATEREQUAL expr
-			|	secondary EQUAL expr
-			|	secondary NOTEQUAL expr
-			|	secondary AND expr
-			|	secondary OR expr
-			|	secondary XOR expr
-			|	secondary PLUS expr
-			|	secondary MINUS expr
-			|	secondary STAR expr
-			|	secondary SLASH expr
-			|	MINUS secondary NEG
-			|	secondary ELLIPSIS secondary /* check */
+			|	secondary LESS expr					{ $$ = new BinaryOperatorExpression($1, new LessOperator(), $3); }
+			|	secondary LESSEQUAL expr			{ $$ = new BinaryOperatorExpression($1, new LessEqualOperator(), $3); }	
+			|	secondary GREATER expr				{ $$ = new BinaryOperatorExpression($1, new GreaterOperator(), $3); }
+			|	secondary GREATEREQUAL expr			{ $$ = new BinaryOperatorExpression($1, new GreaterEqualOperator(), $3); }
+			|	secondary EQUAL expr				{ $$ = new BinaryOperatorExpression($1, new EqualOperator(), $3); }
+			|	secondary NOTEQUAL expr				{ $$ = new BinaryOperatorExpression($1, new NotEqualOperator(), $3); }
+			|	secondary AND expr					{ $$ = new BinaryOperatorExpression($1, new AndOperator(), $3); }
+			|	secondary OR expr					{ $$ = new BinaryOperatorExpression($1, new OrOperator(), $3); }
+			|	secondary XOR expr					{ $$ = new BinaryOperatorExpression($1, new XorOperator(), $3); }
+			|	secondary PLUS expr					{ $$ = new BinaryOperatorExpression($1, new PlusOperator(), $3); }
+			|	secondary MINUS expr				{ $$ = new BinaryOperatorExpression($1, new MinusOperator(), $3); }
+			|	secondary STAR expr					{ $$ = new BinaryOperatorExpression($1, new StarOperator(), $3); }
+			|	secondary SLASH expr				{ $$ = new BinaryOperatorExpression($1, new SlashOperator(), $3); }
+			|	MINUS secondary NEG					{ $$ = new NegativeExpression($2); }
+			|	secondary ELLIPSIS secondary 		{ $$ = new EllipsisExpression($1, $3); }		/* check */
 			;
 
 secondary	:	primary 					{ $$ = $1 }
-			|	func_call
-			|	secondary indexer
+			|	func_call					{ $$ = $1 }
+			|	secondary indexer			{ $$ = new IndexedAccess($1, $2); }
 			;
 
 primary		: 	value					{ $$ = $1; }
@@ -100,121 +100,122 @@ value		:	BOOLEAN_VALUE			{ $$ = new BooleanValue((bool) $1.values[0]); }
 cond		:	IF expr THEN expr ELSE expr END		{ $$ = new Conditional($2, $4, $6); }
 			;
 
-func_def	:	FUNC LROUND opt_params RROUND opt_type func_body
+func_def	:	FUNC LROUND opt_params RROUND opt_type func_body		{ $$ = new FunctionDefinition($3, $5, $6); }
 			;
 
-opt_params	:	/* empty */							{ $$ = null; }
+opt_params	:	/* empty */							{ $$ = new ParameterList(); }
 			|	param_list							{ $$ = $1; }
 			;
 
-param_list	:	param 								{ $$ = $1; }
-			| 	param_list COMMA param				{ $1.params.Add($3); $$ = $1; }
+param_list	:	param 								{ $$ = new ParamenterList($1); }
+			| 	param_list COMMA param				{ $1.parameters.Add($3); $$ = $1; }
 			;
 
 param		:	ID COLON type 						{ $$ = new Parameter($1, $3); }
 			;
 
 func_body	:	DO stm_list END						{ $$ = $1; }
-			|	ARROW LROUND expr RROUND
+			|	ARROW LROUND expr RROUND			{ $$ }
 			;
 
-stm_list	:	statement
-			|	stm_list statement
+stm_list	:	statement							{ $$ = new StatementList($1); }
+			|	stm_list statement					{ $1.statements.Add($2); $$ = $1; }
 			;
 
-statement	:	func_call SEMICOLON
-			|	assignment
-			|	declaration
-			|	if_stm
-			|	loop_stm
-			|	return_stm
-			|	break_stm
-			|	cont_stm
-			|	print_stm
+statement	:	func_call SEMICOLON					{ $$ = $1; }
+			|	assignment							{ $$ = $1; }
+			|	declaration							{ $$ = $1; }
+			|	if_stm								{ $$ = $1; }
+			|	loop_stm							{ $$ = $1; }
+			|	return_stm							{ $$ = $1; }
+			|	break_stm							{ $$ = $1; }
+			|	cont_stm							{ $$ = $1; }
+			|	print_stm							{ $$ = $1; }
 			;
 
-func_call	:	secondary LROUND opt_exprs RROUND
+func_call	:	secondary LROUND opt_exprs RROUND	{ $$ = new FunctionCall($1, $3); }
 			;
 
-opt_exprs	:	/* empty */
-			|	expr_list
+opt_exprs	:	/* empty */							{ $$ = new ExpressionList(); }
+			|	expr_list							{ $$ = $1; }
 			;
 
-expr_list	:	expr
-			|	expr_list COMMA expr
+expr_list	:	expr								{ $$ = new ExpressionList($1); }
+			|	expr_list COMMA expr				{ $1.expressions.Add($3); $$ = $1; }
 			;
 
-assignment	:	secondary ASSIGN expr SEMICOLON
+assignment	:	secondary ASSIGN expr SEMICOLON		{ $$ = new AssignmentStatemt($1, $3); }
 			;
 
-if_stm		:	IF expr THEN stm_list END 						{ if($1) { $2 } else {$3} }
-			|	IF expr THEN stm_list ELSE stm_list END
+if_stm		:	IF expr THEN stm_list END 						{ $$ = new IfStatement($2, $4, new StatementList()); }
+			|	IF expr THEN stm_list ELSE stm_list END			{ $$ = new IfStatement($2, $4, $6); }
 			;
 
-loop_stm	:	loop_header LOOP stm_list END
+loop_stm	:	loop_header LOOP stm_list END		{ $$ = new LoopStatement($1, $3); }
 			;
 
-loop_header	:	/* empty */
-			|	FOR ID IN expr
-			|	FOR expr
-			|	WHILE expr
+loop_header	:	/* empty */							{ $$ = null; }	/* check */
+			|	FOR ID IN expr						{ $$ = new ForHeader(new Identifier($2), $4); }
+			|	FOR expr							{ $$ = new ForHeader(null, $2); }
+			|	WHILE expr							{ $$ = new WhileHeader($2); }
 			;
 
-return_stm	:	RETURN SEMICOLON				/* possible fix: recognize new line before END token */
-			|	RETURN expr SEMICOLON
+return_stm	:	RETURN SEMICOLON					{ $$ = new ReturnStatement(); }		/* possible fix recognize new line before END token */
+			|	RETURN expr SEMICOLON				{ $$ = new ReturnStatement($2); }
 			;
 
-break_stm	:	BREAK SEMICOLON
+break_stm	:	BREAK SEMICOLON						{ $$ = new BreakStatement(); }
 			;
 
-cont_stm	:	CONTINUE SEMICOLON
+cont_stm	:	CONTINUE SEMICOLON					{ $$ = new ContinueStatement(); }
 			;
 
-print_stm	:	PRINT LROUND opt_exprs RROUND SEMICOLON
+print_stm	:	PRINT LROUND opt_exprs RROUND SEMICOLON		{ $$ = new PrintStatement($3); }
 			;
 
-array_def	:	LSQUARE opt_exprs RSQUARE 
+array_def	:	LSQUARE opt_exprs RSQUARE 			{ $$ = new ArrayDefinition($2); }
 			;
 
-map_def		:	LCURLY pair_list RCURLY 
+map_def		:	LCURLY pair_list RCURLY 			{ $$ = new MapDefinition($2); }
 			;
 
-pair_list	:	/* empty */
-			|	pair
-			|	pair_list COMMA pair
+pair_list	:	/* empty */							{ $$ = new ExpressionPairList(); }
+			|	pair								{ $$ = new ExpressionPairList($1); }
+			|	pair_list COMMA pair				{ $1.pairs.Add($3); $$ = $1; }
 			;
 
-pair		:	expr COLON expr 
+pair		:	expr COLON expr 					{ $$ = new PairExpression($1, $3); }
 			;
 
-tuple_def	:	LROUND tuple_elist RROUND 
+tuple_def	:	LROUND tuple_elist RROUND			{ $$ = new TupleDefinition($2); }
 			;
 
-tuple_elist :	tuple_elem
-			|	tuple_elist COMMA tuple_elem
+tuple_elist :	tuple_elem							{ $$ = new TupleElementList($1); }
+			|	tuple_elist COMMA tuple_elem		{ $1.elements.Add($3); $$ = $1; }
 			;
 
-tuple_elem	:	ID IS expr
-			|	expr
+tuple_elem	:	ID IS expr							{ $$ = new TupleElement(new Identifier($1), $3); }
+			|	expr								{ $$ = new TupleElement(null, $1); }
 			;
 
-indexer		:	LSQUARE expr RSQUARE
-			|	DOT	ID
-			|	DOT INTEGER_VALUE
+indexer		:	LSQUARE expr RSQUARE				{ $$ = new SquaresIndexer($2); }
+			|	DOT	ID								{ $$ = new DotIndexer(new Identifier($2), null); }
+			|	DOT INTEGER_VALUE					{ $$ = new DotIndexer(null, new IntegerValue($2)); }
 			;
 
-func_type	:	FUNC LROUND type_list RROUND COLON type 
+func_type	:	FUNC LROUND type_list RROUND COLON type 	{ $$ = new FunctionType($3, $6); }
 			;
 
-type_list	:	type
-			|	type_list COMMA type
+type_list	:	/* empty */							{ $$ = new TypeList(); }
+			|	type								{ $$ = new TypeList($1); }
+			|	type_list COMMA type				{ $1.types.Add($3); $$ = $1; }
 			;
 
-array_type	:	LSQUARE type RSQUARE 
+array_type	:	LSQUARE type RSQUARE 				{ $$ = new ArrayType($2); }
 			;
 
-tuple_type	: 	LROUND type_list RROUND
+tuple_type	: 	LROUND type_list RROUND				{ $$ = new TupleType($2); }
 			;
 
-map_type	:	LCURLY type COLON type RCURLY 
+map_type	:	LCURLY type COLON type RCURLY 		{ $$ = new MapType($2, $4); }
 			;
