@@ -4,9 +4,9 @@ namespace FFC.FAST
     class LoopStatement : FStatement
     {
         public FLoopHeader header;
-        public List<FStatement> body;
+        public StatementList body;
 
-        public LoopStatement(FLoopHeader header, List<FStatement> body)
+        public LoopStatement(FLoopHeader header, StatementList body)
         {
             this.header = header;
             this.body = body;
@@ -14,6 +14,7 @@ namespace FFC.FAST
     }
     abstract class FLoopHeader : FASTNode
     {
+        
     }
     class ForHeader : FLoopHeader
     {

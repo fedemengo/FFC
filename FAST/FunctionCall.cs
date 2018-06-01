@@ -5,8 +5,8 @@ namespace FFC.FAST
     class FunctionCall : FSecondary
     {
         public FSecondary toCall;
-        public List<FExpression> exprs;
-        public FunctionCall(FSecondary toCall, List<FExpression> exprs)
+        public ExpressionList exprs;
+        public FunctionCall(FSecondary toCall, ExpressionList exprs)
         {
             this.toCall = toCall;
             this.exprs = exprs;

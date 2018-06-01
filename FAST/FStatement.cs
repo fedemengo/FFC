@@ -16,6 +16,18 @@ namespace FFC.FAST
             PrintStm
          */
     }
+    class StatementList : FASTNode
+    {
+        public List<FStatement> statements;
+        public StatementList(FStatement statement)
+        {
+            statements = new List<FStatement>{statement};
+        }
+        public StatementList()
+        {
+            statements = new List<FStatement>();
+        }
+    }
     class FunctionCallStatement : FStatement
     {
         public FunctionCall function;
@@ -57,9 +69,9 @@ namespace FFC.FAST
     class IfStatement : FStatement
     {
         public FExpression condition;
-        public List<FStatement> ifTrue;
-        public List<FStatement> ifFalse;
-        public IfStatement(FExpression condition, List<FStatement> ifTrue, List<FStatement> ifFalse)
+        public StatementList ifTrue;
+        public StatementList ifFalse;
+        public IfStatement(FExpression condition, StatementList ifTrue, StatementList ifFalse)
         {
             this.condition = condition;
             this.ifTrue = ifTrue;
@@ -72,6 +84,10 @@ namespace FFC.FAST
         public ReturnStatement(FExpression value)
         {
             this.value = value;
+        }
+        public ReturnStatement()
+        {
+
         }
     }
     class BreakStatement : FStatement
@@ -90,8 +106,8 @@ namespace FFC.FAST
     }
     class PrintStatement : FStatement
     {
-        List<FExpression> toPrint;
-        public PrintStatement(List<FExpression> toPrint)
+        public ExpressionList toPrint;
+        public PrintStatement(ExpressionList toPrint)
         {
             this.toPrint = toPrint;
         }

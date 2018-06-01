@@ -12,6 +12,18 @@ namespace FFC.FAST
                 FSecondary
         */
     }
+    class ExpressionList : FASTNode
+    {
+        public List<FExpression> expressions;
+        public ExpressionList(FExpression expr)
+        {
+            expressions = new List<FExpression>{expr};
+        }
+        public ExpressionList()
+        {
+            expressions = new List<FExpression>();
+        }
+    }
     class BinaryOperatorExpression : FExpression
     {
         public FSecondary left;

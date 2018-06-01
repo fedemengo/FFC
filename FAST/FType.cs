@@ -5,6 +5,18 @@ namespace FFC.FAST
     {
 
     }
+    class TypeList : FASTNode
+    {
+        public List<FType> types;
+        public TypeList()
+        {
+            types = new List<FType>();
+        }
+        public TypeList(FType type)
+        {
+            types = new List<FType>{type};
+        }
+    }
     class IntegerType : FType
     {
         public IntegerType()
@@ -53,11 +65,11 @@ namespace FFC.FAST
         }
     }
     
-    class FuncType : FType
+    class FunctionType : FType
     {
-        public List<FType> paramTypes;
+        public TypeList paramTypes;
         public FType returnType;
-        public FuncType(List<FType> paramTypes, FType returnType)
+        public FunctionType(TypeList paramTypes, FType returnType)
         {
             this.paramTypes = paramTypes;
             this.returnType = returnType;
@@ -83,10 +95,10 @@ namespace FFC.FAST
     }
     class TupleType : FType
     {
-        public List<FType> types;
-        public TupleType(FType type)
+        public TypeList types;
+        public TupleType(TypeList types)
         {
-            this.types = new List<FType>{type};
+            this.types = types;
         }
     }
 }
