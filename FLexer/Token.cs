@@ -5,19 +5,19 @@ namespace FFC.FLexer
     class TokenValue : TValue
     {
         //wraps around list
-        private List<object> list = new List<object>();
+        private List<object> values = new List<object>();
         public void Add(object o)
         {
-            list.Add(o);
+            values.Add(o);
         }
         public int Count
         {
-            get => list.Count;
+            get => values.Count;
         }
         public object this[int i]
         {
-            get => list[i];
-            set => list[i] = value;
+            get => values[i];
+            set => values[i] = value;
         }
 
     }

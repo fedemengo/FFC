@@ -45,7 +45,10 @@ dec_list	: 	declaration { $$ = new DeclarationStatementList((DeclarationStatemen
 			| 	dec_list declaration	{ ((DeclarationStatementList)$1).statements.Add((DeclarationStatement)$2); $$ = $1; }
 			;
 
-declaration	:	ID opt_type IS expr SEMICOLON	{ $$ = new DeclarationStatement(new Identifier(((Token)$1).values[0]), (FExpression)$2, (FExpression)$4); }
+declaration	:	identifier opt_type IS expr SEMICOLON	{ $$ = new DeclarationStatement(new Identifier(((TokenValue)$1)[0]), (FExpression)$2, (FExpression)$4); }
+			;
+
+identifier	:	ID				{ $$ = new Identifier(((TokenValue)$1)[0]); }
 			;
 
 opt_type	:	/* empty */		{ $$ = null; }
@@ -96,13 +99,13 @@ primary		: 	value					{ $$ = $1; }
 //			|	LROUND expr RROUND
 			;
 
-value		:	BOOLEAN_VALUE			{ $$ = new BooleanValue((bool) $1.values[0]); }
-			|	INTEGER_VALUE			{ $$ = new IntegerValue((int) $1.values[0]); }	
-			|	REAL_VALUE				{ $$ = new RealValue((double) $1.values[0]); }
-			|	RATIONAL_VALUE			{ $$ = new RationalValue((int) $1.values[0], (int) $1.values[1]); }
-			|	COMPLEX_VALUE			{ $$ = new ComplexValue((double) $1.values[0], (double) $1.values[1]); }
-			|	STRING_VALUE			{ $$ = new StringValue((string) $1.values[0]); }
-			|	ID						{ $$ = new Identifier((string) $1.values[0]); }
+value		:	BOOLEAN_VALUE			{ $$ = new BooleanValue((bool) $1[0]); }
+			|	INTEGER_VALUE			{ $$ = new IntegerValue((int) $1[0]); }	
+			|	REAL_VALUE				{ $$ = new RealValue((double) $1[0]); }
+			|	RATIONAL_VALUE			{ $$ = new RationalValue((int) $1[0], (int) $1[1]); }
+			|	COMPLEX_VALUE			{ $$ = new ComplexValue((double) $1[0], (double) $1[1]); }
+			|	STRING_VALUE			{ $$ = new StringValue((string) $1[0]); }
+			|	identifier				{ $$ = $1; }
 			;
 
 cond		:	IF expr THEN expr ELSE expr END		{ $$ = new Conditional($2, $4, $6); }
@@ -119,7 +122,7 @@ param_list	:	param 								{ $$ = new ParamenterList($1); }
 			| 	param_list COMMA param				{ $1.parameters.Add($3); $$ = $1; }
 			;
 
-param		:	ID COLON type 						{ $$ = new Parameter($1, $3); }
+param		:	identifier COLON type 						{ $$ = new Parameter($1, $3); }
 			;
 
 func_body	:	DO stm_list END						{ $$ = $1; }
@@ -163,7 +166,7 @@ loop_stm	:	loop_header LOOP stm_list END		{ $$ = new LoopStatement($1, $3); }
 			;
 
 loop_header	:	/* empty */							{ $$ = null; }	/* check */
-			|	FOR ID IN expr						{ $$ = new ForHeader(new Identifier($2), $4); }
+			|	FOR identifier IN expr						{ $$ = new ForHeader(new Identifier($2), $4); }
 			|	FOR expr							{ $$ = new ForHeader(null, $2); }
 			|	WHILE expr							{ $$ = new WhileHeader($2); }
 			;
@@ -202,12 +205,12 @@ tuple_elist :	tuple_elem							{ $$ = new TupleElementList($1); }
 			|	tuple_elist COMMA tuple_elem		{ $1.elements.Add($3); $$ = $1; }
 			;
 
-tuple_elem	:	ID IS expr							{ $$ = new TupleElement(new Identifier($1), $3); }
+tuple_elem	:	identifier IS expr							{ $$ = new TupleElement(new Identifier($1), $3); }
 			|	expr								{ $$ = new TupleElement(null, $1); }
 			;
 
 indexer		:	LSQUARE expr RSQUARE				{ $$ = new SquaresIndexer($2); }
-			|	DOT	ID								{ $$ = new DotIndexer(new Identifier($2), null); }
+			|	DOT	identifier								{ $$ = new DotIndexer(new Identifier($2), null); }
 			|	DOT INTEGER_VALUE					{ $$ = new DotIndexer(null, new IntegerValue($2)); }
 			;
 
