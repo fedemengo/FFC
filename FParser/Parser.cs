@@ -17,21 +17,25 @@ using System.Collections.Generic;
 using System.CodeDom.Compiler;
 using System.Globalization;
 using System.Text;
+
 using QUT.Gppg;
 using FFC.FLexer;
-
 
 //Automatically generated code, touch with caution
 
 namespace FFC.FParser
 {
-	public class FParser: ShiftReduceParser<int, LexLocation>
+	internal class Parser : ShiftReduceParser<TValue, LexLocation> 
 	{
 	#pragma warning disable 649
  		private static Dictionary<int, string> aliases;
 	#pragma warning restore 649
 		private static Rule[] rules = new Rule[108];
 		private static State[] states = new State[204];
+		private Scanner scanner;
+		protected Parser(FFC.FParser.Scanner scanner) : base(scanner)
+		{
+		}
 		private static string[] nonTerms = new string[]{
 				"starting", "$accept", "dec_list", "declaration", "opt_type", "expr", "type", 
 				"func_type", "tuple_type", "array_type", "map_type", "secondary", "primary", 

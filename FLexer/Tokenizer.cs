@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace FFC.FLexer
 {
-    class FLexer
+    class Tokenizer
     {
         static bool IsDigit(char c)
         {
@@ -57,7 +57,7 @@ namespace FFC.FLexer
                 
             return ans;
         }
-        Token NextToken(SourceReader sr)
+        public Token NextToken(SourceReader sr)
         {
             Position begin = sr.GetPosition();
             if(sr.Empty()) return new Token(ETokens.EOF, begin, sr.GetPosition());
