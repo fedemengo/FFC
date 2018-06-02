@@ -45,11 +45,11 @@ dec_list	: 	declaration { $$ = new DeclarationStatementList((DeclarationStatemen
 			| 	dec_list declaration	{ ((DeclarationStatementList)$1).statements.Add((DeclarationStatement)$2); $$ = $1; }
 			;
 
-declaration	:	ID opt_type IS expr SEMICOLON	{ $$ = new DeclarationStatement(new Identifier((Token)$1.values[0]), (FExpression)$2, (FExpression)$4); }
+declaration	:	ID opt_type IS expr SEMICOLON	{ $$ = new DeclarationStatement(new Identifier(((Token)$1).values[0]), (FExpression)$2, (FExpression)$4); }
 			;
 
 opt_type	:	/* empty */		{ $$ = null; }
-			|	COLON type		{ $$ = $1; }
+			|	COLON type		{ $$ = (FType)$1; }
 			;
 
 type		:	INTEGER			{ $$ = new IntegerType(); }

@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  filo-Spin-SP513
-// DateTime: 6/2/2018 6:05:40 PM
+// DateTime: 6/2/2018 6:09:30 PM
 // UserName: filo
-// Input file <FParser/gppg/grammar.y - 6/2/2018 6:05:37 PM>
+// Input file <FParser/gppg/grammar.y - 6/2/2018 6:09:15 PM>
 
 // options: lines
 
@@ -396,7 +396,7 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 5: // declaration -> ID, opt_type, IS, expr, SEMICOLON
 #line 48 "FParser/gppg/grammar.y"
-                                            { CurrentSemanticValue = new DeclarationStatement(new Identifier((Token)ValueStack[ValueStack.Depth-5].values[0]), (FExpression)ValueStack[ValueStack.Depth-4], (FExpression)ValueStack[ValueStack.Depth-2]); }
+                                            { CurrentSemanticValue = new DeclarationStatement(new Identifier(((Token)ValueStack[ValueStack.Depth-5]).values[0]), (FExpression)ValueStack[ValueStack.Depth-4], (FExpression)ValueStack[ValueStack.Depth-2]); }
 #line default
         break;
       case 6: // opt_type -> /* empty */
@@ -406,7 +406,7 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 7: // opt_type -> COLON, type
 #line 52 "FParser/gppg/grammar.y"
-                 { CurrentSemanticValue = ValueStack[ValueStack.Depth-2]; }
+                 { CurrentSemanticValue = (FType)ValueStack[ValueStack.Depth-2]; }
 #line default
         break;
       case 8: // type -> INTEGER
