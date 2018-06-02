@@ -1,4 +1,3 @@
-%defines
 %tokentype ETokens
 
 %token ID BOOLEAN_VALUE INTEGER_VALUE REAL_VALUE RATIONAL_VALUE COMPLEX_VALUE STRING_VALUE
@@ -28,7 +27,10 @@
 %left STAR SLASH
 %left NEG	
 
+%YYSTYPE TValue
+
 %%
+
 
 starting    :	dec_list EOF { $$ = $1; }
 			;
