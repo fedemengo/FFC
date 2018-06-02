@@ -25,7 +25,13 @@
 %left AND OR XOR
 %left PLUS MINUS
 %left STAR SLASH
-%left NEG	
+%left NEG
+
+%using FFC.FAST;
+%using FFC.FLexer;
+%namespace FFC.FParser
+%visibility internal
+%partial 
 
 %YYSTYPE TValue
 
@@ -35,11 +41,11 @@
 starting    :	dec_list EOF { $$ = $1; }
 			;
 
-dec_list	: 	declaration				{ $$ = new DeclarationStatementList($1); }
-			| 	dec_list declaration	{ $1.statements.Add($2); $$ = $1; }
+dec_list	: 	declaration { $$ = new DeclarationStatementList((DeclarationStatement)$1); }
+			| 	dec_list declaration	{ ((DeclarationStatementList)$1).statements.Add((DeclarationStatement)$2); $$ = $1; }
 			;
 
-declaration	:	ID opt_type IS expr SEMICOLON	{ $$ = new DeclarationStatement(new Identifier($1.values[0]), $2, $4); }
+declaration	:	ID opt_type IS expr SEMICOLON	{ $$ = new DeclarationStatement(new Identifier((Token)$1.values[0]), (FExpression)$2, (FExpression)$4); }
 			;
 
 opt_type	:	/* empty */		{ $$ = null; }

@@ -67,7 +67,7 @@ namespace FFC.FAST
             this.expr = expr;
         }
     }
-    class DeclarationStatementList
+    class DeclarationStatementList : FASTNode
     {
         public List<DeclarationStatement> statements;
         public DeclarationStatementList(DeclarationStatement stm)
