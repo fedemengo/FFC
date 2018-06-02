@@ -1,4 +1,4 @@
-# F
+# FFC
 A compiler for the F language (and it's definition)
 
 ## TODOs
@@ -7,29 +7,26 @@ A compiler for the F language (and it's definition)
 * Design structure of statement (with feature to print AST)
 * Action on the tree 
 	* Code generation (e.g. If is smth in stack and some conditional jump) (recursively within different statement)
-	* ?
 	* Reorganize tree (optimization)
 * Mappings between current and final code
 * Generate code for simple program (e.g "hello world" and look into it with **ildasm.exe**)
 * Dynamically load external library 
 
-## SCHEDULE
-
-* W1 - AST (structure), semantic actions
-
-* W2 - Mappings (for main constructs and for nested functions)
-
-* W3 - Code generation (while creating mappings)
-
-* W4 - Debugging and Testing
-
-* W5 - Writing a report
-
 ## Progress
 
-- Lexer
-    - [ ] Bug detection
+- [x] Lexical analyser
+	
+- [x] Parser
+	- [x] Grammar	
+	- [x] Semantic actions
+	- [x] AST structure
 
-- Parser
-    - [ ] Operator precedence
-    - [ ] Tuples
+- [ ] Mappings (main constructs, nested functions)
+
+- [ ] Code generation (while creating mappings)
+
+- [ ] Debugging and Testing
+
+- [ ] Writing a report
+
+
