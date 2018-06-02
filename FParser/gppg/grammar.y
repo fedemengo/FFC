@@ -73,11 +73,11 @@ expr		:	secondary							{ $$ = $1; }
 			|	secondary STAR expr					{ $$ = new BinaryOperatorExpression($1, new StarOperator(), $3); }
 			|	secondary SLASH expr				{ $$ = new BinaryOperatorExpression($1, new SlashOperator(), $3); }
 			|	MINUS secondary NEG					{ $$ = new NegativeExpression($2); }
-			|	secondary ELLIPSIS secondary 		{ $$ = new EllipsisExpression($1, $3); }		/* check */
+			|	secondary ELLIPSIS secondary 		{ $$ = new EllipsisExpression($1, $3); }
 			;
 
-secondary	:	primary 					{ $$ = $1 }
-			|	func_call					{ $$ = $1 }
+secondary	:	primary 					{ $$ = $1; }
+			|	func_call					{ $$ = $1; }
 			|	secondary indexer			{ $$ = new IndexedAccess($1, $2); }
 			;
 
@@ -117,7 +117,7 @@ param		:	ID COLON type 						{ $$ = new Parameter($1, $3); }
 			;
 
 func_body	:	DO stm_list END						{ $$ = $1; }
-			|	ARROW LROUND expr RROUND			{ $$ }
+			|	ARROW LROUND expr RROUND			{ $$ = new StatementList(new ExpressionStatement($3)); }
 			;
 
 stm_list	:	statement							{ $$ = new StatementList($1); }

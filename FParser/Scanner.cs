@@ -8,7 +8,7 @@ namespace FFC.FParser
         public Tokenizer lex;
         public SourceReader sr;
         public Token current;
-        protected Scanner(Tokenizer lex, SourceReader sr)
+        public Scanner(Tokenizer lex, SourceReader sr)
         {
             this.sr = sr;
             this.lex = lex;

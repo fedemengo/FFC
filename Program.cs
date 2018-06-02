@@ -1,19 +1,14 @@
 ﻿using System;
 using FFC.FLexer;
+using FFC.FParser;
 
-namespace FFC
+namespace FFC.FParser
 {
     class Program
     {
         static void Main(string[] args)
         {
-            if(args.Length > 0) FLexerTest.Test(args);
-            else
-            {
-                var s = Console.ReadLine();
-                string[] a = {s};
-                FLexerTest.Test(a);
-            }
+            Parser p = new Parser(new Scanner(new Tokenizer(), new SourceReader(args[0])));
         }
     }
 }
