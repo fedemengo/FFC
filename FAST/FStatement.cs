@@ -28,7 +28,7 @@ namespace FFC.FAST
             statements = new List<FStatement>();
         }
     }
-    class ExpressionStatement : FASTNode
+    class ExpressionStatement : FStatement
     {
         public FExpression expression;
         public ExpressionStatement(FExpression expression)
