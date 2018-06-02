@@ -28,6 +28,15 @@ namespace FFC.FAST
             statements = new List<FStatement>();
         }
     }
+    class ExpressionStatement : FASTNode
+    {
+        public FExpression expression;
+        public ExpressionStatement(FExpression expression)
+        {
+            this.expression = expression;
+        }
+        
+    }
     class FunctionCallStatement : FStatement
     {
         public FunctionCall function;
