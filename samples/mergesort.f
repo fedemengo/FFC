@@ -1,5 +1,5 @@
 merge is func(a: [integer], b: [integer]) do
-	v is [integer];
+	v: [integer] is [];
 	i is 0;
 	j is 0;
 	while i < length(a) & j < length(b) loop
@@ -19,31 +19,34 @@ merge is func(a: [integer], b: [integer]) do
 		v := v + b[j];
 		j := j + 1;
 	end
-end
+end;
 
 // commento
 
 split is func(v: [integer], pos: integer) do
 	i is 0;
-	a is [integer];
-	b is [integer];
+	a: [integer] is [];
+	b: [integer] is [];
 	while i < length(v) loop
 		if i < pos then
-			a := a + v[i]
+			a := a + v[i];
 		else
-			b := b + v[i]
+			b := b + v[i];
+		end
 		i := i + 1;
 	end
 	return (a, b);
-end
+end;
+
 
 mergesort is func(v: [integer]) do
 	parts is split(v, round(length(v)/2));
-	return merge(parts.1 parts.2);
-end
+	return merge(parts.1, parts.2);
+end;
 
 main is func() do
-	v is [3 5 1 2 4 -2 8];
+	v is [3, 5, 1, 2, 4, -2, 8];
 	s is mergesort(v);
-	for i in s loop print(i) end
-end
+	for i in s loop print(i); end
+end;
+
