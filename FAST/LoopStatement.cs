@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 namespace FFC.FAST
 {
     class LoopStatement : FStatement
@@ -10,6 +11,14 @@ namespace FFC.FAST
         {
             this.header = header;
             this.body = body;
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Loop statement");
+            header.Print(tabs + 1);
+            body.Print(tabs + 1);
         }
     }
     abstract class FLoopHeader : FASTNode
@@ -26,6 +35,14 @@ namespace FFC.FAST
             this.id = id;
             this.collection = collection;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("For header");
+            if(id != null) id.Print(tabs + 1);
+            collection.Print(tabs + 1);
+        }
     }
     class WhileHeader : FLoopHeader
     {
@@ -34,6 +51,13 @@ namespace FFC.FAST
         public WhileHeader(FExpression condition)
         {
             this.condition = condition;
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("While header");
+            condition.Print(tabs + 1);
         }
     }
 }

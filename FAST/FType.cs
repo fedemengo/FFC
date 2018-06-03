@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System;
+
 namespace FFC.FAST
 {
     abstract class FType : FASTNode
@@ -16,12 +18,26 @@ namespace FFC.FAST
         {
             types = new List<FType>{type};
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Type list");
+            foreach(FType t in types)
+                t.Print(tabs + 1);
+        }
     }
     class IntegerType : FType
     {
         public IntegerType()
         {
 
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Integer type");
         }
     }
 
@@ -31,6 +47,12 @@ namespace FFC.FAST
         {
 
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Real type");
+        }
     }
 
     class ComplexType : FType
@@ -38,6 +60,12 @@ namespace FFC.FAST
         public ComplexType()
         {
 
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Complex type");
         }
     }
 
@@ -47,6 +75,12 @@ namespace FFC.FAST
         {
 
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Rational type");
+        }
     }
 
     class StringType : FType
@@ -55,6 +89,12 @@ namespace FFC.FAST
         {
 
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("String type");
+        }
     }
 
     class BooleanType : FType
@@ -62,6 +102,12 @@ namespace FFC.FAST
         public BooleanType()
         {
 
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Boolean type");
         }
     }
     
@@ -74,6 +120,14 @@ namespace FFC.FAST
             this.paramTypes = paramTypes;
             this.returnType = returnType;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Function type");
+            paramTypes.Print(tabs + 1);
+            if(returnType != null) returnType.Print(tabs + 1);
+        }
     }
     class ArrayType : FType
     {
@@ -81,6 +135,13 @@ namespace FFC.FAST
         public ArrayType(FType type)
         {
             this.type = type;
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Array type");
+            type.Print(tabs + 1);
         }
     }
     class MapType : FType
@@ -92,6 +153,14 @@ namespace FFC.FAST
             this.key = key;
             this.value = value;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Map type");
+            key.Print(tabs + 1);
+            value.Print(tabs + 1);
+        }
     }
     class TupleType : FType
     {
@@ -99,6 +168,13 @@ namespace FFC.FAST
         public TupleType(TypeList types)
         {
             this.types = types;
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Tuple type");
+            types.Print(tabs + 1);
         }
     }
 }

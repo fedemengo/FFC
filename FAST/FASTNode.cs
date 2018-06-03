@@ -5,5 +5,6 @@ namespace FFC.FAST
         /*
             inherited by anyone
          */
+        abstract public void Print(int tabs);
     }
 }

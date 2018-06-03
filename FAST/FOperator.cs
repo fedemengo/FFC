@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 
 namespace FFC.FAST
 {
@@ -19,7 +20,14 @@ namespace FFC.FAST
             MinusOperator
             StarOperator
             SlashOperator
-         */
+        */
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine(this.GetType().TypeHandle);
+        }
+
     }
     class LessOperator : FOperator
     {

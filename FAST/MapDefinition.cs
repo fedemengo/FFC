@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 
 namespace FFC.FAST
 {
@@ -10,6 +11,13 @@ namespace FFC.FAST
         {
             this.entries = entries;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Map definition");
+            entries.Print(tabs + 1);
+        }
     }
     class ExpressionPairList : FASTNode
     {
@@ -20,7 +28,15 @@ namespace FFC.FAST
         }
         public ExpressionPairList()
         {
-            pairs = null;
+            pairs = new List<ExpressionPair>();
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Expression pair list");
+            foreach(var e in pairs)
+                e.Print(tabs + 1);
         }
     }
     class ExpressionPair : FASTNode
@@ -32,6 +48,14 @@ namespace FFC.FAST
         {
             this.first = first;
             this.second = second;
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Expression pair");
+            first.Print(tabs +1 );
+            second.Print(tabs +1 );
         }
     }
 }

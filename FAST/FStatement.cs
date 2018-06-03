@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+
 namespace FFC.FAST
 {
     abstract class FStatement : FASTNode
@@ -27,6 +29,14 @@ namespace FFC.FAST
         {
             statements = new List<FStatement>();
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Statement list");
+            foreach(FStatement fs in statements)
+                fs.Print(tabs + 1);
+        }
     }
     class ExpressionStatement : FStatement
     {
@@ -35,6 +45,14 @@ namespace FFC.FAST
         {
             this.expression = expression;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Expression statement");
+            expression.Print(tabs + 1);
+        }
+
         
     }
     class FunctionCallStatement : FStatement
@@ -43,6 +61,13 @@ namespace FFC.FAST
         public FunctionCallStatement(FunctionCall function)
         {
             this.function = function;
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("FunctionCall statement");
+            function.Print(tabs + 1);
         }
     }
     class AssignmentStatemt : FStatement
@@ -53,6 +78,14 @@ namespace FFC.FAST
         {
             this.left = left;
             this.right = right;
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Asssignement statement");
+            left.Print(tabs + 1);
+            right.Print(tabs + 1);
         }
     }
     class DeclarationStatement : FStatement
@@ -66,6 +99,15 @@ namespace FFC.FAST
             this.type = type;
             this.expr = expr;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Declaration statement");
+            id.Print(tabs + 1);
+            type.Print(tabs + 1);
+            expr.Print(tabs + 1);
+        }
     }
     class DeclarationStatementList : FASTNode
     {
@@ -73,6 +115,14 @@ namespace FFC.FAST
         public DeclarationStatementList(DeclarationStatement stm)
         {
             statements = new List<DeclarationStatement>{stm};
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Declaration statement list");
+            foreach(DeclarationStatement stm in statements)
+                stm.Print(tabs + 1);
         }
     }
     class IfStatement : FStatement
@@ -86,6 +136,15 @@ namespace FFC.FAST
             this.ifTrue = ifTrue;
             this.ifFalse = ifFalse;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("If statement");
+            condition.Print(tabs + 1);
+            ifTrue.Print(tabs + 1);
+            ifFalse.Print(tabs + 1);
+        }
     }
     class ReturnStatement : FStatement
     {
@@ -96,7 +155,14 @@ namespace FFC.FAST
         }
         public ReturnStatement()
         {
-
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Return statement");
+            if(value != null)
+                value.Print(tabs + 1);
         }
     }
     class BreakStatement : FStatement
@@ -104,13 +170,25 @@ namespace FFC.FAST
         public BreakStatement()
         {
 
+        }public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Break statement");
         }
+
     }
     class ContinueStatement : FStatement
     {
         public ContinueStatement()
         {
 
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Continue statement");
         }
     }
     class PrintStatement : FStatement
@@ -119,6 +197,13 @@ namespace FFC.FAST
         public PrintStatement(ExpressionList toPrint)
         {
             this.toPrint = toPrint;
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Print statement");
+            toPrint.Print(tabs + 1);
         }
     }
 }

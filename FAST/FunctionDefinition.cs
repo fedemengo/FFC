@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 namespace FFC.FAST
 {
     class FunctionDefinition : FPrimary
@@ -13,6 +14,15 @@ namespace FFC.FAST
             this.returnType = returnType;
             this.body = body;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Function definition");
+            parameters.Print(tabs + 1);
+            if(returnType != null) returnType.Print(tabs + 1);
+            body.Print(tabs + 1);
+        }
     }
 
     class ParameterList : FASTNode
@@ -26,6 +36,14 @@ namespace FFC.FAST
         {
             parameters = new List<Parameter>();
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Parameter list");
+            foreach(Parameter p in parameters)
+                p.Print(tabs + 1);
+        }
     }
 
     class Parameter : FASTNode
@@ -37,6 +55,14 @@ namespace FFC.FAST
         {
             this.id = id;
             this.type = type;
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Parameter");
+            id.Print(tabs + 1);
+            type.Print(tabs + 1);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace FFC.FAST
@@ -23,6 +24,15 @@ namespace FFC.FAST
         {
             expressions = new List<FExpression>();
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Expression list");
+            foreach(FExpression e in expressions)
+                e.Print(tabs + 1);
+        }
+
     }
     class BinaryOperatorExpression : FExpression
     {
@@ -35,6 +45,16 @@ namespace FFC.FAST
             this.binOperator = binOperator;
             this.right = right;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Binary operator");
+            left.Print(tabs);
+            binOperator.Print(tabs);
+            right.Print(tabs);
+        }
+        
     }
     class NegativeExpression : FExpression
     {
@@ -43,6 +63,14 @@ namespace FFC.FAST
         {
             this.value = value;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Negative expression");
+            value.Print(tabs + 1);
+        }
+
     }
     class EllipsisExpression : FExpression
     {
@@ -53,5 +81,14 @@ namespace FFC.FAST
             this.from = from;
             this.to = to;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Ellipsis expression");
+            from.Print(tabs + 1);
+            to.Print(tabs + 1);
+        }
+
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 namespace FFC.FAST
 {
     abstract class FValue : FPrimary
@@ -12,6 +13,12 @@ namespace FFC.FAST
         {
             this.value = value;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine($"Boolean value({value})");
+        }
     }
     class IntegerValue : FValue
     {
@@ -21,6 +28,12 @@ namespace FFC.FAST
         {
             this.value = value;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine($"Integer value({value})");
+        }
     }
     class RealValue : FValue
     {
@@ -29,6 +42,12 @@ namespace FFC.FAST
         public RealValue(double value)
         {
             this.value = value;
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine($"RealVal value({value})");
         }
     }
     class RationalValue : FValue
@@ -41,6 +60,12 @@ namespace FFC.FAST
             this.numerator = numerator;
             this.denominator = denominator;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine($"Rationa value({numerator} / { denominator})");
+        }
     }
     class ComplexValue : FValue
     {
@@ -52,6 +77,12 @@ namespace FFC.FAST
             this.real = real;
             this.img = img;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine($"Complex value({real}i{img})");
+        }
     }
     class StringValue : FValue
     {
@@ -60,6 +91,12 @@ namespace FFC.FAST
         public StringValue(string value)
         {
             this.value = value;
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine($"StringV value({value})");
         }
     }
     class Identifier : FValue
@@ -70,5 +107,12 @@ namespace FFC.FAST
         {
             this.name = name;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine($"Identifier({name})");
+        }
+
     }
 }

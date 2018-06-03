@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 
 namespace FFC.FAST
 {
@@ -12,10 +13,17 @@ namespace FFC.FAST
             this.item = item;
             this.index = index;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Indexed access");
+            item.Print(tabs + 1);
+            index.Print(tabs + 1);
+        }
     }
     abstract class Indexer : FASTNode
     {
-        
     }
     class DotIndexer : Indexer
     {
@@ -27,6 +35,14 @@ namespace FFC.FAST
             this.id = id;
             this.index = index;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("DotIndexer");
+            if(id != null) id.Print(tabs + 1);
+            else index.Print(tabs + 1);
+        }
     }
     class SquaresIndexer : Indexer
     {
@@ -35,6 +51,13 @@ namespace FFC.FAST
         public SquaresIndexer(FExpression index)
         {
             this.index = index;
+        }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Squares indexer");
+            index.Print(tabs + 1);
         }
     }
 }

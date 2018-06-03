@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+
 namespace FFC.FAST
 {
     class Conditional : FPrimary
@@ -12,5 +14,15 @@ namespace FFC.FAST
             this.ifTrue = ifTrue;
             this.ifFalse = ifFalse;
         }
+        public override void Print(int tabs)
+        {
+            for(int i = 0; i < tabs; i++)
+                Console.Write("\t");
+            Console.WriteLine("Conditional expression");
+            condition.Print(tabs + 1);
+            ifTrue.Print(tabs + 1);
+            ifFalse.Print(tabs + 1);
+        }
+
     }
 }
