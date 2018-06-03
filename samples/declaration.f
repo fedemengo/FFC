@@ -1,1 +1,1 @@
-a: integer is 4 ;
+a: integer is -4 ;

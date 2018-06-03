@@ -25,7 +25,6 @@
 %left AND OR XOR
 %left PLUS MINUS
 %left STAR SLASH
-%left NEG
 
 %using FFC.FAST;
 %using FFC.FLexer;
@@ -81,7 +80,7 @@ expr		:	secondary							{ $$ = $1; }
 			|	secondary MINUS expr				{ $$ = new BinaryOperatorExpression((FSecondary)$1, new MinusOperator(), (FExpression)$3); }
 			|	secondary STAR expr					{ $$ = new BinaryOperatorExpression((FSecondary)$1, new StarOperator(), (FExpression)$3); }
 			|	secondary SLASH expr				{ $$ = new BinaryOperatorExpression((FSecondary)$1, new SlashOperator(), (FExpression)$3); }
-			|	MINUS secondary NEG					{ $$ = new NegativeExpression((FSecondary)$2); }
+			|	MINUS secondary %prec NEG					{ $$ = new NegativeExpression((FSecondary)$2); }
 			|	secondary ELLIPSIS secondary 		{ $$ = new EllipsisExpression((FSecondary)$1, (FSecondary)$3); }
 			;
 
