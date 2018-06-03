@@ -33,6 +33,11 @@ namespace QUT.Gppg{
             set { scanner = value; }
         }
 
+        public TValue GetAST()
+        {
+            return valueStack.TopElement();
+        }
+
         /// <summary>
         /// Constructor for base class
         /// </summary>
@@ -616,6 +621,11 @@ namespace QUT.Gppg{
         private int startColumn; // start column
         private int endLine;     // end line
         private int endColumn;   // end column
+
+        public override string ToString()
+        {
+            return $"[{startLine}, {startColumn}], [{endLine}, {endColumn}]";
+        }
 
         /// <summary>
         /// The line at which the text span starts.

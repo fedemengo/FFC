@@ -20,5 +20,14 @@ namespace FFC.FParser
             yylloc = current.span;
             return (int)current.type;
         }
+        public static void Test(string path)
+        {
+            Tokenizer l = new Tokenizer();
+            SourceReader sr = new SourceReader(path);
+            Scanner s = new Scanner(l, sr);
+            for(int i = 0; i < 10; i++)
+                s.yylex();
+
+        }
     }
 }

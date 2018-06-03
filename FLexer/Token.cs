@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 using FFC.FParser;
 namespace FFC.FLexer
 {
@@ -29,6 +30,7 @@ namespace FFC.FLexer
         public QUT.Gppg.LexLocation span;
         public Token(ETokens tokenType, Position begin, Position end)
         {
+            Console.WriteLine("Token : " + tokenType);
             this.type = tokenType;
             this.span = new QUT.Gppg.LexLocation(begin.Row, begin.Column, end.Row, end.Column);
         }
@@ -37,6 +39,10 @@ namespace FFC.FLexer
         {
             foreach(object o in objs)
                 values.Add(o);
+            Console.Write("\t");
+            foreach(object o in objs)
+                Console.Write(o.ToString());
+            Console.WriteLine();
         }
 
         override public string ToString()

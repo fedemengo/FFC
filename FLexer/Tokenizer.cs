@@ -54,7 +54,7 @@ namespace FFC.FLexer
                 if(current.type == ETokens.ERROR)
                     sr.SkipBlank();
             }
-                
+            ans.Add(current);
             return ans;
         }
         public Token NextToken(SourceReader sr)
