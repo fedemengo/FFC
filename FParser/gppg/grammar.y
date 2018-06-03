@@ -52,7 +52,7 @@ identifier	:	ID				{ $$ = new Identifier(((TokenValue)$1)[0].ToString()); }
 			;
 
 opt_type	:	/* empty */		{ $$ = null; }
-			|	COLON type		{ $$ = (FType)$1; }
+			|	COLON type		{ $$ = (FType) $2; }
 			;
 
 type		:	INTEGER			{ $$ = new IntegerType(); }

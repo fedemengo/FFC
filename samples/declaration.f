@@ -1,1 +1,1 @@
-a is :integer 4 ;
+a: integer is 4 ;

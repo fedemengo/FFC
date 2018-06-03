@@ -1,8 +1,8 @@
-min is func(x1: integer, x2: integer) => if x1 < x2 then x1 else x2 end
+min is func(x1: integer, x2: integer) => (if x1 < x2 then x1 else x2 end)
 
-max is func(x1: integer, x2: integer) => if x1 > x2 then x1 else x2 end
+max is func(x1: integer, x2: integer) => (if x1 > x2 then x1 else x2 end)
 
-mot is func(x1: integer, x2: integer, x3: integer) => max(min(x1, x2), min(max(x1, x2), x3)) end
+mot is func(x1: integer, x2: integer, x3: integer) => (max(min(x1, x2), min(max(x1, x2), x3)) end)
 
 pivot is func(v: [integer]) do
     m is round((length(v) - 1) / 2);

@@ -3,10 +3,10 @@
 // (see accompanying GPPGcopyright.rtf)
 
 // GPPG version 1.5.2
-// Machine:  filo-Spin-SP513
-// DateTime: 6/3/2018 12:36:04 AM
-// UserName: filo
-// Input file <FParser/gppg/grammar.y - 6/3/2018 12:36:00 AM>
+// Machine:  MacBook-Pro
+// DateTime: 6/3/2018 1:10:36 PM
+// UserName: fedemengo
+// Input file <FParser/gppg/grammar.y - 6/3/2018 1:05:44 PM>
 
 // options: lines
 
@@ -402,7 +402,7 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 8: // opt_type -> COLON, type
 #line 55 "FParser/gppg/grammar.y"
-                 { CurrentSemanticValue = (FType)ValueStack[ValueStack.Depth-2]; }
+                 { CurrentSemanticValue = (FType) ValueStack[ValueStack.Depth-1]; }
 #line default
         break;
       case 9: // type -> INTEGER
