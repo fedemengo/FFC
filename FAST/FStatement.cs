@@ -105,7 +105,7 @@ namespace FFC.FAST
                 Console.Write("\t");
             Console.WriteLine("Declaration statement");
             id.Print(tabs + 1);
-            type.Print(tabs + 1);
+            if(type != null) type.Print(tabs + 1);
             expr.Print(tabs + 1);
         }
     }
