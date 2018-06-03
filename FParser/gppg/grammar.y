@@ -124,7 +124,7 @@ param_list	:	param 								{ $$ = new ParameterList((Parameter)$1); }
 param		:	identifier COLON type 						{ $$ = new Parameter((Identifier)$1, (FType)$3); }
 			;
 
-func_body	:	DO stm_list END						{ $$ = $1; }
+func_body	:	DO stm_list END						{ $$ = $2; }
 			|	ARROW LROUND expr RROUND			{ $$ = new StatementList(new ExpressionStatement((FExpression)$3)); }
 			;
 

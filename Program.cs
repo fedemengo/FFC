@@ -10,9 +10,9 @@ namespace FFC.FParser
         {
             //Scanner.Test(args[0]);
             //FLexerTTest.Test(args);
-            Parser p = new Parser(new Scanner(new Tokenizer(), new SourceReader(args[0])));
+            FFC.FParser.Parser p = new FFC.FParser.Parser(new Scanner(new Tokenizer(), new SourceReader(args[0])));
             bool res = p.Parse();
-            Console.WriteLine($"Parsing success : {res}");
+            Console.WriteLine($"\nParsing success : {res}\n");
             if(res)
             {
                 FASTNode root = (FASTNode)p.GetAST();

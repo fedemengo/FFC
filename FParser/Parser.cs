@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  MacBook-Pro
-// DateTime: 6/3/2018 5:49:52 PM
+// DateTime: 6/3/2018 6:44:12 PM
 // UserName: fedemengo
-// Input file <FParser/gppg/grammar.y - 6/3/2018 5:49:47 PM>
+// Input file <FParser/gppg/grammar.y - 6/3/2018 6:44:07 PM>
 
 // options: lines
 
@@ -651,7 +651,7 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 58: // func_body -> DO, stm_list, END
 #line 127 "FParser/gppg/grammar.y"
-                                 { CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
+                                 { CurrentSemanticValue = ValueStack[ValueStack.Depth-2]; }
 #line default
         break;
       case 59: // func_body -> ARROW, LROUND, expr, RROUND
