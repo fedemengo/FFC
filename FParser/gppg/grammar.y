@@ -40,8 +40,8 @@
 starting    :	dec_list EOF { $$ = $1; }
 			;
 
-dec_list	: 	declaration { $$ = new DeclarationStatementList((DeclarationStatement)$1); }
-			| 	dec_list declaration	{ ((DeclarationStatementList)$1).statements.Add((DeclarationStatement)$2); $$ = $1; }
+dec_list	: 	declaration 							{ $$ = new DeclarationStatementList((DeclarationStatement)$1); }
+			| 	dec_list declaration					{ ((DeclarationStatementList)$1).statements.Add((DeclarationStatement)$2); $$ = $1; }
 			;
 
 declaration	:	identifier opt_type IS expr SEMICOLON	{ $$ = new DeclarationStatement((Identifier)$1, (FType)$2, (FExpression)$4); }
@@ -85,7 +85,7 @@ expr		:	secondary							{ $$ = $1; }
 			|	secondary MINUS expr				{ $$ = new BinaryOperatorExpression((FSecondary)$1, new MinusOperator(), (FExpression)$3); }
 			|	secondary STAR expr					{ $$ = new BinaryOperatorExpression((FSecondary)$1, new StarOperator(), (FExpression)$3); }
 			|	secondary SLASH expr				{ $$ = new BinaryOperatorExpression((FSecondary)$1, new SlashOperator(), (FExpression)$3); }
-			|	MINUS secondary %prec NEG					{ $$ = new NegativeExpression((FSecondary)$2); }
+			|	MINUS secondary %prec NEG			{ $$ = new NegativeExpression((FSecondary)$2); }
 			|	secondary ELLIPSIS secondary 		{ $$ = new EllipsisExpression((FSecondary)$1, (FSecondary)$3); }
 			;
 
@@ -126,7 +126,7 @@ param_list	:	param 								{ $$ = new ParameterList((Parameter)$1); }
 			| 	param_list COMMA param				{ ((ParameterList)$1).parameters.Add((Parameter)$3); $$ = $1; }
 			;
 
-param		:	identifier COLON type 						{ $$ = new Parameter((Identifier)$1, (FType)$3); }
+param		:	identifier COLON type				{ $$ = new Parameter((Identifier)$1, (FType)$3); }
 			;
 
 func_body	:	DO stm_list END						{ $$ = $2; }
@@ -137,15 +137,18 @@ stm_list	:	statement							{ $$ = new StatementList((FStatement)$1); }
 			|	stm_list statement					{ ((StatementList)$1).statements.Add((FStatement)$2); $$ = $1; }
 			;
 
-statement	:	func_call SEMICOLON					{ $$ = $1; }
+ni_stm		:	func_call SEMICOLON					{ $$ = $1; }
 			|	assignment							{ $$ = $1; }
 			|	declaration							{ $$ = $1; }
-			|	if_stm								{ $$ = $1; }
 			|	loop_stm							{ $$ = $1; }
 			|	return_stm							{ $$ = $1; }
 			|	break_stm							{ $$ = $1; }
 			|	cont_stm							{ $$ = $1; }
 			|	print_stm							{ $$ = $1; }
+			;
+
+statement	: 	if_stm								{ $$ = $1; }
+			|	ni_stm								{ $$ = $1; }
 			;
 
 func_call	:	secondary LROUND opt_exprs RROUND	{ $$ = new FunctionCall((FSecondary)$1, (ExpressionList)$3); }
@@ -162,8 +165,20 @@ expr_list	:	expr2								{ $$ = new ExpressionList((FExpression)$1); }
 assignment	:	secondary ASSIGN expr2 SEMICOLON		{ $$ = new AssignmentStatemt((FSecondary)$1, (FExpression)$3); }
 			;
 
-if_stm		:	IF expr THEN stm_list END 						{ $$ = new IfStatement((FExpression)$2, (StatementList)$4, new StatementList()); }
-			|	IF expr THEN stm_list ELSE stm_list END			{ $$ = new IfStatement((FExpression)$2, (StatementList)$4, (StatementList)$6); }
+if_stm		: 	IF expr THEN stm_list e_if_list opt_else		{ $$ = new IfStatement((FExpression)$2, (StatementList)$4, (ElseIfList)$5, (StatementList)$6); }
+			|	IF expr THEN stm_list opt_else					{ $$ = new IfStatement((FExpression)$2, (StatementList)$4, (StatementList)$5); }
+			;
+
+e_if_list	:	ELSE IF expr THEN stm_list						{ $$ = new ElseIfList(new ElseIfStatement((FExpression) $3, (StatementList) $5)); }
+			|	e_if_list ELSE IF expr THEN stm_list			{ (ElseIfList)($1).Add(new ElseIfListStatement((FExpression) $4, (StatementList) $6)); $$ = $1; }
+			;
+		
+opt_else	:	END												{ $$ = new StatementList(); }
+			|	ELSE ni_stm_list END							{ $$ = $2; }
+			;
+
+ni_stm_list :	ni_stm									{ $$ = new StatementList((FStatement)$1); }
+			|	ni_stm_list statement					{ ((StatementList)$1).Add((FStatement)$2); $$ = $1; }
 			;
 
 loop_stm	:	loop_header LOOP stm_list END		{ $$ = new LoopStatement((FLoopHeader)$1, (StatementList)$3); }
