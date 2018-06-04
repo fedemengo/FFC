@@ -166,11 +166,11 @@ assignment	:	secondary ASSIGN expr2 SEMICOLON		{ $$ = new AssignmentStatemt((FSe
 			;
 
 if_stm		: 	IF expr THEN stm_list e_if_list opt_else		{ $$ = new IfStatement((FExpression)$2, (StatementList)$4, (ElseIfList)$5, (StatementList)$6); }
-			|	IF expr THEN stm_list opt_else					{ $$ = new IfStatement((FExpression)$2, (StatementList)$4, (StatementList)$5); }
+			|	IF expr THEN stm_list opt_else					{ $$ = new IfStatement((FExpression)$2, (StatementList)$4, new ElseIfList(), (StatementList)$5); }
 			;
 
 e_if_list	:	ELSE IF expr THEN stm_list						{ $$ = new ElseIfList(new ElseIfStatement((FExpression) $3, (StatementList) $5)); }
-			|	e_if_list ELSE IF expr THEN stm_list			{ (ElseIfList)($1).Add(new ElseIfListStatement((FExpression) $4, (StatementList) $6)); $$ = $1; }
+			|	e_if_list ELSE IF expr THEN stm_list			{ ((ElseIfList)($1)).Add(new ElseIfStatement((FExpression) $4, (StatementList) $6)); $$ = $1; }
 			;
 		
 opt_else	:	END												{ $$ = new StatementList(); }
