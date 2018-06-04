@@ -13,9 +13,15 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            PrintTabs(tabs);
-            Console.WriteLine("Tuple definition");
-            elements.Print(tabs + 1);
+            //ignores this node (tuple definition) if we are dealing with a single expression
+            if(elements.elements.Count == 1 && elements.elements[0].id == null)
+                elements.Print(tabs);
+            else
+            {
+                PrintTabs(tabs);
+                Console.WriteLine("Tuple definition");
+                elements.Print(tabs + 1);
+            }
         }
     }
     class TupleElementList : FASTNode
