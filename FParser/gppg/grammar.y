@@ -45,6 +45,7 @@ dec_list	: 	declaration { $$ = new DeclarationStatementList((DeclarationStatemen
 			;
 
 declaration	:	identifier opt_type IS expr SEMICOLON	{ $$ = new DeclarationStatement((Identifier)$1, (FType)$2, (FExpression)$4); }
+			|	identifier opt_type IS func_def			{ $$ = new DeclarationStatement((Identifier)$1, (FType)$2, (FExpression)$4); }
 			;
 
 identifier	:	ID				{ $$ = new Identifier(((TokenValue)$1)[0].ToString()); }
@@ -64,6 +65,10 @@ type		:	INTEGER			{ $$ = new IntegerType(); }
 			|	tuple_type		{ $$ = $1; }
 			|	array_type		{ $$ = $1; }
 			|	map_type		{ $$ = $1; }
+			;
+
+expr2		:	expr			{ $$ = $1; }
+			|	func_def		{ $$ = $1; }
 			;
 
 expr		:	secondary							{ $$ = $1; }
@@ -91,7 +96,7 @@ secondary	:	primary 					{ $$ = $1; }
 
 primary		: 	value					{ $$ = $1; }
 			|	cond					{ $$ = $1; }
-			|	func_def				{ $$ = $1; }
+//			|	func_def				{ $$ = $1; }
 			|	array_def				{ $$ = $1; }
 			|	map_def					{ $$ = $1; }
 			|	tuple_def				{ $$ = $1; }
@@ -107,7 +112,7 @@ value		:	BOOLEAN_VALUE			{ $$ = new BooleanValue((bool) ((TokenValue)$1)[0]); }
 			|	identifier				{ $$ = $1; }
 			;
 
-cond		:	IF expr THEN expr ELSE expr END		{ $$ = new Conditional((FExpression)$2, (FExpression)$4, (FExpression)$6); }
+cond		:	IF expr THEN expr2 ELSE expr2 END		{ $$ = new Conditional((FExpression)$2, (FExpression)$4, (FExpression)$6); }
 			;
 
 func_def	:	FUNC LROUND opt_params RROUND opt_type func_body		{ $$ = new FunctionDefinition((ParameterList)$3, (FType)$5, (StatementList)$6); }
@@ -125,7 +130,7 @@ param		:	identifier COLON type 						{ $$ = new Parameter((Identifier)$1, (FType
 			;
 
 func_body	:	DO stm_list END						{ $$ = $2; }
-			|	ARROW LROUND expr RROUND			{ $$ = new StatementList(new ExpressionStatement((FExpression)$3)); }
+			|	ARROW LROUND expr2 RROUND			{ $$ = new StatementList(new ExpressionStatement((FExpression)$3)); }
 			;
 
 stm_list	:	statement							{ $$ = new StatementList((FStatement)$1); }
@@ -150,11 +155,11 @@ opt_exprs	:	/* empty */							{ $$ = new ExpressionList(); }
 			|	expr_list							{ $$ = $1; }
 			;
 
-expr_list	:	expr								{ $$ = new ExpressionList((FExpression)$1); }
-			|	expr_list COMMA expr				{ ((ExpressionList)$1).expressions.Add((FExpression)$3); $$ = $1; }
+expr_list	:	expr2								{ $$ = new ExpressionList((FExpression)$1); }
+			|	expr_list COMMA expr2				{ ((ExpressionList)$1).expressions.Add((FExpression)$3); $$ = $1; }
 			;
 
-assignment	:	secondary ASSIGN expr SEMICOLON		{ $$ = new AssignmentStatemt((FSecondary)$1, (FExpression)$3); }
+assignment	:	secondary ASSIGN expr2 SEMICOLON		{ $$ = new AssignmentStatemt((FSecondary)$1, (FExpression)$3); }
 			;
 
 if_stm		:	IF expr THEN stm_list END 						{ $$ = new IfStatement((FExpression)$2, (StatementList)$4, new StatementList()); }
@@ -171,7 +176,7 @@ loop_header	:	/* empty */							{ $$ = null; }	/* check */
 			;
 
 return_stm	:	RETURN SEMICOLON					{ $$ = new ReturnStatement(); }		/* possible fix recognize new line before END token */
-			|	RETURN expr SEMICOLON				{ $$ = new ReturnStatement((FExpression)$2); }
+			|	RETURN expr2 SEMICOLON				{ $$ = new ReturnStatement((FExpression)$2); }
 			;
 
 break_stm	:	BREAK SEMICOLON						{ $$ = new BreakStatement(); }
@@ -194,7 +199,7 @@ pair_list	:	/* empty */							{ $$ = new ExpressionPairList(); }
 			|	pair_list COMMA pair				{ ((ExpressionPairList)$1).pairs.Add((ExpressionPair)$3); $$ = $1; }
 			;
 
-pair		:	expr COLON expr 					{ $$ = new ExpressionPair((FExpression)$1, (FExpression)$3); }
+pair		:	expr2 COLON expr2					{ $$ = new ExpressionPair((FExpression)$1, (FExpression)$3); }
 			;
 
 tuple_def	:	LROUND tuple_elist RROUND			{ $$ = new TupleDefinition((TupleElementList)$2); }
@@ -204,11 +209,11 @@ tuple_elist :	tuple_elem							{ $$ = new TupleElementList((TupleElement)$1); }
 			|	tuple_elist COMMA tuple_elem		{ ((TupleElementList)$1).elements.Add((TupleElement)$3); $$ = $1; }
 			;
 
-tuple_elem	:	identifier IS expr					{ $$ = new TupleElement((Identifier)$1, (FExpression)$3); }
-			|	expr								{ $$ = new TupleElement(null, (FExpression)$1); }
+tuple_elem	:	identifier IS expr2					{ $$ = new TupleElement((Identifier)$1, (FExpression)$3); }
+			|	expr2								{ $$ = new TupleElement(null, (FExpression)$1); }
 			;
 
-indexer		:	LSQUARE expr RSQUARE				{ $$ = new SquaresIndexer((FExpression)$2); }
+indexer		:	LSQUARE expr2 RSQUARE				{ $$ = new SquaresIndexer((FExpression)$2); }
 			|	DOT	identifier						{ $$ = new DotIndexer((Identifier)$2, null);}
 			|	DOT INTEGER_VALUE					{ $$ = new DotIndexer(null, new IntegerValue((int)((TokenValue)$2)[0])); }
 			;
