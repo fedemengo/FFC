@@ -48,9 +48,9 @@ namespace FFC.FAST
         {
             PrintTabs(tabs);
             Console.WriteLine("Binary operator");
-            left.Print(tabs);
-            binOperator.Print(tabs);
-            right.Print(tabs);
+            left.Print(tabs+1);
+            binOperator.Print(tabs+1);
+            right.Print(tabs+1);
         }
         
     }

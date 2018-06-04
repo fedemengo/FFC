@@ -60,7 +60,7 @@ namespace FFC.FAST
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
-            Console.WriteLine($"Rationa value({numerator} / { denominator})");
+            Console.WriteLine($"Rational value({numerator} / { denominator})");
         }
     }
     class ComplexValue : FValue
@@ -90,7 +90,7 @@ namespace FFC.FAST
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
-            Console.WriteLine($"StringV value({value})");
+            Console.WriteLine($"String value({value})");
         }
     }
     class Identifier : FValue

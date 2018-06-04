@@ -24,7 +24,7 @@ namespace FFC.FAST
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
-            Console.WriteLine(this.GetType().TypeHandle);
+            Console.WriteLine(this.GetType().ToString().Substring(9));
         }
 
     }
