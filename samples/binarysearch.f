@@ -12,4 +12,4 @@ binsearch is func(v: [integer], k: integer) do
 		end end
 	end
 	return -1;
-end;
+end

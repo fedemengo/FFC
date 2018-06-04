@@ -19,7 +19,7 @@ merge is func(a: [integer], b: [integer]) do
 		v := v + b[j];
 		j := j + 1;
 	end
-end;
+end
 
 // commento
 
@@ -36,17 +36,17 @@ split is func(v: [integer], pos: integer) do
 		i := i + 1;
 	end
 	return (a, b);
-end;
+end
 
 
 mergesort is func(v: [integer]) do
 	parts is split(v, round(length(v)/2));
 	return merge(parts.1, parts.2);
-end;
+end
 
 main is func() do
 	v is [3, 5, 1, 2, 4, -2, 8];
 	s is mergesort(v);
 	for i in s loop print(i); end
-end;
+end
 
