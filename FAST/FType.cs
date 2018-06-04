@@ -20,8 +20,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Type list");
             foreach(FType t in types)
                 t.Print(tabs + 1);
@@ -35,8 +34,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Integer type");
         }
     }
@@ -49,8 +47,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Real type");
         }
     }
@@ -63,8 +60,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Complex type");
         }
     }
@@ -77,8 +73,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Rational type");
         }
     }
@@ -91,8 +86,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("String type");
         }
     }
@@ -105,8 +99,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Boolean type");
         }
     }
@@ -122,8 +115,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Function type");
             paramTypes.Print(tabs + 1);
             if(returnType != null) returnType.Print(tabs + 1);
@@ -138,8 +130,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Array type");
             type.Print(tabs + 1);
         }
@@ -155,8 +146,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Map type");
             key.Print(tabs + 1);
             value.Print(tabs + 1);
@@ -171,8 +161,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Tuple type");
             types.Print(tabs + 1);
         }

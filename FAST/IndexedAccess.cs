@@ -15,8 +15,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Indexed access");
             item.Print(tabs + 1);
             index.Print(tabs + 1);
@@ -37,8 +36,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("DotIndexer");
             if(id != null) id.Print(tabs + 1);
             else index.Print(tabs + 1);
@@ -54,8 +52,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Squares indexer");
             index.Print(tabs + 1);
         }

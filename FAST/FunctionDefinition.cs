@@ -16,8 +16,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Function definition");
             parameters.Print(tabs + 1);
             if(returnType != null) returnType.Print(tabs + 1);
@@ -38,8 +37,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Parameter list");
             foreach(Parameter p in parameters)
                 p.Print(tabs + 1);
@@ -58,8 +56,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Parameter");
             id.Print(tabs + 1);
             type.Print(tabs + 1);

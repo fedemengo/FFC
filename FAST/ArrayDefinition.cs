@@ -13,8 +13,7 @@ namespace FFC.FAST
 
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Array definition");
             values.Print(tabs + 1);
         }

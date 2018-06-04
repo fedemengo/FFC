@@ -26,8 +26,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Expression list");
             foreach(FExpression e in expressions)
                 e.Print(tabs + 1);
@@ -47,8 +46,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Binary operator");
             left.Print(tabs);
             binOperator.Print(tabs);
@@ -65,8 +63,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Negative expression");
             value.Print(tabs + 1);
         }
@@ -83,8 +80,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Ellipsis expression");
             from.Print(tabs + 1);
             to.Print(tabs + 1);

@@ -14,8 +14,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Loop statement");
             header.Print(tabs + 1);
             body.Print(tabs + 1);
@@ -37,8 +36,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("For header");
             if(id != null) id.Print(tabs + 1);
             collection.Print(tabs + 1);
@@ -54,8 +52,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("While header");
             condition.Print(tabs + 1);
         }

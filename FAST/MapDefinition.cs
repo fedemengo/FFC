@@ -13,8 +13,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Map definition");
             entries.Print(tabs + 1);
         }
@@ -32,8 +31,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Expression pair list");
             foreach(var e in pairs)
                 e.Print(tabs + 1);
@@ -51,8 +49,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Expression pair");
             first.Print(tabs +1 );
             second.Print(tabs +1 );

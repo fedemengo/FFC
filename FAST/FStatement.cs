@@ -31,8 +31,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Statement list");
             foreach(FStatement fs in statements)
                 fs.Print(tabs + 1);
@@ -47,8 +46,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Expression statement");
             expression.Print(tabs + 1);
         }
@@ -64,8 +62,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("FunctionCall statement");
             function.Print(tabs + 1);
         }
@@ -81,8 +78,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Asssignement statement");
             left.Print(tabs + 1);
             right.Print(tabs + 1);
@@ -101,8 +97,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Declaration statement");
             id.Print(tabs + 1);
             if(type != null) type.Print(tabs + 1);
@@ -118,8 +113,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Declaration statement list");
             foreach(DeclarationStatement stm in statements)
                 stm.Print(tabs + 1);
@@ -138,8 +132,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("If statement");
             condition.Print(tabs + 1);
             ifTrue.Print(tabs + 1);
@@ -158,8 +151,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Return statement");
             if(value != null)
                 value.Print(tabs + 1);
@@ -172,8 +164,7 @@ namespace FFC.FAST
 
         }public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Break statement");
         }
 
@@ -186,8 +177,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Continue statement");
         }
     }
@@ -200,8 +190,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Print statement");
             toPrint.Print(tabs + 1);
         }

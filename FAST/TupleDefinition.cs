@@ -13,8 +13,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Tuple definition");
             elements.Print(tabs + 1);
         }
@@ -32,8 +31,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             if(elements.Count == 1 && elements[0].id == null)
             {
                 Console.WriteLine("(Expression) [deduced from TupleElemList]");
@@ -59,8 +57,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Tuple element");
             if(id != null) id.Print(tabs + 1);
             value.Print(tabs + 1);   

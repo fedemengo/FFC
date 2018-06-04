@@ -16,8 +16,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Conditional expression");
             condition.Print(tabs + 1);
             ifTrue.Print(tabs + 1);

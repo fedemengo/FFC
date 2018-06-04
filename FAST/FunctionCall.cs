@@ -14,8 +14,7 @@ namespace FFC.FAST
         }
         public override void Print(int tabs)
         {
-            for(int i = 0; i < tabs; i++)
-                Console.Write("\t");
+            PrintTabs(tabs);
             Console.WriteLine("Functlion cal");
             toCall.Print(tabs + 1);
             exprs.Print(tabs + 1);
