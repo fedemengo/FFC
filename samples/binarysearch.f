@@ -9,7 +9,7 @@ binsearch is func(v: [integer], k: integer) do
 			r := m - 1;
 		else
 			l := m + 1;
-		end end
+		end
 	end
 	return -1;
 end

@@ -29,6 +29,10 @@ namespace FFC.FAST
         {
             statements = new List<FStatement>();
         }
+        public void Add(FStatement stm)
+        {
+            statements.Add(stm);
+        }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
@@ -123,11 +127,13 @@ namespace FFC.FAST
     {
         public FExpression condition;
         public StatementList ifTrue;
+        public ElseIfList elseIfs;
         public StatementList ifFalse;
-        public IfStatement(FExpression condition, StatementList ifTrue, StatementList ifFalse)
+        public IfStatement(FExpression condition, StatementList ifTrue, ElseIfList elseIfs, StatementList ifFalse)
         {
             this.condition = condition;
             this.ifTrue = ifTrue;
+            this.elseIfs = elseIfs;
             this.ifFalse = ifFalse;
         }
         public override void Print(int tabs)
@@ -136,9 +142,56 @@ namespace FFC.FAST
             Console.WriteLine("If statement");
             condition.Print(tabs + 1);
             ifTrue.Print(tabs + 1);
+            elseIfs.Print(tabs + 1);
             ifFalse.Print(tabs + 1);
         }
     }
+
+    class ElseIfList : FASTNode
+    {
+        public List<ElseIfStatement> list;
+        public void Add(ElseIfStatement other)
+        {
+            list.Add(other);
+        }
+
+        public override void Print(int tabs)
+        {
+            PrintTabs(tabs);
+            Console.WriteLine("Else if list");
+            foreach(var l in list)
+                l.Print(tabs + 1);
+        }
+
+        public ElseIfList()
+        {
+            list = new List<ElseIfStatement>();
+        }
+        public ElseIfList(ElseIfStatement start)
+        {
+            list = new List<ElseIfStatement>{start};
+        }
+    }
+
+    class ElseIfStatement : FASTNode
+    {
+        public FExpression condition;
+        public StatementList ifTrue;
+        public ElseIfStatement(FExpression condition, StatementList ifTrue)
+        {
+            this.condition = condition;
+            this.ifTrue = ifTrue;
+        }
+
+        public override void Print(int tabs)
+        {
+            PrintTabs(tabs);
+            Console.WriteLine("Else if");
+            condition.Print(tabs + 1);
+            ifTrue.Print(tabs + 1);
+        }
+    }
+
     class ReturnStatement : FStatement
     {
         public FExpression value;
