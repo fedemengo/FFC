@@ -1,13 +1,10 @@
+using System;
 using System.Collections.Generic;
 
 namespace FFC.FLexer
 {
     class Tokenizer
     {
-        static bool IsDigit(char c)
-        {
-            return c >= '0' && c <= '9';
-        }
         static bool IsBlank(char c)
         {
             switch(c)
@@ -20,12 +17,9 @@ namespace FFC.FLexer
         }
         static bool IsIdentifierChar(char c)
         {
-            return IsLetter(c) || IsDigit(c) || c == '_';
+            return Char.IsLetterOrDigit(c) || c == '_';
         }
-        static bool IsLetter(char c)
-        {
-            return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-        }
+
         static double GetDouble(string before, string after)
         {
             return double.Parse(before + "." + after);
@@ -37,7 +31,7 @@ namespace FFC.FLexer
         static string GetDigits(SourceReader sr)
         {
             string tmp = "";
-            while(IsDigit(sr.GetChar()))
+            while(Char.IsDigit(sr.GetChar()))
             {
                 tmp += sr.GetChar();
                 sr.Advance();
@@ -146,7 +140,7 @@ namespace FFC.FLexer
                     sr.Advance(); //get past the "
                     return new Token(ETokens.STRING_VALUE, new List<object>{val}, begin, sr.GetPosition());
                 default:
-                    if(IsDigit(sr.GetChar()))
+                    if(Char.IsDigit(sr.GetChar()))
                     {
                         string tmp = GetDigits(sr);
                         //maybe double/complex
@@ -154,7 +148,7 @@ namespace FFC.FLexer
                         {
                             sr.Advance();
                             string tmp2 = GetDigits(sr);
-                            if(IsLetter(sr.GetChar()))
+                            if(Char.IsLetter(sr.GetChar()))
                                 return new Token(ETokens.ERROR, new List<object>{"Letter after number - identifier can't begin with numbers."}, begin, sr.GetPosition());
                             //check missing suffix
                             if(tmp2.Length == 0)
@@ -169,7 +163,7 @@ namespace FFC.FLexer
                                     sr.Advance();
                                 }
                                 tmp3 += GetDigits(sr);
-                                if(IsLetter(sr.GetChar()))
+                                if(Char.IsLetter(sr.GetChar()))
                                     return new Token(ETokens.ERROR, new List<object>{"Letter after number - identifier can't begin with numbers."}, begin, sr.GetPosition());
 
                                 if(tmp3.Length == 0 || tmp3.Length == 1 && tmp3[0] == '-')
@@ -183,7 +177,7 @@ namespace FFC.FLexer
                                 string tmp4 = GetDigits(sr);
                                 if(tmp4.Length == 0)
                                     return new Token(ETokens.ERROR, new List<object>{"Mantissa is missing."}, begin, sr.GetPosition());
-                                if(IsLetter(sr.GetChar()))
+                                if(Char.IsLetter(sr.GetChar()))
                                     return new Token(ETokens.ERROR, new List<object>{"Letter after number - identifier can't begin with numbers."}, begin, sr.GetPosition());
                                 double real = GetDouble(tmp, tmp2);
                                 double img = GetDouble(tmp3, tmp4);
@@ -201,18 +195,18 @@ namespace FFC.FLexer
                             string tmp2 = GetDigits(sr);
                             if(tmp2.Length == 0)
                                 return new Token(ETokens.ERROR, new List<object>{"Denominator is missing,"}, begin, sr.GetPosition());
-                            if(IsLetter(sr.GetChar()))
+                            if(Char.IsLetter(sr.GetChar()))
                                 return new Token(ETokens.ERROR, new List<object>{"Letter after number - identifier can't begin with numbers."}, begin, sr.GetPosition());
                             if(sr.GetChar() == '.')
                                 return new Token(ETokens.ERROR, new List<object>{"Denominator has to be an integer number"}, begin, sr.GetPosition());
                             return new Token(ETokens.RATIONAL_VALUE, new List<object>{GetInt(tmp), GetInt(tmp2)}, begin, sr.GetPosition());
                         }
-                        else if(IsLetter(sr.GetChar()))
+                        else if(Char.IsLetter(sr.GetChar()))
                             return new Token(ETokens.ERROR, new List<object>{"Letter after number - identifier can't begin with numbers."}, begin, sr.GetPosition());
                         return new Token(ETokens.INTEGER_VALUE, new List<object>{GetInt(tmp)}, begin, sr.GetPosition());
                     }
                     //might be letter or not known symbol
-                    else if(IsLetter(sr.GetChar()))
+                    else if(Char.IsLetter(sr.GetChar()))
                     {
                         string tmp = "";
                         while(IsIdentifierChar(sr.GetChar()))
