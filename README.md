@@ -2,6 +2,7 @@
 A compiler for the F language (and it's definition)
 
 ## TODOs
+* Fix names in grammar
 * Action on the tree 
 	* Code generation (e.g. If is smth in stack and some conditional jump) (recursively within different statement)
 	* Reorganize tree (optimization)
@@ -10,8 +11,10 @@ A compiler for the F language (and it's definition)
 * Dynamically load external library 
 
 * Debugging on AST printing
-* Think if more \\escaped character are needed
-* Think about '\\n' instead of ';' for SEMICOLON tokens
+* Think if more ```\``` escaped character are needed
+* Think about ```\n``` instead of ```;``` for SEMICOLON tokens
+
+* Handling error token
 
 ## Progress
 
