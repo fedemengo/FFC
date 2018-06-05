@@ -5,26 +5,18 @@ namespace FFC.FLexer
 {
     class SourceReader
     {
-        private static int BYTE_TO_READ = 1024;
-        private FileStream fileStream;
-        private byte[] bufferContainer;
-        private int bufferPosition;
-        private int byteRead;
+        private string[] buffer;
         private bool isFinished;
-        private bool isEmpty;
-        private Position position = new Position();
+        private Position position;
         public Position GetPosition()
         {
             return new Position(position);
         }
         public SourceReader(string filePath)
         {
-            this.fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            this.bufferContainer = new byte[BYTE_TO_READ];
+            this.buffer = File.ReadAllLines(filePath);
             this.isFinished = false;
-            this.isEmpty = false;
-
-            UpdateBuffer();
+            this.position = new Position();
         }
         public void SkipLine()
         {
@@ -40,6 +32,11 @@ namespace FFC.FLexer
                 SkipLine();
             }
         }
+
+        public bool Empty()
+        {
+            return isFinished;
+        }
         public void SkipBlank()
         {
             char x = GetChar();
@@ -54,50 +51,23 @@ namespace FFC.FLexer
                 SkipBlank();
             }
         }
-
-        private bool EndOfBuffer()
-        {
-            if(this.bufferPosition == this.byteRead){
-                if(this.isFinished){
-                    this.isEmpty = true;
-                }
-                return true;
-            }
-            return false;
-        }
-
-        private void UpdateBuffer()
-        {
-            if(!Empty())
-            {
-                this.bufferPosition = 0;
-                this.byteRead = this.fileStream.Read(bufferContainer, 0, BYTE_TO_READ);
-
-                if(this.byteRead != BYTE_TO_READ)
-                {
-                    this.isFinished = true;
-                }
-            }
-        }
-        public bool Empty() => this.isEmpty;
         public char GetChar()
         {
-            if(this.Empty())
-            {
+            if(this.isFinished)
                 return '\0';
-            }
-            return Convert.ToChar(this.bufferContainer[this.bufferPosition]);
+            if(this.position.Column == this.buffer[this.position.Row].Length)
+                return '\n';
+            return this.buffer[this.position.Row][this.position.Column];
         }
         public void Advance()
         {
-            if(GetChar() == '\n')
+            if(this.position.Column == this.buffer[this.position.Row].Length)
                 position.NextLine();
             else
                 position.NextChar();
-            this.bufferPosition++;
-            if(this.EndOfBuffer()){
-                this.UpdateBuffer();
-            }
+
+            if(this.position.Row == this.buffer.Length)
+                this.isFinished = true;
         }
     }
 }

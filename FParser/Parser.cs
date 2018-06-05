@@ -21,17 +21,6 @@ using FFC.FLexer;
 
 namespace FFC.FParser
 {
-internal enum ETokens {error=2,EOF=3,ID=4,BOOLEAN_VALUE=5,INTEGER_VALUE=6,
-    REAL_VALUE=7,RATIONAL_VALUE=8,COMPLEX_VALUE=9,STRING_VALUE=10,DOT=11,COMMA=12,
-    COLON=13,SEMICOLON=14,STAR=15,SLASH=16,PLUS=17,MINUS=18,
-    INTEGER=19,COMPLEX=20,RATIONAL=21,REAL=22,STRING=23,BOOLEAN=24,
-    ASSIGN=25,ARROW=26,LESS=27,LESSEQUAL=28,GREATER=29,GREATEREQUAL=30,
-    EQUAL=31,NOTEQUAL=32,AND=33,OR=34,XOR=35,FUNC=36,
-    DO=37,RETURN=38,PRINT=39,IS=40,IF=41,THEN=42,
-    ELSE=43,END=44,WHILE=45,FOR=46,IN=47,LOOP=48,
-    BREAK=49,CONTINUE=50,LROUND=51,RROUND=52,LSQUARE=53,RSQUARE=54,
-    LCURLY=55,RCURLY=56,ELLIPSIS=57,NEG=58};
-
 [GeneratedCodeAttribute( "Gardens Point Parser Generator", "1.5.2")]
 internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
 {
@@ -396,7 +385,7 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
   }
 
   protected override void Initialize() {
-    this.InitSpecialTokens((int)ETokens.error, (int)ETokens.EOF);
+    this.InitSpecialTokens((int)ETokens.ERROR, (int)ETokens.EOF);
     this.InitStates(states);
     this.InitRules(rules);
     this.InitNonTerminals(nonTerms);
