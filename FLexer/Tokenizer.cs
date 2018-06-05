@@ -120,6 +120,19 @@ namespace FFC.FLexer
                         sr.Advance();
                         return NextToken(sr);
                     }
+                    else if(sr.GetChar() == '*')
+                    {
+                        //Multi line comments
+                        sr.Advance();
+                        char prev = sr.GetChar(); sr.Advance();
+                        while(prev != '*' && sr.GetChar() != '/')
+                        {
+                            prev = sr.GetChar();
+                            sr.Advance();
+                        }
+                        //skips the comment
+                        return NextToken(sr);
+                    }
                     return new Token(ETokens.SLASH, begin, sr.GetPosition());
                 case '(' : sr.Advance(); return new Token(ETokens.LROUND, begin, sr.GetPosition());
                 case ')' : sr.Advance(); return new Token(ETokens.RROUND, begin, sr.GetPosition());
@@ -148,11 +161,10 @@ namespace FFC.FLexer
                         {
                             sr.Advance();
                             string tmp2 = GetDigits(sr);
-                            if(Char.IsLetter(sr.GetChar()))
-                                return new Token(ETokens.ERROR, new List<object>{"Letter after number - identifier can't begin with numbers."}, begin, sr.GetPosition());
                             //check missing suffix
                             if(tmp2.Length == 0)
                                 return new Token(ETokens.ERROR, new List<object>{"Mantissa is missing."}, begin, sr.GetPosition());
+                            //complex values
                             if(sr.GetChar() == 'i')
                             {
                                 sr.Advance(); //skips the i
@@ -184,6 +196,9 @@ namespace FFC.FLexer
                                 
                                 return new Token(ETokens.COMPLEX_VALUE, new List<object>{real, img}, begin, sr.GetPosition());
                             }
+                            //can be checked only after i
+                            if(Char.IsLetter(sr.GetChar()))
+                                return new Token(ETokens.ERROR, new List<object>{"Letter after number - identifier can't begin with numbers."}, begin, sr.GetPosition());
                             return new Token(ETokens.REAL_VALUE, new List<object>{GetDouble(tmp, tmp2)}, begin, sr.GetPosition());
                         }
                         else if(sr.GetChar() == '\\')
