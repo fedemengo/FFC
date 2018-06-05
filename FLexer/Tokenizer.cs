@@ -130,6 +130,7 @@ namespace FFC.FLexer
                             prev = sr.GetChar();
                             sr.Advance();
                         }
+                        sr.Advance(); //Skip the last slash
                         //skips the comment
                         return NextToken(sr);
                     }
