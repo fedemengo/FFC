@@ -29,14 +29,15 @@ namespace FFC.FLexer
         public ETokens type{get; set;}
         public TokenValue values = new TokenValue();
         //Position is in a [L, R) format
-        public QUT.Gppg.LexLocation span;
+        public Position begin, end;
         public Token(ETokens tokenType, Position begin, Position end)
         {
             #if DBG_TOKEN
                 Console.WriteLine("Token : " + tokenType);
             #endif
             this.type = tokenType;
-            this.span = new QUT.Gppg.LexLocation(begin.Row, begin.Column, end.Row, end.Column);
+            this.begin = begin;
+            this.end = end;
         }
 
         public Token(ETokens tokenType, List<object> objs, Position begin, Position end) : this(tokenType, begin, end)
@@ -64,7 +65,7 @@ namespace FFC.FLexer
                 if(i == values.Count - 1)
                     ans += ")";
             }
-            ans += " " + span.ToString();
+            ans += $"[{begin.ToString()}, {end.ToString()}";
             return ans;
         }
     }

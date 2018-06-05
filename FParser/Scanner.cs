@@ -17,7 +17,7 @@ namespace FFC.FParser
         {
             current = lex.NextToken(sr);
             yylval = current.values;
-            yylloc = current.span;
+            yylloc = new QUT.Gppg.LexLocation(current.begin.Row, current.begin.Column, current.end.Row, current.end.Column);
             return (int)current.type;
         }
         public static void Test(string path)
