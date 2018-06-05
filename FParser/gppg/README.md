@@ -1,10 +1,11 @@
 # Parser creation instruction
 
-This are the instructions to generate a working Parser from "grammar.y" using "gppg.exe":
+This are the instructions to generate a working Parser from `grammar.y` using `gppg.exe`:
 
-*   Using windows or wine, run "FParser/gppg/gppg.exe FParser/gppg/grammary.y > FParser/Parser.cs"
-*   If needed, update "FLexer/ETokens.cs" to match the ETokens enum inside the newly generated "FParser/Parser.cs" (except for the ERROR token that should be in upper case)
-*   In Parser.cs, make sure all the uses of the "error" token are refactored to "ERROR", then remove the ETokens class from the source file
+*   Using windows or wine, run `FParser/gppg/gppg.exe FParser/gppg/grammary.y > FParser/Parser.cs`
+*   Running FParser/gppg/script.sh should generally be enough, but for details:
+    *   If changes to token were made, update `FLexer/ETokens.cs` to match the ETokens enum inside the newly generated `FParser/Parser.cs` (except for the ERROR token that should be in upper case)
+    *   In Parser.cs, make sure all the uses of the `error` token are refactored to `ERROR`, then remove the ETokens class from the source file
 
 # Other information
 
