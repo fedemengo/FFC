@@ -147,8 +147,32 @@ namespace FFC.FLexer
                     sr.Advance(); //get first "
                     string val = "";
                     while(sr.GetChar() != '"'){
-                        val += sr.GetChar();
-                        sr.Advance(); //
+                        //escape character
+                        if(sr.GetChar() == '\\')
+                        {
+                            sr.Advance();
+                            switch(sr.GetChar())
+                            {
+                                case '"':
+                                case '\\':
+                                    val += sr.GetChar();
+                                    break;
+                                case 'n':
+                                    val += '\n';
+                                    break;
+                                case 't':
+                                    val += '\t';
+                                    break;
+                                default : //non recognized escape characters
+                                    //just ignored
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            val += sr.GetChar();
+                        }
+                        sr.Advance(); //moves to next char
                     }
                     sr.Advance(); //get past the "
                     return new Token(ETokens.STRING_VALUE, new List<object>{val}, begin, sr.GetPosition());
