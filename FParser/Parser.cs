@@ -3,10 +3,10 @@
 // (see accompanying GPPGcopyright.rtf)
 
 // GPPG version 1.5.2
-// Machine:  MacBook-Pro
-// DateTime: 6/6/2018 1:38:36 PM
-// UserName: fedemengo
-// Input file <FParser/gppg/grammar.y - 6/6/2018 1:36:52 PM>
+// Machine:  filo-Spin-SP513
+// DateTime: 6/6/2018 2:27:40 PM
+// UserName: filo
+// Input file <FParser/gppg/grammar.y - 6/6/2018 2:06:41 PM>
 
 // options: lines
 
@@ -997,4 +997,3 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
 
 }
 }
-
