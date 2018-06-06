@@ -125,7 +125,7 @@ namespace FFC.FLexer
                         //Multi line comments
                         sr.Advance();
                         char prev = sr.GetChar(); sr.Advance();
-                        while(prev != '*' && sr.GetChar() != '/')
+                        while(prev != '*' || sr.GetChar() != '/')
                         {
                             prev = sr.GetChar();
                             sr.Advance();
