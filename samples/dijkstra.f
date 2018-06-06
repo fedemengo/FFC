@@ -5,7 +5,7 @@
 */
 
 a is func() do
-    if a + 3 = a * 2 + 3 then
+    if 1 * 2 + 3 = 6/2 - 3 & a | b then
         ans := i;
     end
 end

@@ -35,10 +35,10 @@ namespace FFC.FAST
     }
     class BinaryOperatorExpression : FExpression
     {
-        public FSecondary left;
+        public FExpression left;
         public FOperator binOperator;
         public FExpression right;
-        public BinaryOperatorExpression(FSecondary left, FOperator binOperator, FExpression right)
+        public BinaryOperatorExpression(FExpression left, FOperator binOperator, FExpression right)
         {
             this.left = left;
             this.binOperator = binOperator;

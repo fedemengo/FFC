@@ -7,10 +7,11 @@
 
 %token ASSIGN ARROW
 
-%token LESS LESSEQUAL GREATER GREATEREQUAL EQUAL NOTEQUAL
-%token AND OR XOR
-%token STAR SLASH
-%token PLUS MINUS
+//%token OR XOR
+//%token AND
+//%token LESS LESSEQUAL GREATER GREATEREQUAL EQUAL NOTEQUAL
+//%token PLUS MINUS
+//%token STAR SLASH
 
 %token FUNC DO RETURN PRINT
 %token IS IF THEN ELSE END
@@ -22,7 +23,8 @@
 
 %start starting
 
-%left AND OR XOR
+%left OR XOR
+%left AND
 %left LESS LESSEQUAL GREATER GREATEREQUAL EQUAL NOTEQUAL
 %left PLUS MINUS
 %left STAR SLASH
@@ -73,21 +75,21 @@ expr2		:	expr													{ $$ = $1; }
 			;
 
 expr		:	secondary												{ $$ = $1; }
-			|	secondary OR expr										{ $$ = new BinaryOperatorExpression((FSecondary)$1, new OrOperator(), (FExpression)$3); }
-			|	secondary XOR expr										{ $$ = new BinaryOperatorExpression((FSecondary)$1, new XorOperator(), (FExpression)$3); }
-			|	secondary AND expr										{ $$ = new BinaryOperatorExpression((FSecondary)$1, new AndOperator(), (FExpression)$3); }
-			|	secondary LESS expr										{ $$ = new BinaryOperatorExpression((FSecondary)$1, new LessOperator(), (FExpression)$3); }
-			|	secondary LESSEQUAL expr								{ $$ = new BinaryOperatorExpression((FSecondary)$1, new LessEqualOperator(), (FExpression)$3); }	
-			|	secondary GREATER expr									{ $$ = new BinaryOperatorExpression((FSecondary)$1, new GreaterOperator(), (FExpression)$3); }
-			|	secondary GREATEREQUAL expr								{ $$ = new BinaryOperatorExpression((FSecondary)$1, new GreaterEqualOperator(), (FExpression)$3); }
-			|	secondary EQUAL expr									{ $$ = new BinaryOperatorExpression((FSecondary)$1, new EqualOperator(), (FExpression)$3); }
-			|	secondary NOTEQUAL expr									{ $$ = new BinaryOperatorExpression((FSecondary)$1, new NotEqualOperator(), (FExpression)$3); }
-			|	secondary PLUS expr										{ $$ = new BinaryOperatorExpression((FSecondary)$1, new PlusOperator(), (FExpression)$3); }
-			|	secondary MINUS expr									{ $$ = new BinaryOperatorExpression((FSecondary)$1, new MinusOperator(), (FExpression)$3); }
-			|	secondary STAR expr										{ $$ = new BinaryOperatorExpression((FSecondary)$1, new StarOperator(), (FExpression)$3); }
-			|	secondary SLASH expr									{ $$ = new BinaryOperatorExpression((FSecondary)$1, new SlashOperator(), (FExpression)$3); }
-			|	MINUS secondary %prec NEG								{ $$ = new NegativeExpression((FSecondary)$2); }
-			|	secondary ELLIPSIS secondary 							{ $$ = new EllipsisExpression((FSecondary)$1, (FSecondary)$3); }
+			|	expr OR expr											{ $$ = new BinaryOperatorExpression((FExpression)$1, new OrOperator(), (FExpression)$3); }
+			|	expr XOR expr											{ $$ = new BinaryOperatorExpression((FExpression)$1, new XorOperator(), (FExpression)$3); }
+			|	expr AND expr											{ $$ = new BinaryOperatorExpression((FExpression)$1, new AndOperator(), (FExpression)$3); }
+			|	expr LESS expr											{ $$ = new BinaryOperatorExpression((FExpression)$1, new LessOperator(), (FExpression)$3); }
+			|	expr LESSEQUAL expr										{ $$ = new BinaryOperatorExpression((FExpression)$1, new LessEqualOperator(), (FExpression)$3); }	
+			|	expr GREATER expr										{ $$ = new BinaryOperatorExpression((FExpression)$1, new GreaterOperator(), (FExpression)$3); }
+			|	expr GREATEREQUAL expr									{ $$ = new BinaryOperatorExpression((FExpression)$1, new GreaterEqualOperator(), (FExpression)$3); }
+			|	expr NOTEQUAL expr										{ $$ = new BinaryOperatorExpression((FExpression)$1, new NotEqualOperator(), (FExpression)$3); }
+			|	expr PLUS expr											{ $$ = new BinaryOperatorExpression((FExpression)$1, new PlusOperator(), (FExpression)$3); }
+			|	expr EQUAL expr											{ $$ = new BinaryOperatorExpression((FExpression)$1, new EqualOperator(), (FExpression)$3); }
+			|	expr MINUS expr											{ $$ = new BinaryOperatorExpression((FExpression)$1, new MinusOperator(), (FExpression)$3); }
+			|	expr STAR expr											{ $$ = new BinaryOperatorExpression((FExpression)$1, new StarOperator(), (FExpression)$3); }
+			|	expr SLASH expr											{ $$ = new BinaryOperatorExpression((FExpression)$1, new SlashOperator(), (FExpression)$3); }
+//			|	MINUS secondary %prec NEG								{ $$ = new NegativeExpression((FSecondary)$2); }
+//			|	secondary ELLIPSIS secondary 							{ $$ = new EllipsisExpression((FSecondary)$1, (FSecondary)$3); }
 			;
 
 secondary	:	primary 												{ $$ = $1; }
