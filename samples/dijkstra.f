@@ -27,7 +27,7 @@ dijkstra is func(adj :[[(integer, integer)]], source :integer) :[integer] do
             if v[i] = skip then
                 continue;
             end
-            if ans = -1 | (v[i] < v[ans]) then
+            if ans = -1 | v[i] < v[ans] then
                 ans := i;
             end
         end
