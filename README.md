@@ -11,8 +11,8 @@ A compiler for the F language (and it's definition)
 * Dynamically load external library 
 
 * Debugging on AST printing
-* Think if more ```\``` escaped character are needed
-* Think about ```\n``` instead of ```;``` for SEMICOLON tokens
+* Think if more `\` escaped character are needed (supported `\n`, `\t`, `\\`, `\"`)
+* Think about `\n` instead of `;` for SEMICOLON tokens
 
 * Handling error token
 
@@ -33,4 +33,6 @@ A compiler for the F language (and it's definition)
 
 - [ ] Writing a report
 
+## Notes
 
+* **dotnet core** CIL generation https://github.com/dotnet/coreclr
