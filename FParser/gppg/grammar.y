@@ -2,14 +2,15 @@
 
 %token ID BOOLEAN_VALUE INTEGER_VALUE REAL_VALUE RATIONAL_VALUE COMPLEX_VALUE STRING_VALUE
 %token DOT COMMA COLON SEMICOLON
-%token STAR SLASH
-%token PLUS MINUS
 
 %token INTEGER COMPLEX RATIONAL REAL STRING BOOLEAN
 
 %token ASSIGN ARROW
+
 %token LESS LESSEQUAL GREATER GREATEREQUAL EQUAL NOTEQUAL
 %token AND OR XOR
+%token STAR SLASH
+%token PLUS MINUS
 
 %token FUNC DO RETURN PRINT
 %token IS IF THEN ELSE END
@@ -72,15 +73,15 @@ expr2		:	expr													{ $$ = $1; }
 			;
 
 expr		:	secondary												{ $$ = $1; }
+			|	secondary OR expr										{ $$ = new BinaryOperatorExpression((FSecondary)$1, new OrOperator(), (FExpression)$3); }
+			|	secondary XOR expr										{ $$ = new BinaryOperatorExpression((FSecondary)$1, new XorOperator(), (FExpression)$3); }
+			|	secondary AND expr										{ $$ = new BinaryOperatorExpression((FSecondary)$1, new AndOperator(), (FExpression)$3); }
 			|	secondary LESS expr										{ $$ = new BinaryOperatorExpression((FSecondary)$1, new LessOperator(), (FExpression)$3); }
 			|	secondary LESSEQUAL expr								{ $$ = new BinaryOperatorExpression((FSecondary)$1, new LessEqualOperator(), (FExpression)$3); }	
 			|	secondary GREATER expr									{ $$ = new BinaryOperatorExpression((FSecondary)$1, new GreaterOperator(), (FExpression)$3); }
 			|	secondary GREATEREQUAL expr								{ $$ = new BinaryOperatorExpression((FSecondary)$1, new GreaterEqualOperator(), (FExpression)$3); }
 			|	secondary EQUAL expr									{ $$ = new BinaryOperatorExpression((FSecondary)$1, new EqualOperator(), (FExpression)$3); }
 			|	secondary NOTEQUAL expr									{ $$ = new BinaryOperatorExpression((FSecondary)$1, new NotEqualOperator(), (FExpression)$3); }
-			|	secondary AND expr										{ $$ = new BinaryOperatorExpression((FSecondary)$1, new AndOperator(), (FExpression)$3); }
-			|	secondary OR expr										{ $$ = new BinaryOperatorExpression((FSecondary)$1, new OrOperator(), (FExpression)$3); }
-			|	secondary XOR expr										{ $$ = new BinaryOperatorExpression((FSecondary)$1, new XorOperator(), (FExpression)$3); }
 			|	secondary PLUS expr										{ $$ = new BinaryOperatorExpression((FSecondary)$1, new PlusOperator(), (FExpression)$3); }
 			|	secondary MINUS expr									{ $$ = new BinaryOperatorExpression((FSecondary)$1, new MinusOperator(), (FExpression)$3); }
 			|	secondary STAR expr										{ $$ = new BinaryOperatorExpression((FSecondary)$1, new StarOperator(), (FExpression)$3); }

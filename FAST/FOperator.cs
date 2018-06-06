@@ -24,7 +24,10 @@ namespace FFC.FAST
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
+            var prev = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(this.GetType().ToString().Substring(9));
+            Console.ForegroundColor = prev;
         }
 
     }

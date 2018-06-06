@@ -4,6 +4,14 @@
     Using map for 
 */
 
+a is func() do
+    if a + 3 = a * 2 + 3 then
+        ans := i;
+    end
+end
+
+
+/*
 dijkstra is func(adj :[[(integer, integer)]], source :integer) :[integer] do
     
     inf is 2000000000;
@@ -27,7 +35,7 @@ dijkstra is func(adj :[[(integer, integer)]], source :integer) :[integer] do
             if v[i] = skip then
                 continue;
             end
-            if ans = -1 | (v[i] < v[ans]) then
+            if ans = (-1) | v[i] < v[ans] then
                 ans := i;
             end
         end
@@ -53,3 +61,4 @@ dijkstra is func(adj :[[(integer, integer)]], source :integer) :[integer] do
     return dist;
 
 end
+*/
