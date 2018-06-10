@@ -191,4 +191,11 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Div);
         }
     }
+    class ModuloOperator : FOperator
+    {
+        public ModuloOperator()
+        {
+            
+        }
+    }
 }

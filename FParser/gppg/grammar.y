@@ -11,11 +11,12 @@
 %token ELLIPSIS
 %token EOF
 
+%left NOT
 %left OR XOR
 %left AND
 %left LESS LESSEQUAL GREATER GREATEREQUAL EQUAL NOTEQUAL
 %left PLUS MINUS
-%left STAR SLASH
+%left STAR SLASH MODULO
 
 %start starting
 
@@ -64,6 +65,7 @@ expr		:	math_expr												{ $$ = $1; }
 			;
 
 math_expr	:	secondary												{ $$ = $1; }
+			|	NOT math_expr											{ $$ = new NotExpression((FExpression)$2); }
 			|	math_expr OR math_expr									{ $$ = new BinaryOperatorExpression((FExpression)$1, new OrOperator(), (FExpression)$3); }
 			|	math_expr XOR math_expr									{ $$ = new BinaryOperatorExpression((FExpression)$1, new XorOperator(), (FExpression)$3); }
 			|	math_expr AND math_expr									{ $$ = new BinaryOperatorExpression((FExpression)$1, new AndOperator(), (FExpression)$3); }
@@ -77,6 +79,7 @@ math_expr	:	secondary												{ $$ = $1; }
 			|	math_expr MINUS math_expr								{ $$ = new BinaryOperatorExpression((FExpression)$1, new MinusOperator(), (FExpression)$3); }
 			|	math_expr STAR math_expr								{ $$ = new BinaryOperatorExpression((FExpression)$1, new StarOperator(), (FExpression)$3); }
 			|	math_expr SLASH math_expr								{ $$ = new BinaryOperatorExpression((FExpression)$1, new SlashOperator(), (FExpression)$3); }
+			|	math_expr MODULO math_expr								{ $$ = new BinaryOperatorExpression((FExpression)$1, new ModuloOperator(), (FExpression)$3); }
 			|	MINUS secondary %prec NEG								{ $$ = new NegativeExpression((FSecondary)$2); }
 			|	secondary ELLIPSIS secondary 							{ $$ = new EllipsisExpression((FSecondary)$1, (FSecondary)$3); }
 			;

@@ -97,6 +97,19 @@ namespace FFC.FAST
             from.Print(tabs + 1);
             to.Print(tabs + 1);
         }
-
+    }
+    class NotExpression : FExpression
+    {
+        public FExpression expr;
+        public NotExpression(FExpression expr)
+        {
+            this.expr = expr;
+        }
+        public override void Print(int tabs)
+        {
+            PrintTabs(tabs);
+            Console.WriteLine("Not expression");
+            expr.Print(tabs + 1);
+        }
     }
 }
