@@ -122,4 +122,11 @@ namespace FFC.FAST
 
         }
     }
+    class ModuloOperator : FOperator
+    {
+        public ModuloOperator()
+        {
+            
+        }
+    }
 }

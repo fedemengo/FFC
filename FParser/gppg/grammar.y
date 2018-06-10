@@ -16,7 +16,7 @@
 %left AND
 %left LESS LESSEQUAL GREATER GREATEREQUAL EQUAL NOTEQUAL
 %left PLUS MINUS
-%left STAR SLASH
+%left STAR SLASH MODULO
 
 %start starting
 
@@ -79,6 +79,7 @@ math_expr	:	secondary												{ $$ = $1; }
 			|	math_expr MINUS math_expr								{ $$ = new BinaryOperatorExpression((FExpression)$1, new MinusOperator(), (FExpression)$3); }
 			|	math_expr STAR math_expr								{ $$ = new BinaryOperatorExpression((FExpression)$1, new StarOperator(), (FExpression)$3); }
 			|	math_expr SLASH math_expr								{ $$ = new BinaryOperatorExpression((FExpression)$1, new SlashOperator(), (FExpression)$3); }
+			|	math_expr MODULO math_expr								{ $$ = new BinaryOperatorExpression((FExpression)$1, new ModuloOperator(), (FExpression)$3); }
 			|	MINUS secondary %prec NEG								{ $$ = new NegativeExpression((FSecondary)$2); }
 			|	secondary ELLIPSIS secondary 							{ $$ = new EllipsisExpression((FSecondary)$1, (FSecondary)$3); }
 			;

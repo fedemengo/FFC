@@ -104,6 +104,7 @@ namespace FFC.FLexer
                 case '+' : sr.Advance(); return new Token(ETokens.PLUS, begin, sr.GetPosition());
                 case '-' : sr.Advance(); return new Token(ETokens.MINUS, begin, sr.GetPosition());
                 case '*' : sr.Advance(); return new Token(ETokens.STAR, begin, sr.GetPosition());
+                case '%' : sr.Advance(); return new Token(ETokens.MODULO, begin, sr.GetPosition());
                 case '/' : 
                     sr.Advance();
                     if(sr.GetChar() == '=')
