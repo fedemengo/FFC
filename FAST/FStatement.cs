@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 
 namespace FFC.FAST
 {
@@ -40,6 +41,7 @@ namespace FFC.FAST
             foreach(FStatement fs in statements)
                 fs.Print(tabs + 1);
         }
+
     }
     class ExpressionStatement : FStatement
     {
@@ -107,6 +109,11 @@ namespace FFC.FAST
             if(type != null) type.Print(tabs + 1);
             expr.Print(tabs + 1);
         }
+
+        public override void Generate(ILGenerator generator)
+        {
+            expr.Generate(generator);
+        }
     }
     class DeclarationStatementList : FASTNode
     {
@@ -121,6 +128,13 @@ namespace FFC.FAST
             Console.WriteLine("Declaration statement list");
             foreach(DeclarationStatement stm in statements)
                 stm.Print(tabs + 1);
+        }
+        public override void Generate(ILGenerator generator)
+        {
+            foreach(var stm in statements)
+            {
+                stm.Generate(generator);
+            }
         }
     }
     class IfStatement : FStatement
@@ -246,6 +260,14 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("Print statement");
             toPrint.Print(tabs + 1);
+        }
+
+        public override void Generate(ILGenerator generator)
+        {
+            foreach(FExpression expr in toPrint.expressions)
+            {
+                expr.Generate(generator);
+            }
         }
     }
 }

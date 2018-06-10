@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 
 namespace FFC.FAST
 {
@@ -52,7 +53,13 @@ namespace FFC.FAST
             binOperator.Print(tabs+1);
             right.Print(tabs+1);
         }
-        
+
+        public override void Generate(ILGenerator generator)
+        {
+            left.Generate(generator);
+            right.Generate(generator);
+            binOperator.Generate(generator);
+        }
     }
     class NegativeExpression : FExpression
     {
@@ -68,6 +75,11 @@ namespace FFC.FAST
             value.Print(tabs + 1);
         }
 
+        public override void Generate(ILGenerator generator)
+        {
+            value.Generate(generator);
+            generator.Emit(OpCodes.Neg);
+        }
     }
     class EllipsisExpression : FExpression
     {

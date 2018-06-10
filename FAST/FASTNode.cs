@@ -11,5 +11,10 @@ namespace FFC.FAST
             while(i-- != 0)
                 System.Console.Write("  ");
         }
+
+        public virtual void Generate(System.Reflection.Emit.ILGenerator generator)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

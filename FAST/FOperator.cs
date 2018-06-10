@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using System.Reflection.Emit;
 
 namespace FFC.FAST
 {
@@ -37,12 +38,23 @@ namespace FFC.FAST
         {
 
         }
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Clt);
+        }
     }
     class LessEqualOperator : FOperator
     {
         public LessEqualOperator()
         {
 
+        }
+
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Cgt);            // <= equivalent to !<
+            generator.Emit(OpCodes.Ldc_I4_0);
+            generator.Emit(OpCodes.Ceq);
         }
     }
     class GreaterOperator : FOperator
@@ -51,12 +63,24 @@ namespace FFC.FAST
         {
 
         }
+
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Cgt);
+        }
     }
     class GreaterEqualOperator : FOperator
     {
         public GreaterEqualOperator()
         {
 
+        }
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Clt);            // >= equivalent to !<
+            generator.Emit(OpCodes.Ldc_I4_0);
+            generator.Emit(OpCodes.Ceq);
+            
         }
     }
     class EqualOperator : FOperator
@@ -65,6 +89,11 @@ namespace FFC.FAST
         {
 
         }
+
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Ceq);
+        }
     }
     class NotEqualOperator : FOperator
     {
@@ -72,12 +101,24 @@ namespace FFC.FAST
         {
 
         }
+
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Ceq);
+            generator.Emit(OpCodes.Ldc_I4_0);
+            generator.Emit(OpCodes.Ceq);
+        }
+
     }
     class AndOperator : FOperator
     {
         public AndOperator()
         {
 
+        }
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.And);
         }
     }
     class OrOperator : FOperator
@@ -86,12 +127,20 @@ namespace FFC.FAST
         {
 
         }
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Or);
+        }
     }
     class XorOperator : FOperator
     {
         public XorOperator()
         {
 
+        }
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Xor);
         }
     }
     class PlusOperator : FOperator
@@ -100,12 +149,22 @@ namespace FFC.FAST
         {
 
         }
+
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Add);
+        }
     }
     class MinusOperator : FOperator
     {
         public MinusOperator()
         {
 
+        }
+
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Sub);
         }
     }
     class StarOperator : FOperator
@@ -114,12 +173,22 @@ namespace FFC.FAST
         {
 
         }
+
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Mul);
+        }
     }
     class SlashOperator : FOperator
     {
         public SlashOperator()
         {
 
+        }
+
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Div);
         }
     }
 }

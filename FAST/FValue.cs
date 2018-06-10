@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System;
+using System.Reflection.Emit;
+
 namespace FFC.FAST
 {
     abstract class FValue : FPrimary
@@ -18,6 +20,11 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine($"Boolean value({value})");
         }
+
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Ldc_I4, value ? 1 : 0);
+        }
     }
     class IntegerValue : FValue
     {
@@ -32,6 +39,11 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine($"Integer value({value})");
         }
+
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Ldc_I4, value);
+        }
     }
     class RealValue : FValue
     {
@@ -45,6 +57,11 @@ namespace FFC.FAST
         {
             PrintTabs(tabs);
             Console.WriteLine($"RealVal value({value})");
+        }
+
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Ldc_R8, value);
         }
     }
     class RationalValue : FValue
@@ -91,6 +108,11 @@ namespace FFC.FAST
         {
             PrintTabs(tabs);
             Console.WriteLine($"String value({value})");
+        }
+
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Ldstr, value);
         }
     }
     class Identifier : FValue
