@@ -11,6 +11,7 @@
 %token ELLIPSIS
 %token EOF
 
+%left NOT
 %left OR XOR
 %left AND
 %left LESS LESSEQUAL GREATER GREATEREQUAL EQUAL NOTEQUAL
@@ -64,6 +65,7 @@ expr		:	math_expr												{ $$ = $1; }
 			;
 
 math_expr	:	secondary												{ $$ = $1; }
+			|	NOT math_expr											{ $$ = new NotExpression((FExpression)$2); }
 			|	math_expr OR math_expr									{ $$ = new BinaryOperatorExpression((FExpression)$1, new OrOperator(), (FExpression)$3); }
 			|	math_expr XOR math_expr									{ $$ = new BinaryOperatorExpression((FExpression)$1, new XorOperator(), (FExpression)$3); }
 			|	math_expr AND math_expr									{ $$ = new BinaryOperatorExpression((FExpression)$1, new AndOperator(), (FExpression)$3); }

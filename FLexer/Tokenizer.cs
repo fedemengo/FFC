@@ -78,6 +78,7 @@ namespace FFC.FLexer
                 case '|' : sr.Advance(); return new Token(ETokens.OR, begin, sr.GetPosition());
                 case '&' : sr.Advance(); return new Token(ETokens.AND, begin, sr.GetPosition());
                 case '^' : sr.Advance(); return new Token(ETokens.XOR, begin, sr.GetPosition());
+                case '!' : sr.Advance(); return new Token(ETokens.NOT, begin, sr.GetPosition());
                 case '<' :
                     sr.Advance();
                     if(sr.GetChar() == '=')

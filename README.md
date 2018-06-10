@@ -13,6 +13,7 @@ A compiler for the F language (and it's definition)
 * Debugging on AST printing
 * Think if more `\` escaped character are needed (supported `\n`, `\t`, `\\`, `\"`)
 * Think about `\n` instead of `;` for SEMICOLON tokens
+* Add Lexer support for -2^31
 
 * Handling error token
 
