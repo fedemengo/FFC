@@ -75,7 +75,7 @@ namespace FFC.FAST
         }
         public override void BuildType()
         {
-            ValueType = binOperator.GetTarget(left, right);
+            ValueType = binOperator.GetTarget(left.ValueType, right.ValueType);
         }
 
         public override void Generate(ILGenerator generator)
@@ -91,7 +91,7 @@ namespace FFC.FAST
             
             FType targetType = ValueType;
             
-            if(binOperator.GetType() is RelationalOperator)
+            if(binOperator is RelationalOperator)
             {
                 //we need to cast to the same type they would get summed to
                 targetType = new PlusOperator().GetTarget(left.ValueType, right.ValueType);

@@ -1,10 +1,19 @@
 using System.Collections.Generic;
 using System;
+using System.Reflection.Emit;
 
 namespace FFC.FAST
 {
     abstract class FType : FASTNode
     {
+        public static void Convert(FType t1, FType t2, ILGenerator generator)
+        {
+            if(t2.GetType() != typeof(RealType))
+                throw new NotImplementedException("Conversions are not implemented yet");
+            //anything (?) to real (double) 
+            generator.Emit(OpCodes.Conv_R8);
+        }
+        public abstract Type GetPrintableType();
     }
     class TypeList : FASTNode
     {
@@ -40,6 +49,10 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("Integer type");
         }
+        public override Type GetPrintableType() 
+        {
+            return typeof(int);
+        }
     }
 
     class RealType : NumericType
@@ -53,6 +66,11 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("Real type");
         }
+        public override Type GetPrintableType() 
+        {
+            return typeof(double);
+        }
+
     }
 
     class ComplexType : NumericType
@@ -65,6 +83,10 @@ namespace FFC.FAST
         {
             PrintTabs(tabs);
             Console.WriteLine("Complex type");
+        }
+        public override Type GetPrintableType() 
+        {
+            throw new NotImplementedException("Complex printing is not currently implemented");
         }
     }
 
@@ -79,6 +101,10 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("Rational type");
         }
+        public override Type GetPrintableType()
+        {
+            throw new NotImplementedException("Rational printing is not currently implented");
+        }
     }
 
     class StringType : FType
@@ -92,6 +118,10 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("String type");
         }
+        public override Type GetPrintableType() 
+        {
+            return typeof(string);
+        }
     }
 
     class BooleanType : FType
@@ -104,6 +134,10 @@ namespace FFC.FAST
         {
             PrintTabs(tabs);
             Console.WriteLine("Boolean type");
+        }
+        public override Type GetPrintableType() 
+        {
+            return typeof(bool);
         }
     }
     
@@ -123,6 +157,10 @@ namespace FFC.FAST
             paramTypes.Print(tabs + 1);
             if(returnType != null) returnType.Print(tabs + 1);
         }
+        public override Type GetPrintableType() 
+        {
+            throw new NotImplementedException("Function Type printing is not implemented");
+        }
     }
     class ArrayType : FType
     {
@@ -136,6 +174,10 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("Array type");
             type.Print(tabs + 1);
+        }
+        public override Type GetPrintableType() 
+        {
+            throw new NotImplementedException("Array type printing is not implemented");
         }
     }
     class MapType : FType
@@ -154,6 +196,10 @@ namespace FFC.FAST
             key.Print(tabs + 1);
             value.Print(tabs + 1);
         }
+        public override Type GetPrintableType() 
+        {
+            throw new NotImplementedException("Map Type printing is not implemented");
+        }
     }
     class TupleType : FType
     {
@@ -167,6 +213,10 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("Tuple type");
             types.Print(tabs + 1);
+        }
+        public override Type GetPrintableType() 
+        {
+            throw new NotImplementedException("Tuple type printing is not implemented");
         }
     }
 }
