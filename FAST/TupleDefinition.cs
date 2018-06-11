@@ -11,10 +11,14 @@ namespace FFC.FAST
         {
             this.elements = elements;
         }
+        public bool IsExpression()
+        {
+            return elements.elements.Count == 1 && elements.elements[0].id == null;
+        }
         public override void Print(int tabs)
         {
-            //ignores this node (tuple definition) if we are dealing with a single expression
-            if(elements.elements.Count == 1 && elements.elements[0].id == null)
+            //ignores print of (tuple definition) if we are dealing with a single expression
+            if(IsExpression())
                 elements.Print(tabs);
             else
             {
@@ -22,6 +26,12 @@ namespace FFC.FAST
                 Console.WriteLine("Tuple definition");
                 elements.Print(tabs + 1);
             }
+        }
+        public override void Generate(System.Reflection.Emit.ILGenerator generator)
+        {
+            //only for expression, tuple to do!
+            elements.Generate(generator);
+            type = elements.elements[0].value.type;
         }
     }
     class TupleElementList : FASTNode
@@ -49,6 +59,15 @@ namespace FFC.FAST
                 foreach(var element in elements)
                     element.Print(tabs + 1);
             }
+        }
+        public override void Generate(System.Reflection.Emit.ILGenerator generator)
+        {
+            if(elements.Count == 1 && elements[0].id == null)
+            {
+                elements[0].value.Generate(generator);
+            }
+            else
+                throw new NotImplementedException();
         }
     }
     class TupleElement : FASTNode

@@ -21,8 +21,12 @@ namespace FFC.FParser
             Console.WriteLine($"\nParsing success : {res}\n");
             if (res)
             {
-                FASTNode root = (FASTNode)p.GetAST();
-                root.Print(0);
+                DeclarationStatementList stms = (DeclarationStatementList)p.GetAST();
+                //Print to see program's AST
+                stms.Print(0);
+                
+
+                //Generate PE compiling all statements
                 
                 string name = Path.Split('/')[1].Split('.')[0];
                 AppDomain ad = System.Threading.Thread.GetDomain();
@@ -33,7 +37,7 @@ namespace FFC.FParser
 
                 modb.CreateGlobalFunctions();
 
-                /* Type */
+                /* Class 'Program' that will run all the statements */
                 TypeBuilder tb = modb.DefineType("Program", TypeAttributes.Public);
                 ConstructorBuilder cb = tb.DefineConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName,
                                                             CallingConventions.Standard,
@@ -49,8 +53,10 @@ namespace FFC.FParser
                 MethodBuilder mb = tb.DefineMethod("Main", MethodAttributes.Public | MethodAttributes.Static, typeof(void), new Type[] { typeof(string[]) });
 
                 ILGenerator ilMeth = mb.GetILGenerator();
-                root.Generate(ilMeth);
-                ilMeth.Emit(OpCodes.Call, typeof(System.Console).GetMethod("WriteLine", new Type[] { typeof(int)}));
+
+                //generates all the statemetns in main
+                stms.Generate(ilMeth);
+
                 ilMeth.Emit(OpCodes.Ret);
 
                 ab.SetEntryPoint(mb);
@@ -59,7 +65,6 @@ namespace FFC.FParser
 
                 ab.Save(name + ".exe");
             }
-            Console.ReadLine();
         }
     }
 }

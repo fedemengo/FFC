@@ -41,7 +41,11 @@ namespace FFC.FAST
             foreach(FStatement fs in statements)
                 fs.Print(tabs + 1);
         }
-
+        public override void Generate(ILGenerator generator)
+        {
+            foreach(FStatement stm in statements)
+                stm.Generate(generator);
+        }
     }
     class ExpressionStatement : FStatement
     {
@@ -229,12 +233,12 @@ namespace FFC.FAST
         public BreakStatement()
         {
 
-        }public override void Print(int tabs)
+        }
+        public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Break statement");
         }
-
     }
     class ContinueStatement : FStatement
     {
@@ -264,10 +268,12 @@ namespace FFC.FAST
 
         public override void Generate(ILGenerator generator)
         {
-            foreach(FExpression expr in toPrint.expressions)
-            {
-                expr.Generate(generator);
+            foreach(FExpression expr in toPrint.expressions){
+                expr.EmitPrint(generator);
+                generator.Emit(OpCodes.Ldstr, " ");
+                generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{typeof(string)}));
             }
+            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("WriteLine", new Type[0]));
         }
     }
 }

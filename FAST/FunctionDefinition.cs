@@ -22,6 +22,11 @@ namespace FFC.FAST
             if(returnType != null) returnType.Print(tabs + 1);
             body.Print(tabs + 1);
         }
+        public override void Generate(System.Reflection.Emit.ILGenerator generator)
+        {
+            //only generates body
+            body.Generate(generator);
+        }
     }
 
     class ParameterList : FASTNode

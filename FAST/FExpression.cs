@@ -13,6 +13,13 @@ namespace FFC.FAST
                 EllipsisExpr
                 FSecondary
         */
+        public virtual void EmitPrint(ILGenerator generator)
+        {
+            Generate(generator);
+            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{type}));
+
+        }
+        public Type type = null;
     }
     class ExpressionList : FASTNode
     {
@@ -59,6 +66,14 @@ namespace FFC.FAST
             left.Generate(generator);
             right.Generate(generator);
             binOperator.Generate(generator);
+            //just for basic printing
+            type = left.type;
+        }
+
+        public override void EmitPrint(ILGenerator generator)
+        {
+            Generate(generator);
+            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{type}));
         }
     }
     class NegativeExpression : FExpression
@@ -79,6 +94,7 @@ namespace FFC.FAST
         {
             value.Generate(generator);
             generator.Emit(OpCodes.Neg);
+            type = value.type;
         }
     }
     class EllipsisExpression : FExpression
@@ -110,6 +126,15 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("Not expression");
             expr.Print(tabs + 1);
+        }
+        public override void Generate(ILGenerator generator)
+        {
+            // "!a" -> "a = 0"
+            expr.Generate(generator);
+            generator.Emit(OpCodes.Ldc_I4_0);
+            generator.Emit(OpCodes.Ceq);
+            //
+            type = typeof(bool);
         }
     }
 }

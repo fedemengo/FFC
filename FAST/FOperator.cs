@@ -52,7 +52,7 @@ namespace FFC.FAST
 
         public override void Generate(ILGenerator generator)
         {
-            generator.Emit(OpCodes.Cgt);            // <= equivalent to !<
+            generator.Emit(OpCodes.Cgt);            // <= equivalent to !>
             generator.Emit(OpCodes.Ldc_I4_0);
             generator.Emit(OpCodes.Ceq);
         }
@@ -80,7 +80,6 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Clt);            // >= equivalent to !<
             generator.Emit(OpCodes.Ldc_I4_0);
             generator.Emit(OpCodes.Ceq);
-            
         }
     }
     class EqualOperator : FOperator
@@ -196,6 +195,10 @@ namespace FFC.FAST
         public ModuloOperator()
         {
             
+        }
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Rem);
         }
     }
 }
