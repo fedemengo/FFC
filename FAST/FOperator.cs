@@ -213,7 +213,7 @@ namespace FFC.FAST
                 return new ArrayType(((ArrayType) t1).type);
             if(t1 is ArrayType && t2.GetType() == ((ArrayType) t1).type.GetType())
                 return new ArrayType(((ArrayType) t1).type);
-            return (this as MathOperator).GetTarget(t1, t2);
+            return base.GetTarget(t1, t2);
         }
     }
     class MinusOperator : MathOperator
