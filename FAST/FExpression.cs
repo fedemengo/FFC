@@ -88,14 +88,21 @@ namespace FFC.FAST
                 throw new NotImplementedException("Operations on maps are not yet implemented.");
             if(ValueType is TupleType)
                 throw new NotImplementedException("Operations on tuples are not yet implemented.");
-
+            
+            FType targetType = ValueType;
+            
+            if(binOperator.GetType() is RelationalOperator)
+            {
+                //we need to cast to the same type they would get summed to
+                targetType = new PlusOperator().GetTarget(left.ValueType, right.ValueType);
+            }
             left.Generate(generator);
-            if(left.ValueType.GetType() != ValueType.GetType())
-                FType.Convert(left.ValueType, ValueType, generator);
+            if(left.ValueType.GetType() != targetType.GetType())
+                FType.Convert(left.ValueType, targetType, generator);
             
             right.Generate(generator);
-            if(right.ValueType.GetType() != ValueType.GetType())
-                FType.Convert(right.ValueType, ValueType, generator);
+            if(right.ValueType.GetType() != targetType.GetType())
+                FType.Convert(right.ValueType, targetType, generator);
 
             binOperator.Generate(generator);
         }
