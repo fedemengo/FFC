@@ -30,9 +30,28 @@ namespace FFC.FAST
             Console.WriteLine(this.GetType().ToString().Substring(9));
             Console.ForegroundColor = prev;
         }
-
+        public abstract FType GetTarget(FType t1, FType t2);
     }
-    class LessOperator : FOperator
+
+    abstract class RelationalOperator : FOperator
+    {
+        public override FType GetTarget(FType t1, FType t2)
+        {
+            if(!(t1 is NumericType && t2 is NumericType))
+                throw new Exception("Can't get target type");
+            if(t1 is ComplexType || t2 is ComplexType)
+            {
+                if(!(t1 is ComplexType && t2 is ComplexType))
+                    throw new Exception("Can't get target type");
+            }
+            if(t1 is RationalType || t2 is RationalType){
+                if(t1 is RealType || t2 is RealType)
+                    throw new Exception("Can't get target type");
+            }
+            return new BooleanType();
+        }
+    }
+    class LessOperator : RelationalOperator
     {
         public LessOperator()
         {
@@ -43,7 +62,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Clt);
         }
     }
-    class LessEqualOperator : FOperator
+    class LessEqualOperator : RelationalOperator
     {
         public LessEqualOperator()
         {
@@ -57,7 +76,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Ceq);
         }
     }
-    class GreaterOperator : FOperator
+    class GreaterOperator : RelationalOperator
     {
         public GreaterOperator()
         {
@@ -69,7 +88,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Cgt);
         }
     }
-    class GreaterEqualOperator : FOperator
+    class GreaterEqualOperator : RelationalOperator
     {
         public GreaterEqualOperator()
         {
@@ -82,7 +101,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Ceq);
         }
     }
-    class EqualOperator : FOperator
+    class EqualOperator : RelationalOperator
     {
         public EqualOperator()
         {
@@ -94,11 +113,10 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Ceq);
         }
     }
-    class NotEqualOperator : FOperator
+    class NotEqualOperator : RelationalOperator
     {
         public NotEqualOperator()
         {
-
         }
 
         public override void Generate(ILGenerator generator)
@@ -109,7 +127,17 @@ namespace FFC.FAST
         }
 
     }
-    class AndOperator : FOperator
+
+    abstract class BooleanOperator : FOperator
+    {
+        public override FType GetTarget(FType t1, FType t2)
+        {
+            if(t1 is BooleanType && t2 is BooleanType)
+                return new BooleanType();
+            throw new Exception("Can't get target type");            
+        }
+    }
+    class AndOperator : BooleanOperator
     {
         public AndOperator()
         {
@@ -120,7 +148,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.And);
         }
     }
-    class OrOperator : FOperator
+    class OrOperator : BooleanOperator
     {
         public OrOperator()
         {
@@ -131,7 +159,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Or);
         }
     }
-    class XorOperator : FOperator
+    class XorOperator : BooleanOperator
     {
         public XorOperator()
         {
@@ -142,19 +170,53 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Xor);
         }
     }
-    class PlusOperator : FOperator
+
+    abstract class MathOperator : FOperator
+    {
+        public override FType GetTarget(FType t1, FType t2)
+        {
+            if(!(t1 is NumericType && t2 is NumericType))
+                throw new Exception("Can't get target type");
+            if(t1 is ComplexType || t2 is ComplexType)
+            {
+                if(t1 is RationalType || t2 is RationalType)
+                    throw new Exception("Can't get target type");
+                return new ComplexType();
+            }
+            if(t1 is RationalType || t2 is RationalType)
+            {
+                if(t1 is RealType || t2 is RealType)
+                    throw new Exception("Can't get target type");
+                return new RationalType();
+            }
+            if(t1 is RealType || t2 is RealType)
+                return new RealType();
+            return new IntegerType();
+        }
+    }
+    class PlusOperator : MathOperator
     {
         public PlusOperator()
         {
-
         }
 
         public override void Generate(ILGenerator generator)
         {
             generator.Emit(OpCodes.Add);
         }
+
+        public override FType GetTarget(FType t1, FType t2)
+        {
+            if(t1 is StringType && t2 is StringType)
+                return new StringType();
+            if(t1 is ArrayType && t2 is ArrayType && ((ArrayType) t1).type.GetType() == ((ArrayType) t2).type.GetType())
+                return new ArrayType(((ArrayType) t1).type);
+            if(t1 is ArrayType && t2.GetType() == ((ArrayType) t1).type.GetType())
+                return new ArrayType(((ArrayType) t1).type);
+            return (this as MathOperator).GetTarget(t1, t2);
+        }
     }
-    class MinusOperator : FOperator
+    class MinusOperator : MathOperator
     {
         public MinusOperator()
         {
@@ -166,7 +228,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Sub);
         }
     }
-    class StarOperator : FOperator
+    class StarOperator : MathOperator
     {
         public StarOperator()
         {
@@ -178,7 +240,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Mul);
         }
     }
-    class SlashOperator : FOperator
+    class SlashOperator : MathOperator
     {
         public SlashOperator()
         {
@@ -189,8 +251,27 @@ namespace FFC.FAST
         {
             generator.Emit(OpCodes.Div);
         }
+
+        public override FType GetTarget(FType t1, FType t2)
+        {
+            if(!(t1 is NumericType && t2 is NumericType))
+                throw new Exception("Can't get target type");
+            if(t1 is ComplexType || t2 is ComplexType)
+            {
+                if(t1 is RationalType || t2 is RationalType)
+                    throw new Exception("Can't get target type");
+                return new ComplexType();
+            }
+            if(t1 is RationalType || t2 is RationalType)
+            {
+                if(t1 is RealType || t2 is RealType)
+                    throw new Exception("Can't get target type");
+                return new RationalType();
+            }
+            return new RealType();
+        }
     }
-    class ModuloOperator : FOperator
+    class ModuloOperator : MathOperator
     {
         public ModuloOperator()
         {
@@ -199,6 +280,13 @@ namespace FFC.FAST
         public override void Generate(ILGenerator generator)
         {
             generator.Emit(OpCodes.Rem);
+        }
+
+        public override FType GetTarget(FType t1, FType t2)
+        {
+            if(t1 is IntegerType && t2 is IntegerType)
+                return new IntegerType();
+            throw new Exception("Can't get target type");
         }
     }
 }
