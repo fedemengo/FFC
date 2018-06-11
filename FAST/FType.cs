@@ -5,7 +5,6 @@ namespace FFC.FAST
 {
     abstract class FType : FASTNode
     {
-
     }
     class TypeList : FASTNode
     {
@@ -26,7 +25,11 @@ namespace FFC.FAST
                 t.Print(tabs + 1);
         }
     }
-    class IntegerType : FType
+
+    abstract class NumericType : FType
+    {
+    }
+    class IntegerType : NumericType
     {
         public IntegerType()
         {
@@ -39,7 +42,7 @@ namespace FFC.FAST
         }
     }
 
-    class RealType : FType
+    class RealType : NumericType
     {
         public RealType()
         {
@@ -52,7 +55,7 @@ namespace FFC.FAST
         }
     }
 
-    class ComplexType : FType
+    class ComplexType : NumericType
     {
         public ComplexType()
         {
@@ -65,7 +68,7 @@ namespace FFC.FAST
         }
     }
 
-    class RationalType : FType
+    class RationalType : NumericType
     {
         public RationalType()
         {
