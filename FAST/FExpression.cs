@@ -16,10 +16,23 @@ namespace FFC.FAST
         public virtual void EmitPrint(ILGenerator generator)
         {
             Generate(generator);
-            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{type}));
-
+            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{ValueType.GetPrintableType()}));
         }
-        public Type type = null;
+        private FType _type;
+        public virtual FType ValueType
+        {
+            set => _type = value;
+            get
+            {
+                if(_type == null)
+                    BuildType();
+                return _type;
+            }
+        }
+        public virtual void BuildType()
+        {
+            throw new NotImplementedException();
+        }
     }
     class ExpressionList : FASTNode
     {
@@ -60,20 +73,37 @@ namespace FFC.FAST
             binOperator.Print(tabs+1);
             right.Print(tabs+1);
         }
+        public override void BuildType()
+        {
+            ValueType = binOperator.GetTarget(left, right);
+        }
 
         public override void Generate(ILGenerator generator)
         {
+            if(ValueType is ComplexType || ValueType is RationalType)
+                throw new NotImplementedException("Operations on rational / complex are not yet implemented.");
+            if(ValueType is ArrayType)
+                throw new NotImplementedException("Operations on arrays are not yet implemented.");
+            if(ValueType is MapType)
+                throw new NotImplementedException("Operations on maps are not yet implemented.");
+            if(ValueType is TupleType)
+                throw new NotImplementedException("Operations on tuples are not yet implemented.");
+
             left.Generate(generator);
+            if(left.ValueType.GetType() != ValueType.GetType())
+                FType.Convert(left.ValueType, ValueType, generator);
+            
             right.Generate(generator);
+            if(right.ValueType.GetType() != ValueType.GetType())
+                FType.Convert(right.ValueType, ValueType, generator);
+
             binOperator.Generate(generator);
-            //just for basic printing
-            type = left.type;
         }
 
         public override void EmitPrint(ILGenerator generator)
         {
             Generate(generator);
-            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{type}));
+            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{ValueType.GetPrintableType()}));
         }
     }
     class NegativeExpression : FExpression
@@ -90,11 +120,14 @@ namespace FFC.FAST
             value.Print(tabs + 1);
         }
 
+        public override void BuildType()
+        {
+            ValueType = value.ValueType;
+        }
         public override void Generate(ILGenerator generator)
         {
             value.Generate(generator);
             generator.Emit(OpCodes.Neg);
-            type = value.type;
         }
     }
     class EllipsisExpression : FExpression
@@ -127,14 +160,20 @@ namespace FFC.FAST
             Console.WriteLine("Not expression");
             expr.Print(tabs + 1);
         }
+        public override void BuildType()
+        {
+            ValueType = expr.ValueType;
+        }
         public override void Generate(ILGenerator generator)
         {
             // "!a" -> "a = 0"
             expr.Generate(generator);
+            if(expr.ValueType is BooleanType == false)
+            {
+                throw new Exception($"Can't apply not operator to {expr.ValueType}");
+            }
             generator.Emit(OpCodes.Ldc_I4_0);
             generator.Emit(OpCodes.Ceq);
-            //
-            type = typeof(bool);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace FFC.FAST
         public BooleanValue(bool value)
         {
             this.value = value;
-            type = typeof(bool);
+            ValueType = new BooleanType();
         }
         public override void Print(int tabs)
         {
@@ -34,7 +34,7 @@ namespace FFC.FAST
         public IntegerValue(int value)
         {
             this.value = value;
-            type = typeof(int);
+            ValueType = new IntegerType();
         }
         public override void Print(int tabs)
         {
@@ -54,7 +54,7 @@ namespace FFC.FAST
         public RealValue(double value)
         {
             this.value = value;
-            type = typeof(double);
+            ValueType = new RealType();
         }
         public override void Print(int tabs)
         {
@@ -76,7 +76,7 @@ namespace FFC.FAST
         {
             this.numerator = numerator;
             this.denominator = denominator;
-            type = typeof(Tuple<int, int>);
+            ValueType = new RationalType();
         }
         public override void Print(int tabs)
         {
@@ -93,7 +93,7 @@ namespace FFC.FAST
         {
             this.real = real;
             this.img = img;
-            type = typeof(Tuple<double, double>);
+            ValueType = new ComplexType();
         }
         public override void Print(int tabs)
         {
@@ -108,7 +108,7 @@ namespace FFC.FAST
         public StringValue(string value)
         {
             this.value = value;
-            type = typeof(string);
+            ValueType = new StringType();
         }
         public override void Print(int tabs)
         {

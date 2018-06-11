@@ -30,8 +30,17 @@ namespace FFC.FAST
         public override void Generate(System.Reflection.Emit.ILGenerator generator)
         {
             //only for expression, tuple to do!
-            elements.Generate(generator);
-            type = elements.elements[0].value.type;
+            if(IsExpression()) elements.elements[0].value.Generate(generator);
+            else throw new NotImplementedException("Tuple definition is not implemented yet");
+        }
+        public override void BuildType()
+        {
+            if(IsExpression())
+            {
+                //get inner expression type
+                ValueType = elements.elements[0].value.ValueType;   
+            }
+            else throw new NotImplementedException("Tuple definition is not implemented yet");
         }
     }
     class TupleElementList : FASTNode
@@ -62,12 +71,7 @@ namespace FFC.FAST
         }
         public override void Generate(System.Reflection.Emit.ILGenerator generator)
         {
-            if(elements.Count == 1 && elements[0].id == null)
-            {
-                elements[0].value.Generate(generator);
-            }
-            else
-                throw new NotImplementedException();
+            throw new NotImplementedException("tuple element list not implemented");
         }
     }
     class TupleElement : FASTNode
