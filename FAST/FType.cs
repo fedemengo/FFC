@@ -70,7 +70,6 @@ namespace FFC.FAST
         {
             return typeof(double);
         }
-
     }
 
     class ComplexType : NumericType
