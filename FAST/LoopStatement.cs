@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System;
+using FFC.FParser;
+
 namespace FFC.FAST
 {
     class LoopStatement : FStatement
@@ -7,8 +9,9 @@ namespace FFC.FAST
         public FLoopHeader header;
         public StatementList body;
 
-        public LoopStatement(FLoopHeader header, StatementList body)
+        public LoopStatement(FLoopHeader header, StatementList body, TextSpan span)
         {
+            this.Span = span;
             this.header = header;
             this.body = body;
         }
@@ -29,8 +32,9 @@ namespace FFC.FAST
         public Identifier id;
         public FExpression collection;
 
-        public ForHeader(Identifier id, FExpression collection)
+        public ForHeader(Identifier id, FExpression collection, TextSpan span)
         {
+            this.Span = span;
             this.id = id;
             this.collection = collection;
         }
@@ -46,8 +50,9 @@ namespace FFC.FAST
     {
         public FExpression condition;
 
-        public WhileHeader(FExpression condition)
+        public WhileHeader(FExpression condition, TextSpan span)
         {
+            this.Span = span;
             this.condition = condition;
         }
         public override void Print(int tabs)

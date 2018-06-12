@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System;
 using System.Reflection.Emit;
+using FFC.FParser;
 
 namespace FFC.FAST
 {
@@ -11,8 +12,9 @@ namespace FFC.FAST
     {
         public bool value;
 
-        public BooleanValue(bool value)
+        public BooleanValue(bool value, TextSpan span)
         {
+            this.Span = span;
             this.value = value;
             ValueType = new BooleanType();
         }
@@ -31,8 +33,9 @@ namespace FFC.FAST
     {
         public int value;
 
-        public IntegerValue(int value)
+        public IntegerValue(int value, TextSpan span)
         {
+            this.Span = span;
             this.value = value;
             ValueType = new IntegerType();
         }
@@ -51,8 +54,9 @@ namespace FFC.FAST
     {
         public double value;
 
-        public RealValue(double value)
+        public RealValue(double value, TextSpan span)
         {
+            this.Span = span;
             this.value = value;
             ValueType = new RealType();
         }
@@ -72,8 +76,9 @@ namespace FFC.FAST
         public int numerator;
         public int denominator;
 
-        public RationalValue(int numerator, int denominator)
+        public RationalValue(int numerator, int denominator, TextSpan span)
         {
+            this.Span = span;
             this.numerator = numerator;
             this.denominator = denominator;
             ValueType = new RationalType();
@@ -89,8 +94,9 @@ namespace FFC.FAST
         public double real;
         public double img;
 
-        public ComplexValue(double real, double img)
+        public ComplexValue(double real, double img, TextSpan span)
         {
+            this.Span = span;
             this.real = real;
             this.img = img;
             ValueType = new ComplexType();
@@ -105,8 +111,9 @@ namespace FFC.FAST
     {
         public string value;
 
-        public StringValue(string value)
+        public StringValue(string value, TextSpan span)
         {
+            this.Span = span;
             this.value = value;
             ValueType = new StringType();
         }
@@ -125,8 +132,9 @@ namespace FFC.FAST
     {
         public string name;
 
-        public Identifier(string name)
+        public Identifier(string name, TextSpan span)
         {
+            this.Span = span;
             this.name = name;
         }
         public override void Print(int tabs)

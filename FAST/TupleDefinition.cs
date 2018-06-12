@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using FFC.FParser;
 
 namespace FFC.FAST
 {
@@ -7,8 +8,9 @@ namespace FFC.FAST
     {
         public TupleElementList elements;
 
-        public TupleDefinition(TupleElementList elements)
+        public TupleDefinition(TupleElementList elements, TextSpan span)
         {
+            this.Span = span;
             this.elements = elements;
         }
         public bool IsExpression()
@@ -46,12 +48,14 @@ namespace FFC.FAST
     class TupleElementList : FASTNode
     {
         public List<TupleElement> elements;
-        public TupleElementList()
+        public TupleElementList(TextSpan span)
         {
+            this.Span = span;
             elements = new List<TupleElement>();
         }
-        public TupleElementList(TupleElement element)
+        public TupleElementList(TupleElement element, TextSpan span)
         {
+            this.Span = span;
             elements = new List<TupleElement>{element};
         }
         public override void Print(int tabs)
@@ -79,8 +83,9 @@ namespace FFC.FAST
         public Identifier id;
         public FExpression value;
 
-        public TupleElement(Identifier id, FExpression value)
+        public TupleElement(Identifier id, FExpression value, TextSpan span)
         {
+            this.Span = span;
             this.id = id;
             this.value = value;
         }

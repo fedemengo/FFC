@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FFC.FParser;
 
 namespace FFC.FAST
 {
@@ -8,11 +9,12 @@ namespace FFC.FAST
         public FExpression condition;
         public FExpression ifTrue;
         public FExpression ifFalse;
-        public Conditional(FExpression condition, FExpression ifTrue, FExpression ifFalse)
+        public Conditional(FExpression condition, FExpression ifTrue, FExpression ifFalse, TextSpan span)
         {
             this.condition = condition;
             this.ifTrue = ifTrue;
             this.ifFalse = ifFalse;
+            this.Span = span;
         }
         public override void Print(int tabs)
         {

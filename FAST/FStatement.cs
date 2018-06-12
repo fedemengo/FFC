@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
+using FFC.FParser;
 
 namespace FFC.FAST
 {
@@ -22,12 +23,14 @@ namespace FFC.FAST
     class StatementList : FASTNode
     {
         public List<FStatement> statements;
-        public StatementList(FStatement statement)
+        public StatementList(FStatement statement, TextSpan span)
         {
+            this.Span = span;
             statements = new List<FStatement>{statement};
         }
-        public StatementList()
+        public StatementList(TextSpan span)
         {
+            this.Span = span;
             statements = new List<FStatement>();
         }
         public void Add(FStatement stm)
@@ -50,8 +53,9 @@ namespace FFC.FAST
     class ExpressionStatement : FStatement
     {
         public FExpression expression;
-        public ExpressionStatement(FExpression expression)
+        public ExpressionStatement(FExpression expression, TextSpan span)
         {
+            this.Span = span;
             this.expression = expression;
         }
         public override void Print(int tabs)
@@ -66,8 +70,9 @@ namespace FFC.FAST
     class FunctionCallStatement : FStatement
     {
         public FunctionCall function;
-        public FunctionCallStatement(FunctionCall function)
+        public FunctionCallStatement(FunctionCall function, TextSpan span)
         {
+            this.Span = span;
             this.function = function;
         }
         public override void Print(int tabs)
@@ -81,8 +86,9 @@ namespace FFC.FAST
     {
         public FSecondary left;
         public FExpression right;
-        public AssignmentStatemt(FSecondary left, FExpression right)
+        public AssignmentStatemt(FSecondary left, FExpression right, TextSpan span)
         {
+            this.Span = span;
             this.left = left;
             this.right = right;
         }
@@ -99,8 +105,9 @@ namespace FFC.FAST
         public Identifier id;
         public FType type;
         public FExpression expr;
-        public DeclarationStatement(Identifier id, FType type, FExpression expr)
+        public DeclarationStatement(Identifier id, FType type, FExpression expr, TextSpan span)
         {
+            this.Span = span;
             this.id = id;
             this.type = type;
             this.expr = expr;
@@ -122,8 +129,9 @@ namespace FFC.FAST
     class DeclarationStatementList : FASTNode
     {
         public List<DeclarationStatement> statements;
-        public DeclarationStatementList(DeclarationStatement stm)
+        public DeclarationStatementList(DeclarationStatement stm, TextSpan span)
         {
+            this.Span = span;
             statements = new List<DeclarationStatement>{stm};
         }
         public override void Print(int tabs)
@@ -140,6 +148,10 @@ namespace FFC.FAST
                 stm.Generate(generator);
             }
         }
+        public void Add(DeclarationStatement stm)
+        {
+            statements.Add(stm);
+        }
     }
     class IfStatement : FStatement
     {
@@ -147,8 +159,9 @@ namespace FFC.FAST
         public StatementList ifTrue;
         public ElseIfList elseIfs;
         public StatementList ifFalse;
-        public IfStatement(FExpression condition, StatementList ifTrue, ElseIfList elseIfs, StatementList ifFalse)
+        public IfStatement(FExpression condition, StatementList ifTrue, ElseIfList elseIfs, StatementList ifFalse, TextSpan span)
         {
+            this.Span = span;
             this.condition = condition;
             this.ifTrue = ifTrue;
             this.elseIfs = elseIfs;
@@ -181,12 +194,14 @@ namespace FFC.FAST
                 l.Print(tabs + 1);
         }
 
-        public ElseIfList()
+        public ElseIfList(TextSpan span = null)
         {
+            this.Span = span;
             list = new List<ElseIfStatement>();
         }
-        public ElseIfList(ElseIfStatement start)
+        public ElseIfList(ElseIfStatement start, TextSpan span)
         {
+            this.Span = span;
             list = new List<ElseIfStatement>{start};
         }
     }
@@ -195,8 +210,9 @@ namespace FFC.FAST
     {
         public FExpression condition;
         public StatementList ifTrue;
-        public ElseIfStatement(FExpression condition, StatementList ifTrue)
+        public ElseIfStatement(FExpression condition, StatementList ifTrue, TextSpan span)
         {
+            this.Span = span;
             this.condition = condition;
             this.ifTrue = ifTrue;
         }
@@ -213,12 +229,14 @@ namespace FFC.FAST
     class ReturnStatement : FStatement
     {
         public FExpression value;
-        public ReturnStatement(FExpression value)
+        public ReturnStatement(FExpression value, TextSpan span)
         {
+            this.Span = span;
             this.value = value;
         }
-        public ReturnStatement()
+        public ReturnStatement(TextSpan span)
         {
+            this.Span = span;
         }
         public override void Print(int tabs)
         {
@@ -230,8 +248,9 @@ namespace FFC.FAST
     }
     class BreakStatement : FStatement
     {
-        public BreakStatement()
+        public BreakStatement(TextSpan span)
         {
+            this.Span = span;
 
         }
         public override void Print(int tabs)
@@ -242,8 +261,9 @@ namespace FFC.FAST
     }
     class ContinueStatement : FStatement
     {
-        public ContinueStatement()
+        public ContinueStatement(TextSpan span)
         {
+            this.Span = span;
 
         }
         public override void Print(int tabs)
@@ -255,8 +275,9 @@ namespace FFC.FAST
     class PrintStatement : FStatement
     {
         public ExpressionList toPrint;
-        public PrintStatement(ExpressionList toPrint)
+        public PrintStatement(ExpressionList toPrint, TextSpan span)
         {
+            this.Span = span;
             this.toPrint = toPrint;
         }
         public override void Print(int tabs)

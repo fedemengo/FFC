@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using FFC.FParser;
 
 namespace FFC.FAST
 {
@@ -7,8 +8,9 @@ namespace FFC.FAST
     {
         public FSecondary toCall;
         public ExpressionList exprs;
-        public FunctionCall(FSecondary toCall, ExpressionList exprs)
+        public FunctionCall(FSecondary toCall, ExpressionList exprs, TextSpan span)
         {
+            this.Span = span;
             this.toCall = toCall;
             this.exprs = exprs;
         }

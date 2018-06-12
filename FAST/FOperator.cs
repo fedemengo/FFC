@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System;
 using System.Reflection.Emit;
+using FFC.FParser;
 
 namespace FFC.FAST
 {
@@ -38,23 +39,24 @@ namespace FFC.FAST
         public override FType GetTarget(FType t1, FType t2)
         {
             if(!(t1 is NumericType && t2 is NumericType))
-                throw new Exception("Can't compare non numeric types");
+                throw new Exception("{this.Span.Begin} - Can't compare non numeric types");
             if(t1 is ComplexType || t2 is ComplexType)
             {
                 if(!(t1 is ComplexType && t2 is ComplexType))
-                    throw new Exception("Can't compare complex numbers to other numeric values");
+                    throw new Exception("{this.Span.Begin} - Can't compare complex numbers to other numeric values");
             }
             if(t1 is RationalType || t2 is RationalType){
                 if(t1 is RealType || t2 is RealType)
-                    throw new Exception("Can't compare rationals to reals");
+                    throw new Exception("{this.Span.Begin} - Can't compare rationals to reals");
             }
             return new BooleanType();
         }
     }
     class LessOperator : RelationalOperator
     {
-        public LessOperator()
+        public LessOperator(TextSpan span)
         {
+            this.Span = span;
 
         }
         public override void Generate(ILGenerator generator)
@@ -64,8 +66,9 @@ namespace FFC.FAST
     }
     class LessEqualOperator : RelationalOperator
     {
-        public LessEqualOperator()
+        public LessEqualOperator(TextSpan span)
         {
+            this.Span = span;
 
         }
 
@@ -78,8 +81,9 @@ namespace FFC.FAST
     }
     class GreaterOperator : RelationalOperator
     {
-        public GreaterOperator()
+        public GreaterOperator(TextSpan span)
         {
+            this.Span = span;
 
         }
 
@@ -90,8 +94,9 @@ namespace FFC.FAST
     }
     class GreaterEqualOperator : RelationalOperator
     {
-        public GreaterEqualOperator()
+        public GreaterEqualOperator(TextSpan span)
         {
+            this.Span = span;
 
         }
         public override void Generate(ILGenerator generator)
@@ -103,8 +108,9 @@ namespace FFC.FAST
     }
     class EqualOperator : RelationalOperator
     {
-        public EqualOperator()
+        public EqualOperator(TextSpan span)
         {
+            this.Span = span;
 
         }
 
@@ -115,8 +121,9 @@ namespace FFC.FAST
     }
     class NotEqualOperator : RelationalOperator
     {
-        public NotEqualOperator()
+        public NotEqualOperator(TextSpan span)
         {
+            this.Span = span;
         }
 
         public override void Generate(ILGenerator generator)
@@ -134,13 +141,14 @@ namespace FFC.FAST
         {
             if(t1 is BooleanType && t2 is BooleanType)
                 return new BooleanType();
-            throw new Exception($"Can't use boolean operator {this.GetType().Name} on non-boolean values");            
+            throw new Exception($"{this.Span.Begin} - Can't use boolean operator {this.GetType().Name} on non-boolean values");            
         }
     }
     class AndOperator : BooleanOperator
     {
-        public AndOperator()
+        public AndOperator(TextSpan span)
         {
+            this.Span = span;
 
         }
         public override void Generate(ILGenerator generator)
@@ -150,8 +158,9 @@ namespace FFC.FAST
     }
     class OrOperator : BooleanOperator
     {
-        public OrOperator()
+        public OrOperator(TextSpan span)
         {
+            this.Span = span;
 
         }
         public override void Generate(ILGenerator generator)
@@ -161,8 +170,9 @@ namespace FFC.FAST
     }
     class XorOperator : BooleanOperator
     {
-        public XorOperator()
+        public XorOperator(TextSpan span)
         {
+            this.Span = span;
 
         }
         public override void Generate(ILGenerator generator)
@@ -176,17 +186,17 @@ namespace FFC.FAST
         public override FType GetTarget(FType t1, FType t2)
         {
             if(!(t1 is NumericType && t2 is NumericType))
-                throw new Exception($"Can't apply operator {this.GetType().Name} to non-numeric type {(t1 is NumericType ? t2.GetType().Name : t1.GetType().Name)}");
+                throw new Exception($"{this.Span.Begin} - Can't apply operator {this.GetType().Name} to non-numeric type {(t1 is NumericType ? t2.GetType().Name : t1.GetType().Name)}");
             if(t1 is ComplexType || t2 is ComplexType)
             {
                 if(t1 is RationalType || t2 is RationalType)
-                    throw new Exception($"Can't use operator {this.GetType().Name} mixing complex and rational numbers");
+                    throw new Exception($"{this.Span.Begin} - Can't use operator {this.GetType().Name} mixing complex and rational numbers");
                 return new ComplexType();
             }
             if(t1 is RationalType || t2 is RationalType)
             {
                 if(t1 is RealType || t2 is RealType)
-                    throw new Exception($"Can't use operator {this.GetType().Name} mixing real and rational numbers");
+                    throw new Exception($"{this.Span.Begin} - Can't use operator {this.GetType().Name} mixing real and rational numbers");
                 return new RationalType();
             }
             if(t1 is RealType || t2 is RealType)
@@ -196,8 +206,9 @@ namespace FFC.FAST
     }
     class PlusOperator : MathOperator
     {
-        public PlusOperator()
+        public PlusOperator(TextSpan span)
         {
+            this.Span = span;
         }
 
         public override void Generate(ILGenerator generator)
@@ -218,8 +229,9 @@ namespace FFC.FAST
     }
     class MinusOperator : MathOperator
     {
-        public MinusOperator()
+        public MinusOperator(TextSpan span)
         {
+            this.Span = span;
 
         }
 
@@ -230,8 +242,9 @@ namespace FFC.FAST
     }
     class StarOperator : MathOperator
     {
-        public StarOperator()
+        public StarOperator(TextSpan span)
         {
+            this.Span = span;
 
         }
 
@@ -242,8 +255,9 @@ namespace FFC.FAST
     }
     class SlashOperator : MathOperator
     {
-        public SlashOperator()
+        public SlashOperator(TextSpan span)
         {
+            this.Span = span;
 
         }
 
@@ -255,17 +269,17 @@ namespace FFC.FAST
         public override FType GetTarget(FType t1, FType t2)
         {
             if(!(t1 is NumericType && t2 is NumericType))
-                throw new Exception($"Can't use {this.GetType().Name} with non-numeric type {(t1 is NumericType ? t2.GetType().Name : t1.GetType().Name)}");
+                throw new Exception($"{this.Span.Begin} - Can't use {this.GetType().Name} with non-numeric type {(t1 is NumericType ? t2.GetType().Name : t1.GetType().Name)}");
             if(t1 is ComplexType || t2 is ComplexType)
             {
                 if(t1 is RationalType || t2 is RationalType)
-                    throw new Exception($"Can't use {this.GetType().Name} mixing complex and rational values");
+                    throw new Exception($"{this.Span.Begin} - Can't use {this.GetType().Name} mixing complex and rational values");
                 return new ComplexType();
             }
             if(t1 is RationalType || t2 is RationalType)
             {
                 if(t1 is RealType || t2 is RealType)
-                    throw new Exception($"Can't use {this.GetType().Name} mixing real and rational values");
+                    throw new Exception($"{this.Span.Begin} - Can't use {this.GetType().Name} mixing real and rational values");
                 return new RationalType();
             }
             return new RealType();
@@ -273,8 +287,9 @@ namespace FFC.FAST
     }
     class ModuloOperator : MathOperator
     {
-        public ModuloOperator()
+        public ModuloOperator(TextSpan span)
         {
+            this.Span = span;
             
         }
         public override void Generate(ILGenerator generator)
@@ -286,7 +301,7 @@ namespace FFC.FAST
         {
             if(t1 is IntegerType && t2 is IntegerType)
                 return new IntegerType();
-            throw new Exception($"Can't use {this.GetType().Name} with {(t1 is IntegerType ? t2.GetType().Name : t1.GetType().Name)} values");
+            throw new Exception($"{this.Span.Begin} - Can't use {this.GetType().Name} with {(t1 is IntegerType ? t2.GetType().Name : t1.GetType().Name)} values");
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using FFC.FParser;
 
 namespace FFC.FAST
 {
@@ -8,8 +9,9 @@ namespace FFC.FAST
         public FSecondary item;
         public Indexer index;
 
-        public IndexedAccess(FSecondary item, Indexer index)
+        public IndexedAccess(FSecondary item, Indexer index, TextSpan span)
         {
+            this.Span = span;
             this.item = item;
             this.index = index;
         }
@@ -29,8 +31,9 @@ namespace FFC.FAST
         public Identifier id;
         public IntegerValue index;
 
-        public DotIndexer(Identifier id, IntegerValue index)
+        public DotIndexer(Identifier id, IntegerValue index, TextSpan span)
         {
+            this.Span = span;
             this.id = id;
             this.index = index;
         }
@@ -46,8 +49,9 @@ namespace FFC.FAST
     {
         public FExpression index;
 
-        public SquaresIndexer(FExpression index)
+        public SquaresIndexer(FExpression index, TextSpan span)
         {
+            this.Span = span;
             this.index = index;
         }
         public override void Print(int tabs)

@@ -4,9 +4,9 @@
 
 // GPPG version 1.5.2
 // Machine:  filo-Spin-SP513
-// DateTime: 6/10/2018 6:17:55 PM
+// DateTime: 6/12/2018 11:34:25 PM
 // UserName: filo
-// Input file <FParser/gppg/grammar.y - 6/10/2018 6:16:44 PM>
+// Input file <FParser/gppg/grammar.y - 6/12/2018 11:34:22 PM>
 
 // options: lines
 
@@ -409,27 +409,27 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 3: // dec_list -> declaration
 #line 36 "FParser/gppg/grammar.y"
-                                   { CurrentSemanticValue = new DeclarationStatementList((DeclarationStatement)ValueStack[ValueStack.Depth-1]); }
+                                   { CurrentSemanticValue = new DeclarationStatementList((DeclarationStatement)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 4: // dec_list -> dec_list, declaration
 #line 37 "FParser/gppg/grammar.y"
-                                   { ((DeclarationStatementList)ValueStack[ValueStack.Depth-2]).statements.Add((DeclarationStatement)ValueStack[ValueStack.Depth-1]); CurrentSemanticValue = ValueStack[ValueStack.Depth-2]; }
+                                   { ((DeclarationStatementList)ValueStack[ValueStack.Depth-2]).Add((DeclarationStatement)ValueStack[ValueStack.Depth-1]); ValueStack[ValueStack.Depth-2].Span = ValueStack[ValueStack.Depth-2].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-2]; }
 #line default
         break;
       case 5: // declaration -> identifier, opt_type, IS, math_expr, SEMICOLON
 #line 40 "FParser/gppg/grammar.y"
-                                                            { CurrentSemanticValue = new DeclarationStatement((Identifier)ValueStack[ValueStack.Depth-5], (FType)ValueStack[ValueStack.Depth-4], (FExpression)ValueStack[ValueStack.Depth-2]); }
+                                                            { CurrentSemanticValue = new DeclarationStatement((Identifier)ValueStack[ValueStack.Depth-5], (FType)ValueStack[ValueStack.Depth-4], (FExpression)ValueStack[ValueStack.Depth-2], new TextSpan(ValueStack[ValueStack.Depth-5].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 6: // declaration -> identifier, opt_type, IS, func_def
 #line 41 "FParser/gppg/grammar.y"
-                                           { CurrentSemanticValue = new DeclarationStatement((Identifier)ValueStack[ValueStack.Depth-4], (FType)ValueStack[ValueStack.Depth-3], (FExpression)ValueStack[ValueStack.Depth-1]); }
+                                           { CurrentSemanticValue = new DeclarationStatement((Identifier)ValueStack[ValueStack.Depth-4], (FType)ValueStack[ValueStack.Depth-3], (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-4].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 7: // identifier -> ID
 #line 44 "FParser/gppg/grammar.y"
-                             { CurrentSemanticValue = new Identifier(((TokenValue)ValueStack[ValueStack.Depth-1])[0].ToString()); }
+                             { CurrentSemanticValue = new Identifier(((TokenValue)ValueStack[ValueStack.Depth-1])[0].ToString(), new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 8: // opt_type -> /* empty */
@@ -439,37 +439,37 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 9: // opt_type -> COLON, type
 #line 48 "FParser/gppg/grammar.y"
-                           { CurrentSemanticValue = (FType) ValueStack[ValueStack.Depth-1]; }
+                           { CurrentSemanticValue = ValueStack[ValueStack.Depth-1]; }
 #line default
         break;
       case 10: // type -> INTEGER
 #line 51 "FParser/gppg/grammar.y"
-                            { CurrentSemanticValue = new IntegerType(); }
+                            { CurrentSemanticValue = new IntegerType(new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 11: // type -> COMPLEX
 #line 52 "FParser/gppg/grammar.y"
-                         { CurrentSemanticValue = new ComplexType(); }
+                         { CurrentSemanticValue = new ComplexType(new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 12: // type -> RATIONAL
 #line 53 "FParser/gppg/grammar.y"
-                         { CurrentSemanticValue = new RationalType(); }
+                         { CurrentSemanticValue = new RationalType(new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 13: // type -> REAL
 #line 54 "FParser/gppg/grammar.y"
-                      { CurrentSemanticValue = new RealType(); }
+                      { CurrentSemanticValue = new RealType(new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 14: // type -> STRING
 #line 55 "FParser/gppg/grammar.y"
-                        { CurrentSemanticValue = new StringType(); }
+                        { CurrentSemanticValue = new StringType(new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 15: // type -> BOOLEAN
 #line 56 "FParser/gppg/grammar.y"
-                         { CurrentSemanticValue = new BooleanType(); }
+                         { CurrentSemanticValue = new BooleanType(new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 16: // type -> func_type
@@ -509,87 +509,87 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 23: // math_expr -> NOT, math_expr
 #line 68 "FParser/gppg/grammar.y"
-                             { CurrentSemanticValue = new NotExpression((FExpression)ValueStack[ValueStack.Depth-1]); }
+                             { CurrentSemanticValue = new NotExpression((FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 24: // math_expr -> math_expr, OR, math_expr
 #line 69 "FParser/gppg/grammar.y"
-                                    { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new OrOperator(), (FExpression)ValueStack[ValueStack.Depth-1]); }
+                                    { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new OrOperator(ValueStack[ValueStack.Depth-2].Span), (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 25: // math_expr -> math_expr, XOR, math_expr
 #line 70 "FParser/gppg/grammar.y"
-                                     { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new XorOperator(), (FExpression)ValueStack[ValueStack.Depth-1]); }
+                                     { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new XorOperator(ValueStack[ValueStack.Depth-2].Span), (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 26: // math_expr -> math_expr, AND, math_expr
 #line 71 "FParser/gppg/grammar.y"
-                                     { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new AndOperator(), (FExpression)ValueStack[ValueStack.Depth-1]); }
+                                     { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new AndOperator(ValueStack[ValueStack.Depth-2].Span), (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 27: // math_expr -> math_expr, LESS, math_expr
 #line 72 "FParser/gppg/grammar.y"
-                                     { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new LessOperator(), (FExpression)ValueStack[ValueStack.Depth-1]); }
+                                     { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new LessOperator(ValueStack[ValueStack.Depth-2].Span), (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 28: // math_expr -> math_expr, LESSEQUAL, math_expr
 #line 73 "FParser/gppg/grammar.y"
-                                         { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new LessEqualOperator(), (FExpression)ValueStack[ValueStack.Depth-1]); }
+                                         { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new LessEqualOperator(ValueStack[ValueStack.Depth-2].Span), (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 29: // math_expr -> math_expr, GREATER, math_expr
 #line 74 "FParser/gppg/grammar.y"
-                                        { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new GreaterOperator(), (FExpression)ValueStack[ValueStack.Depth-1]); }
+                                        { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new GreaterOperator(ValueStack[ValueStack.Depth-2].Span), (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 30: // math_expr -> math_expr, GREATEREQUAL, math_expr
 #line 75 "FParser/gppg/grammar.y"
-                                           { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new GreaterEqualOperator(), (FExpression)ValueStack[ValueStack.Depth-1]); }
+                                           { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new GreaterEqualOperator(ValueStack[ValueStack.Depth-2].Span), (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 31: // math_expr -> math_expr, NOTEQUAL, math_expr
 #line 76 "FParser/gppg/grammar.y"
-                                        { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new NotEqualOperator(), (FExpression)ValueStack[ValueStack.Depth-1]); }
+                                        { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new NotEqualOperator(ValueStack[ValueStack.Depth-2].Span), (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 32: // math_expr -> math_expr, PLUS, math_expr
 #line 77 "FParser/gppg/grammar.y"
-                                     { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new PlusOperator(), (FExpression)ValueStack[ValueStack.Depth-1]); }
+                                     { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new PlusOperator(ValueStack[ValueStack.Depth-2].Span), (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 33: // math_expr -> math_expr, EQUAL, math_expr
 #line 78 "FParser/gppg/grammar.y"
-                                      { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new EqualOperator(), (FExpression)ValueStack[ValueStack.Depth-1]); }
+                                      { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new EqualOperator(ValueStack[ValueStack.Depth-2].Span), (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 34: // math_expr -> math_expr, MINUS, math_expr
 #line 79 "FParser/gppg/grammar.y"
-                                      { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new MinusOperator(), (FExpression)ValueStack[ValueStack.Depth-1]); }
+                                      { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new MinusOperator(ValueStack[ValueStack.Depth-2].Span), (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 35: // math_expr -> math_expr, STAR, math_expr
 #line 80 "FParser/gppg/grammar.y"
-                                     { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new StarOperator(), (FExpression)ValueStack[ValueStack.Depth-1]); }
+                                     { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new StarOperator(ValueStack[ValueStack.Depth-2].Span), (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 36: // math_expr -> math_expr, SLASH, math_expr
 #line 81 "FParser/gppg/grammar.y"
-                                      { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new SlashOperator(), (FExpression)ValueStack[ValueStack.Depth-1]); }
+                                      { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new SlashOperator(ValueStack[ValueStack.Depth-2].Span), (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 37: // math_expr -> math_expr, MODULO, math_expr
 #line 82 "FParser/gppg/grammar.y"
-                                       { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new ModuloOperator(), (FExpression)ValueStack[ValueStack.Depth-1]); }
+                                       { CurrentSemanticValue = new BinaryOperatorExpression((FExpression)ValueStack[ValueStack.Depth-3], new ModuloOperator(ValueStack[ValueStack.Depth-2].Span), (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 38: // math_expr -> MINUS, secondary
 #line 83 "FParser/gppg/grammar.y"
-                                      { CurrentSemanticValue = new NegativeExpression((FSecondary)ValueStack[ValueStack.Depth-1]); }
+                                      { CurrentSemanticValue = new NegativeExpression((FSecondary)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-2].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 39: // math_expr -> secondary, ELLIPSIS, secondary
 #line 84 "FParser/gppg/grammar.y"
-                                         { CurrentSemanticValue = new EllipsisExpression((FSecondary)ValueStack[ValueStack.Depth-3], (FSecondary)ValueStack[ValueStack.Depth-1]); }
+                                         { CurrentSemanticValue = new EllipsisExpression((FSecondary)ValueStack[ValueStack.Depth-3], (FSecondary)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 40: // secondary -> primary
@@ -604,7 +604,7 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 42: // secondary -> secondary, indexer
 #line 89 "FParser/gppg/grammar.y"
-                                { CurrentSemanticValue = new IndexedAccess((FSecondary)ValueStack[ValueStack.Depth-2], (Indexer)ValueStack[ValueStack.Depth-1]); }
+                                { CurrentSemanticValue = new IndexedAccess((FSecondary)ValueStack[ValueStack.Depth-2], (Indexer)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-2].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 43: // primary -> value
@@ -634,32 +634,32 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 48: // value -> BOOLEAN_VALUE
 #line 100 "FParser/gppg/grammar.y"
-                                 { CurrentSemanticValue = new BooleanValue((bool) ((TokenValue)ValueStack[ValueStack.Depth-1])[0]); }
+                                 { CurrentSemanticValue = new BooleanValue((bool) ((TokenValue)ValueStack[ValueStack.Depth-1])[0], new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 49: // value -> INTEGER_VALUE
 #line 101 "FParser/gppg/grammar.y"
-                             { CurrentSemanticValue = new IntegerValue((int) ((TokenValue)ValueStack[ValueStack.Depth-1])[0]); }
+                             { CurrentSemanticValue = new IntegerValue((int) ((TokenValue)ValueStack[ValueStack.Depth-1])[0], new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 50: // value -> REAL_VALUE
 #line 102 "FParser/gppg/grammar.y"
-                           { CurrentSemanticValue = new RealValue((double) ((TokenValue)ValueStack[ValueStack.Depth-1])[0]); }
+                           { CurrentSemanticValue = new RealValue((double) ((TokenValue)ValueStack[ValueStack.Depth-1])[0], new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 51: // value -> RATIONAL_VALUE
 #line 103 "FParser/gppg/grammar.y"
-                              { CurrentSemanticValue = new RationalValue((int) ((TokenValue)ValueStack[ValueStack.Depth-1])[0], (int) ((TokenValue)ValueStack[ValueStack.Depth-1])[1]); }
+                              { CurrentSemanticValue = new RationalValue((int) ((TokenValue)ValueStack[ValueStack.Depth-1])[0], (int) ((TokenValue)ValueStack[ValueStack.Depth-1])[1], new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 52: // value -> COMPLEX_VALUE
 #line 104 "FParser/gppg/grammar.y"
-                             { CurrentSemanticValue = new ComplexValue((double) ((TokenValue)ValueStack[ValueStack.Depth-1])[0], (double) ((TokenValue)ValueStack[ValueStack.Depth-1])[1]); }
+                             { CurrentSemanticValue = new ComplexValue((double) ((TokenValue)ValueStack[ValueStack.Depth-1])[0], (double) ((TokenValue)ValueStack[ValueStack.Depth-1])[1], new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 53: // value -> STRING_VALUE
 #line 105 "FParser/gppg/grammar.y"
-                            { CurrentSemanticValue = new StringValue((string) ((TokenValue)ValueStack[ValueStack.Depth-1])[0]); }
+                            { CurrentSemanticValue = new StringValue((string) ((TokenValue)ValueStack[ValueStack.Depth-1])[0], new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 54: // value -> identifier
@@ -669,12 +669,12 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 55: // cond -> IF, math_expr, THEN, expr, ELSE, expr, END
 #line 109 "FParser/gppg/grammar.y"
-                                                 { CurrentSemanticValue = new Conditional((FExpression)ValueStack[ValueStack.Depth-6], (FExpression)ValueStack[ValueStack.Depth-4], (FExpression)ValueStack[ValueStack.Depth-2]); }
+                                                 { CurrentSemanticValue = new Conditional((FExpression)ValueStack[ValueStack.Depth-6], (FExpression)ValueStack[ValueStack.Depth-4], (FExpression)ValueStack[ValueStack.Depth-2], new TextSpan(ValueStack[ValueStack.Depth-7].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 56: // func_def -> FUNC, LROUND, opt_params, RROUND, opt_type, func_body
 #line 112 "FParser/gppg/grammar.y"
-                                                             { CurrentSemanticValue = new FunctionDefinition((ParameterList)ValueStack[ValueStack.Depth-4], (FType)ValueStack[ValueStack.Depth-2], (StatementList)ValueStack[ValueStack.Depth-1]); }
+                                                             { CurrentSemanticValue = new FunctionDefinition((ParameterList)ValueStack[ValueStack.Depth-4], (FType)ValueStack[ValueStack.Depth-2], (StatementList)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-6].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 57: // opt_params -> /* empty */
@@ -689,17 +689,17 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 59: // param_list -> param
 #line 119 "FParser/gppg/grammar.y"
-                                { CurrentSemanticValue = new ParameterList((Parameter)ValueStack[ValueStack.Depth-1]); }
+                                { CurrentSemanticValue = new ParameterList((Parameter)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 60: // param_list -> param_list, COMMA, param
 #line 120 "FParser/gppg/grammar.y"
-                                     { ((ParameterList)ValueStack[ValueStack.Depth-3]).parameters.Add((Parameter)ValueStack[ValueStack.Depth-1]); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
+                                     { ((ParameterList)ValueStack[ValueStack.Depth-3]).parameters.Add((Parameter)ValueStack[ValueStack.Depth-1]); ValueStack[ValueStack.Depth-3].Span = ValueStack[ValueStack.Depth-3].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
 #line default
         break;
       case 61: // param -> identifier, COLON, type
 #line 123 "FParser/gppg/grammar.y"
-                                       { CurrentSemanticValue = new Parameter((Identifier)ValueStack[ValueStack.Depth-3], (FType)ValueStack[ValueStack.Depth-1]); }
+                                       { CurrentSemanticValue = new Parameter((Identifier)ValueStack[ValueStack.Depth-3], (FType)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 62: // func_body -> DO, stm_list, END
@@ -709,17 +709,17 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 63: // func_body -> ARROW, LROUND, expr, RROUND
 #line 127 "FParser/gppg/grammar.y"
-                                     { CurrentSemanticValue = new StatementList(new ExpressionStatement((FExpression)ValueStack[ValueStack.Depth-2])); }
+                                     { CurrentSemanticValue = new StatementList(new ExpressionStatement((FExpression)ValueStack[ValueStack.Depth-2], new TextSpan(ValueStack[ValueStack.Depth-2].Span)), new TextSpan(ValueStack[ValueStack.Depth-4].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 64: // stm_list -> statement
 #line 130 "FParser/gppg/grammar.y"
-                                { CurrentSemanticValue = new StatementList((FStatement)ValueStack[ValueStack.Depth-1]); }
+                                { CurrentSemanticValue = new StatementList((FStatement)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 65: // stm_list -> stm_list, statement
 #line 131 "FParser/gppg/grammar.y"
-                                 { ((StatementList)ValueStack[ValueStack.Depth-2]).statements.Add((FStatement)ValueStack[ValueStack.Depth-1]); CurrentSemanticValue = ValueStack[ValueStack.Depth-2]; }
+                                 { ((StatementList)ValueStack[ValueStack.Depth-2]).statements.Add((FStatement)ValueStack[ValueStack.Depth-1]); ValueStack[ValueStack.Depth-2].Span = ValueStack[ValueStack.Depth-2].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-2]; }
 #line default
         break;
       case 66: // nif_stm -> func_call, SEMICOLON
@@ -774,7 +774,7 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 76: // func_call -> secondary, LROUND, opt_exprs, RROUND
 #line 148 "FParser/gppg/grammar.y"
-                                                   { CurrentSemanticValue = new FunctionCall((FSecondary)ValueStack[ValueStack.Depth-4], (ExpressionList)ValueStack[ValueStack.Depth-2]); }
+                                                   { CurrentSemanticValue = new FunctionCall((FSecondary)ValueStack[ValueStack.Depth-4], (ExpressionList)ValueStack[ValueStack.Depth-2], new TextSpan(ValueStack[ValueStack.Depth-4].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 77: // opt_exprs -> /* empty */
@@ -789,62 +789,62 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 79: // expr_list -> expr
 #line 155 "FParser/gppg/grammar.y"
-                             { CurrentSemanticValue = new ExpressionList((FExpression)ValueStack[ValueStack.Depth-1]); }
+                             { CurrentSemanticValue = new ExpressionList((FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 80: // expr_list -> expr_list, COMMA, expr
 #line 156 "FParser/gppg/grammar.y"
-                                  { ((ExpressionList)ValueStack[ValueStack.Depth-3]).expressions.Add((FExpression)ValueStack[ValueStack.Depth-1]); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
+                                  { ((ExpressionList)ValueStack[ValueStack.Depth-3]).expressions.Add((FExpression)ValueStack[ValueStack.Depth-1]); ValueStack[ValueStack.Depth-3].Span = ValueStack[ValueStack.Depth-3].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
 #line default
         break;
       case 81: // assignment -> secondary, ASSIGN, expr, SEMICOLON
 #line 159 "FParser/gppg/grammar.y"
-                                                   { CurrentSemanticValue = new AssignmentStatemt((FSecondary)ValueStack[ValueStack.Depth-4], (FExpression)ValueStack[ValueStack.Depth-2]); }
+                                                   { CurrentSemanticValue = new AssignmentStatemt((FSecondary)ValueStack[ValueStack.Depth-4], (FExpression)ValueStack[ValueStack.Depth-2], new TextSpan(ValueStack[ValueStack.Depth-4].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 82: // if_stm -> IF, math_expr, THEN, stm_list, e_if_list, opt_else
 #line 162 "FParser/gppg/grammar.y"
-                                                           { CurrentSemanticValue = new IfStatement((FExpression)ValueStack[ValueStack.Depth-5], (StatementList)ValueStack[ValueStack.Depth-3], (ElseIfList)ValueStack[ValueStack.Depth-2], (StatementList)ValueStack[ValueStack.Depth-1]); }
+                                                           { CurrentSemanticValue = new IfStatement((FExpression)ValueStack[ValueStack.Depth-5], (StatementList)ValueStack[ValueStack.Depth-3], (ElseIfList)ValueStack[ValueStack.Depth-2], (StatementList)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-6].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 83: // if_stm -> IF, math_expr, THEN, stm_list, opt_else
 #line 163 "FParser/gppg/grammar.y"
-                                              { CurrentSemanticValue = new IfStatement((FExpression)ValueStack[ValueStack.Depth-4], (StatementList)ValueStack[ValueStack.Depth-2], new ElseIfList(), (StatementList)ValueStack[ValueStack.Depth-1]); }
+                                              { CurrentSemanticValue = new IfStatement((FExpression)ValueStack[ValueStack.Depth-4], (StatementList)ValueStack[ValueStack.Depth-2], new ElseIfList(), (StatementList)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-5].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 84: // e_if_list -> ELSE, IF, math_expr, THEN, stm_list
 #line 166 "FParser/gppg/grammar.y"
-                                                  { CurrentSemanticValue = new ElseIfList(new ElseIfStatement((FExpression) ValueStack[ValueStack.Depth-3], (StatementList) ValueStack[ValueStack.Depth-1])); }
+                                                  { CurrentSemanticValue = new ElseIfList(new ElseIfStatement((FExpression) ValueStack[ValueStack.Depth-3], (StatementList) ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-5].Span, ValueStack[ValueStack.Depth-1].Span)), new TextSpan(ValueStack[ValueStack.Depth-5].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 85: // e_if_list -> e_if_list, ELSE, IF, math_expr, THEN, stm_list
 #line 167 "FParser/gppg/grammar.y"
-                                                  { ((ElseIfList)(ValueStack[ValueStack.Depth-6])).Add(new ElseIfStatement((FExpression) ValueStack[ValueStack.Depth-3], (StatementList) ValueStack[ValueStack.Depth-1])); CurrentSemanticValue = ValueStack[ValueStack.Depth-6]; }
+                                                  { ((ElseIfList)(ValueStack[ValueStack.Depth-6])).Add(new ElseIfStatement((FExpression) ValueStack[ValueStack.Depth-3], (StatementList) ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-5].Span, ValueStack[ValueStack.Depth-1].Span))); ValueStack[ValueStack.Depth-6].Span = ValueStack[ValueStack.Depth-6].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-6]; }
 #line default
         break;
       case 86: // opt_else -> END
 #line 170 "FParser/gppg/grammar.y"
-                            { CurrentSemanticValue = new StatementList(); }
+                            { CurrentSemanticValue = new StatementList(new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 87: // opt_else -> ELSE, nif_stmlist, END
 #line 171 "FParser/gppg/grammar.y"
-                                  { CurrentSemanticValue = ValueStack[ValueStack.Depth-2]; }
+                                  { ValueStack[ValueStack.Depth-2].Span = new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-2]; }
 #line default
         break;
       case 88: // nif_stmlist -> nif_stm
 #line 174 "FParser/gppg/grammar.y"
-                                  { CurrentSemanticValue = new StatementList((FStatement)ValueStack[ValueStack.Depth-1]); }
+                                  { CurrentSemanticValue = new StatementList((FStatement)ValueStack[ValueStack.Depth-1], ValueStack[ValueStack.Depth-1].Span); }
 #line default
         break;
       case 89: // nif_stmlist -> nif_stmlist, statement
 #line 175 "FParser/gppg/grammar.y"
-                                   { ((StatementList)ValueStack[ValueStack.Depth-2]).Add((FStatement)ValueStack[ValueStack.Depth-1]); CurrentSemanticValue = ValueStack[ValueStack.Depth-2]; }
+                                   { ((StatementList)ValueStack[ValueStack.Depth-2]).Add((FStatement)ValueStack[ValueStack.Depth-1]); ValueStack[ValueStack.Depth-2].Span = ValueStack[ValueStack.Depth-2].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-2]; }
 #line default
         break;
       case 90: // loop_stm -> loop_header, LOOP, stm_list, END
 #line 178 "FParser/gppg/grammar.y"
-                                               { CurrentSemanticValue = new LoopStatement((FLoopHeader)ValueStack[ValueStack.Depth-4], (StatementList)ValueStack[ValueStack.Depth-2]); }
+                                               { CurrentSemanticValue = new LoopStatement((FLoopHeader)ValueStack[ValueStack.Depth-4], (StatementList)ValueStack[ValueStack.Depth-2], new TextSpan(ValueStack[ValueStack.Depth-4].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 91: // loop_header -> /* empty */
@@ -854,52 +854,52 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 92: // loop_header -> FOR, identifier, IN, math_expr
 #line 182 "FParser/gppg/grammar.y"
-                                        { CurrentSemanticValue = new ForHeader((Identifier)ValueStack[ValueStack.Depth-3], (FExpression)ValueStack[ValueStack.Depth-1]); }
+                                        { CurrentSemanticValue = new ForHeader((Identifier)ValueStack[ValueStack.Depth-3], (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-4].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 93: // loop_header -> FOR, math_expr
 #line 183 "FParser/gppg/grammar.y"
-                             { CurrentSemanticValue = new ForHeader(null, (FExpression)ValueStack[ValueStack.Depth-1]); }
+                             { CurrentSemanticValue = new ForHeader(null, (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-2].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 94: // loop_header -> WHILE, math_expr
 #line 184 "FParser/gppg/grammar.y"
-                               { CurrentSemanticValue = new WhileHeader((FExpression)ValueStack[ValueStack.Depth-1]); }
+                               { CurrentSemanticValue = new WhileHeader((FExpression)ValueStack[ValueStack.Depth-1],new TextSpan(ValueStack[ValueStack.Depth-2].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 95: // return_stm -> RETURN, SEMICOLON
 #line 187 "FParser/gppg/grammar.y"
-                                       { CurrentSemanticValue = new ReturnStatement(); }
+                                       { CurrentSemanticValue = new ReturnStatement(new TextSpan(ValueStack[ValueStack.Depth-2].Span)); }
 #line default
         break;
       case 96: // return_stm -> RETURN, expr, SEMICOLON
 #line 188 "FParser/gppg/grammar.y"
-                                   { CurrentSemanticValue = new ReturnStatement((FExpression)ValueStack[ValueStack.Depth-2]); }
+                                   { CurrentSemanticValue = new ReturnStatement((FExpression)ValueStack[ValueStack.Depth-2], new TextSpan(ValueStack[ValueStack.Depth-3].Span)); }
 #line default
         break;
       case 97: // break_stm -> BREAK, SEMICOLON
 #line 191 "FParser/gppg/grammar.y"
-                                      { CurrentSemanticValue = new BreakStatement(); }
+                                      { CurrentSemanticValue = new BreakStatement(new TextSpan(ValueStack[ValueStack.Depth-2].Span)); }
 #line default
         break;
       case 98: // cont_stm -> CONTINUE, SEMICOLON
 #line 194 "FParser/gppg/grammar.y"
-                                       { CurrentSemanticValue = new ContinueStatement(); }
+                                       { CurrentSemanticValue = new ContinueStatement(new TextSpan(ValueStack[ValueStack.Depth-2].Span)); }
 #line default
         break;
       case 99: // print_stm -> PRINT, LROUND, opt_exprs, RROUND, SEMICOLON
 #line 197 "FParser/gppg/grammar.y"
-                                                        { CurrentSemanticValue = new PrintStatement((ExpressionList)ValueStack[ValueStack.Depth-3]); }
+                                                        { CurrentSemanticValue = new PrintStatement((ExpressionList)ValueStack[ValueStack.Depth-3], new TextSpan(ValueStack[ValueStack.Depth-5].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 100: // array_def -> LSQUARE, opt_exprs, RSQUARE
 #line 200 "FParser/gppg/grammar.y"
-                                              { CurrentSemanticValue = new ArrayDefinition((ExpressionList)ValueStack[ValueStack.Depth-2]); }
+                                              { CurrentSemanticValue = new ArrayDefinition((ExpressionList)ValueStack[ValueStack.Depth-2], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 101: // map_def -> LCURLY, pair_list, RCURLY
 #line 203 "FParser/gppg/grammar.y"
-                                           { CurrentSemanticValue = new MapDefinition((ExpressionPairList)ValueStack[ValueStack.Depth-2]); }
+                                           { CurrentSemanticValue = new MapDefinition((ExpressionPairList)ValueStack[ValueStack.Depth-2], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 102: // pair_list -> /* empty */
@@ -909,62 +909,62 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 103: // pair_list -> pair
 #line 207 "FParser/gppg/grammar.y"
-                      { CurrentSemanticValue = new ExpressionPairList((ExpressionPair)ValueStack[ValueStack.Depth-1]); }
+                      { CurrentSemanticValue = new ExpressionPairList((ExpressionPair)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 104: // pair_list -> pair_list, COMMA, pair
 #line 208 "FParser/gppg/grammar.y"
-                                  { ((ExpressionPairList)ValueStack[ValueStack.Depth-3]).pairs.Add((ExpressionPair)ValueStack[ValueStack.Depth-1]); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
+                                  { ((ExpressionPairList)ValueStack[ValueStack.Depth-3]).pairs.Add((ExpressionPair)ValueStack[ValueStack.Depth-1]); ValueStack[ValueStack.Depth-3].Span = ValueStack[ValueStack.Depth-3].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
 #line default
         break;
       case 105: // pair -> expr, COLON, expr
 #line 211 "FParser/gppg/grammar.y"
-                                  { CurrentSemanticValue = new ExpressionPair((FExpression)ValueStack[ValueStack.Depth-3], (FExpression)ValueStack[ValueStack.Depth-1]); }
+                                  { CurrentSemanticValue = new ExpressionPair((FExpression)ValueStack[ValueStack.Depth-3], (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 106: // tuple_def -> LROUND, tuple_elist, RROUND
 #line 214 "FParser/gppg/grammar.y"
-                                             { CurrentSemanticValue = new TupleDefinition((TupleElementList)ValueStack[ValueStack.Depth-2]); }
+                                             { CurrentSemanticValue = new TupleDefinition((TupleElementList)ValueStack[ValueStack.Depth-2], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 107: // tuple_elist -> tuple_elem
 #line 217 "FParser/gppg/grammar.y"
-                                    { CurrentSemanticValue = new TupleElementList((TupleElement)ValueStack[ValueStack.Depth-1]); }
+                                    { CurrentSemanticValue = new TupleElementList((TupleElement)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 108: // tuple_elist -> tuple_elist, COMMA, tuple_elem
 #line 218 "FParser/gppg/grammar.y"
-                                        { ((TupleElementList)ValueStack[ValueStack.Depth-3]).elements.Add((TupleElement)ValueStack[ValueStack.Depth-1]); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
+                                        { ((TupleElementList)ValueStack[ValueStack.Depth-3]).elements.Add((TupleElement)ValueStack[ValueStack.Depth-1]); ValueStack[ValueStack.Depth-3].Span = ValueStack[ValueStack.Depth-3].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
 #line default
         break;
       case 109: // tuple_elem -> identifier, IS, expr
 #line 221 "FParser/gppg/grammar.y"
-                                         { CurrentSemanticValue = new TupleElement((Identifier)ValueStack[ValueStack.Depth-3], (FExpression)ValueStack[ValueStack.Depth-1]); }
+                                         { CurrentSemanticValue = new TupleElement((Identifier)ValueStack[ValueStack.Depth-3], (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 110: // tuple_elem -> expr
 #line 222 "FParser/gppg/grammar.y"
-                      { CurrentSemanticValue = new TupleElement(null, (FExpression)ValueStack[ValueStack.Depth-1]); }
+                      { CurrentSemanticValue = new TupleElement(null, (FExpression)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 111: // indexer -> LSQUARE, expr, RSQUARE
 #line 225 "FParser/gppg/grammar.y"
-                                        { CurrentSemanticValue = new SquaresIndexer((FExpression)ValueStack[ValueStack.Depth-2]); }
+                                        { CurrentSemanticValue = new SquaresIndexer((FExpression)ValueStack[ValueStack.Depth-2], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 112: // indexer -> DOT, identifier
 #line 226 "FParser/gppg/grammar.y"
-                              { CurrentSemanticValue = new DotIndexer((Identifier)ValueStack[ValueStack.Depth-1], null);}
+                              { CurrentSemanticValue = new DotIndexer((Identifier)ValueStack[ValueStack.Depth-1], null, new TextSpan(ValueStack[ValueStack.Depth-2].Span, ValueStack[ValueStack.Depth-1].Span));}
 #line default
         break;
       case 113: // indexer -> DOT, INTEGER_VALUE
 #line 227 "FParser/gppg/grammar.y"
-                                { CurrentSemanticValue = new DotIndexer(null, new IntegerValue((int)((TokenValue)ValueStack[ValueStack.Depth-1])[0])); }
+                                { CurrentSemanticValue = new DotIndexer(null, new IntegerValue((int)((TokenValue)ValueStack[ValueStack.Depth-1])[0], ValueStack[ValueStack.Depth-1].Span), new TextSpan(ValueStack[ValueStack.Depth-2].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 114: // func_type -> FUNC, LROUND, type_list, RROUND, COLON, type
 #line 230 "FParser/gppg/grammar.y"
-                                                        { CurrentSemanticValue = new FunctionType((TypeList)ValueStack[ValueStack.Depth-4], (FType)ValueStack[ValueStack.Depth-1]); }
+                                                        { CurrentSemanticValue = new FunctionType((TypeList)ValueStack[ValueStack.Depth-4], (FType)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-6].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 115: // type_list -> /* empty */
@@ -974,27 +974,27 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 116: // type_list -> type
 #line 234 "FParser/gppg/grammar.y"
-                      { CurrentSemanticValue = new TypeList((FType)ValueStack[ValueStack.Depth-1]); }
+                      { CurrentSemanticValue = new TypeList((FType)ValueStack[ValueStack.Depth-1], new TextSpan(ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 117: // type_list -> type_list, COMMA, type
 #line 235 "FParser/gppg/grammar.y"
-                                  { ((TypeList)ValueStack[ValueStack.Depth-3]).types.Add((FType)ValueStack[ValueStack.Depth-1]); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
+                                  { ((TypeList)ValueStack[ValueStack.Depth-3]).types.Add((FType)ValueStack[ValueStack.Depth-1]); ValueStack[ValueStack.Depth-3].Span = ValueStack[ValueStack.Depth-3].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
 #line default
         break;
       case 118: // array_type -> LSQUARE, type, RSQUARE
 #line 238 "FParser/gppg/grammar.y"
-                                           { CurrentSemanticValue = new ArrayType((FType)ValueStack[ValueStack.Depth-2]); }
+                                           { CurrentSemanticValue = new ArrayType((FType)ValueStack[ValueStack.Depth-2], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 119: // tuple_type -> LROUND, type_list, RROUND
 #line 241 "FParser/gppg/grammar.y"
-                                              { CurrentSemanticValue = new TupleType((TypeList)ValueStack[ValueStack.Depth-2]); }
+                                              { CurrentSemanticValue = new TupleType((TypeList)ValueStack[ValueStack.Depth-2], new TextSpan(ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 120: // map_type -> LCURLY, type, COLON, type, RCURLY
 #line 244 "FParser/gppg/grammar.y"
-                                                { CurrentSemanticValue = new MapType((FType)ValueStack[ValueStack.Depth-4], (FType)ValueStack[ValueStack.Depth-2]); }
+                                                { CurrentSemanticValue = new MapType((FType)ValueStack[ValueStack.Depth-4], (FType)ValueStack[ValueStack.Depth-2], new TextSpan(ValueStack[ValueStack.Depth-5].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
     }

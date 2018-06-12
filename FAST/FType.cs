@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System;
 using System.Reflection.Emit;
+using FFC.FParser;
 
 namespace FFC.FAST
 {
@@ -18,12 +19,14 @@ namespace FFC.FAST
     class TypeList : FASTNode
     {
         public List<FType> types;
-        public TypeList()
+        public TypeList(TextSpan span = null)
         {
+            this.Span = span;
             types = new List<FType>();
         }
-        public TypeList(FType type)
+        public TypeList(FType type, TextSpan span = null)
         {
+            this.Span = span;
             types = new List<FType>{type};
         }
         public override void Print(int tabs)
@@ -40,8 +43,9 @@ namespace FFC.FAST
     }
     class IntegerType : NumericType
     {
-        public IntegerType()
+        public IntegerType(TextSpan span = null)
         {
+            this.Span = span;
 
         }
         public override void Print(int tabs)
@@ -57,8 +61,9 @@ namespace FFC.FAST
 
     class RealType : NumericType
     {
-        public RealType()
+        public RealType(TextSpan span = null)
         {
+            this.Span = span;
 
         }
         public override void Print(int tabs)
@@ -74,8 +79,9 @@ namespace FFC.FAST
 
     class ComplexType : NumericType
     {
-        public ComplexType()
+        public ComplexType(TextSpan span = null)
         {
+            this.Span = span;
 
         }
         public override void Print(int tabs)
@@ -91,8 +97,9 @@ namespace FFC.FAST
 
     class RationalType : NumericType
     {
-        public RationalType()
+        public RationalType(TextSpan span = null)
         {
+            this.Span = span;
 
         }
         public override void Print(int tabs)
@@ -108,8 +115,9 @@ namespace FFC.FAST
 
     class StringType : FType
     {
-        public StringType()
+        public StringType(TextSpan span = null)
         {
+            this.Span = span;
 
         }
         public override void Print(int tabs)
@@ -125,8 +133,9 @@ namespace FFC.FAST
 
     class BooleanType : FType
     {
-        public BooleanType()
+        public BooleanType(TextSpan span = null)
         {
+            this.Span = span;
 
         }
         public override void Print(int tabs)
@@ -144,8 +153,9 @@ namespace FFC.FAST
     {
         public TypeList paramTypes;
         public FType returnType;
-        public FunctionType(TypeList paramTypes, FType returnType)
+        public FunctionType(TypeList paramTypes, FType returnType, TextSpan span = null)
         {
+            this.Span = span;
             this.paramTypes = paramTypes;
             this.returnType = returnType;
         }
@@ -164,8 +174,9 @@ namespace FFC.FAST
     class ArrayType : FType
     {
         public FType type;
-        public ArrayType(FType type)
+        public ArrayType(FType type, TextSpan span = null)
         {
+            this.Span = span;
             this.type = type;
         }
         public override void Print(int tabs)
@@ -183,7 +194,7 @@ namespace FFC.FAST
     {
         public FType key;
         public FType value;
-        public MapType(FType key, FType value)
+        public MapType(FType key, FType value, TextSpan span = null)
         {
             this.key = key;
             this.value = value;
@@ -203,8 +214,9 @@ namespace FFC.FAST
     class TupleType : FType
     {
         public TypeList types;
-        public TupleType(TypeList types)
+        public TupleType(TypeList types, TextSpan span = null)
         {
+            this.Span = span;
             this.types = types;
         }
         public override void Print(int tabs)

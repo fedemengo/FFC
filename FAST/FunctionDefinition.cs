@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System;
+using FFC.FParser;
+
 namespace FFC.FAST
 {
     class FunctionDefinition : FPrimary
@@ -8,8 +10,9 @@ namespace FFC.FAST
         public FType returnType;
         public StatementList body;
 
-        public FunctionDefinition(ParameterList parameters, FType returnType, StatementList body)
+        public FunctionDefinition(ParameterList parameters, FType returnType, StatementList body, TextSpan span)
         {
+            this.Span = span;
             this.parameters = parameters;
             this.returnType = returnType;
             this.body = body;
@@ -32,12 +35,14 @@ namespace FFC.FAST
     class ParameterList : FASTNode
     {
         public List<Parameter> parameters;
-        public ParameterList(Parameter p)
+        public ParameterList(Parameter p, TextSpan span)
         {
+            this.Span = span;
             parameters = new List<Parameter>{p};
         }
-        public ParameterList()
+        public ParameterList(TextSpan span = null)
         {
+            this.Span = span;
             parameters = new List<Parameter>();
         }
         public override void Print(int tabs)
@@ -54,8 +59,9 @@ namespace FFC.FAST
         public Identifier id;
         public FType type;
 
-        public Parameter(Identifier id, FType type)
+        public Parameter(Identifier id, FType type, TextSpan span)
         {
+            this.Span = span;
             this.id = id;
             this.type = type;
         }

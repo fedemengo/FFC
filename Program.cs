@@ -19,7 +19,8 @@ namespace FFC.FParser
             {
                 //Scanner.Test(args[0]);
                 //FLexerTTest.Test(args);
-                string Path = "samples/declaration.f";
+                //string Path = "samples/declaration.f";
+                string Path = args[0];
                 FFC.FParser.Parser p = new FFC.FParser.Parser(new Scanner(new Tokenizer(), new SourceReader(Path)));
                 bool res = p.Parse();
                 Console.WriteLine($"\nParsing success : {res}\n");

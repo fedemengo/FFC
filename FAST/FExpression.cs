@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
+using FFC.FParser;
 
 namespace FFC.FAST
 {
@@ -37,12 +38,14 @@ namespace FFC.FAST
     class ExpressionList : FASTNode
     {
         public List<FExpression> expressions;
-        public ExpressionList(FExpression expr)
+        public ExpressionList(FExpression expr, TextSpan span)
         {
+            this.Span = span;
             expressions = new List<FExpression>{expr};
         }
-        public ExpressionList()
+        public ExpressionList(TextSpan span = null)
         {
+            this.Span = span;
             expressions = new List<FExpression>();
         }
         public override void Print(int tabs)
@@ -59,8 +62,9 @@ namespace FFC.FAST
         public FExpression left;
         public FOperator binOperator;
         public FExpression right;
-        public BinaryOperatorExpression(FExpression left, FOperator binOperator, FExpression right)
+        public BinaryOperatorExpression(FExpression left, FOperator binOperator, FExpression right, TextSpan span)
         {
+            this.Span = span;
             this.left = left;
             this.binOperator = binOperator;
             this.right = right;
@@ -94,7 +98,7 @@ namespace FFC.FAST
             if(binOperator is RelationalOperator)
             {
                 //we need to cast to the same type they would get summed to
-                targetType = new PlusOperator().GetTarget(left.ValueType, right.ValueType);
+                targetType = new PlusOperator(null).GetTarget(left.ValueType, right.ValueType);
             }
             left.Generate(generator);
             if(left.ValueType.GetType() != targetType.GetType())
@@ -116,8 +120,9 @@ namespace FFC.FAST
     class NegativeExpression : FExpression
     {
         public FSecondary value;
-        public NegativeExpression(FSecondary value)
+        public NegativeExpression(FSecondary value, TextSpan span)
         {
+            this.Span = span;
             this.value = value;
         }
         public override void Print(int tabs)
@@ -141,8 +146,9 @@ namespace FFC.FAST
     {
         public FSecondary from;
         public FSecondary to;
-        public EllipsisExpression(FSecondary from, FSecondary to)
+        public EllipsisExpression(FSecondary from, FSecondary to, TextSpan span)
         {
+            this.Span = span;
             this.from = from;
             this.to = to;
         }
@@ -157,8 +163,9 @@ namespace FFC.FAST
     class NotExpression : FExpression
     {
         public FExpression expr;
-        public NotExpression(FExpression expr)
+        public NotExpression(FExpression expr, TextSpan span)
         {
+            this.Span = span;
             this.expr = expr;
         }
         public override void Print(int tabs)

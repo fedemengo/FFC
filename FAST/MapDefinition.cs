@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using FFC.FParser;
 
 namespace FFC.FAST
 {
@@ -7,8 +8,9 @@ namespace FFC.FAST
     {
         public ExpressionPairList entries;
 
-        public MapDefinition(ExpressionPairList entries)
+        public MapDefinition(ExpressionPairList entries, TextSpan span = null)
         {
+            this.Span = span;
             this.entries = entries;
         }
         public override void Print(int tabs)
@@ -21,12 +23,14 @@ namespace FFC.FAST
     class ExpressionPairList : FASTNode
     {
         public List<ExpressionPair> pairs;
-        public ExpressionPairList(ExpressionPair pair)
+        public ExpressionPairList(ExpressionPair pair, TextSpan span = null)
         {
+            this.Span = span;
             pairs = new List<ExpressionPair>{pair};
         }
-        public ExpressionPairList()
+        public ExpressionPairList(TextSpan span = null)
         {
+            this.Span = span;
             pairs = new List<ExpressionPair>();
         }
         public override void Print(int tabs)
@@ -42,8 +46,9 @@ namespace FFC.FAST
         public FExpression first;
         public FExpression second;
 
-        public ExpressionPair(FExpression first, FExpression second)
+        public ExpressionPair(FExpression first, FExpression second, TextSpan span = null)
         {
+            this.Span = span;
             this.first = first;
             this.second = second;
         }
