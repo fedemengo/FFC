@@ -49,7 +49,7 @@ namespace FFC.FAST
         public override void Generate(ILGenerator generator)
         {
             generator.Emit(OpCodes.Ldc_I4_S, value);
-            generator.Emit(OpCodes.Call, typeof(FInteger).GetConstructor(new Type[]{typeof(int)}));
+            generator.Emit(OpCodes.Newobj, typeof(FInteger).GetConstructor(new Type[]{typeof(int)}));
         }
     }
     class RealValue : FValue

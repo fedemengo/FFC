@@ -1,3 +1,3 @@
 main is func() :integer do
-    print 4;
+    print 3 + 5;
 end

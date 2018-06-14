@@ -17,7 +17,7 @@ namespace FFC.FAST
         public virtual void EmitPrint(ILGenerator generator)
         {
             Generate(generator);
-            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{ValueType.GetPrintableType()}));
+            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{ValueType.GetRunTimeType()}));
         }
         private FType _type;
         public virtual FType ValueType
@@ -111,8 +111,8 @@ namespace FFC.FAST
 
             string op_name = binOperator.GetMethodName();
             Type rtt = targetType.GetRunTimeType();
+            //this goes for binOperator.Generate();
             generator.Emit(OpCodes.Call, rtt.GetMethod(op_name, new Type[]{rtt, rtt}));
-            binOperator.Generate(generator);
         }
 
         public override void EmitPrint(ILGenerator generator)

@@ -15,7 +15,6 @@ namespace FFC.FAST
             //anything (?) to real (double) 
             generator.Emit(OpCodes.Conv_R8);
         }
-        public abstract Type GetPrintableType();
 
         public abstract Type GetRunTimeType();
     }
@@ -56,7 +55,6 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("Integer type");
         }
-        public override Type GetPrintableType() => typeof(int);
         public override Type GetRunTimeType() => typeof(FInteger);
     }
 
@@ -72,7 +70,6 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("Real type");
         }
-        public override Type GetPrintableType() => typeof(double);
         public override Type GetRunTimeType() => typeof(FReal);
     }
 
@@ -87,10 +84,6 @@ namespace FFC.FAST
         {
             PrintTabs(tabs);
             Console.WriteLine("Complex type");
-        }
-        public override Type GetPrintableType() 
-        {
-            throw new NotImplementedException("Complex printing is not currently implemented");
         }
         public override Type GetRunTimeType() => typeof(FComplex);
     }
@@ -107,10 +100,6 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("Rational type");
         }
-        public override Type GetPrintableType()
-        {
-            throw new NotImplementedException("Rational printing is not currently implented");
-        }
         public override Type GetRunTimeType() => typeof(FRational);
     }
 
@@ -126,10 +115,6 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("String type");
         }
-        public override Type GetPrintableType() 
-        {
-            return typeof(string);
-        }
         public override Type GetRunTimeType() => typeof(FString);
     }
 
@@ -144,10 +129,6 @@ namespace FFC.FAST
         {
             PrintTabs(tabs);
             Console.WriteLine("Boolean type");
-        }
-        public override Type GetPrintableType() 
-        {
-            return typeof(bool);
         }
         public override Type GetRunTimeType() => typeof(FBoolean);
     }
@@ -169,13 +150,9 @@ namespace FFC.FAST
             paramTypes.Print(tabs + 1);
             if(returnType != null) returnType.Print(tabs + 1);
         }
-        public override Type GetPrintableType() 
-        {
-            throw new NotImplementedException("Function Type printing is not implemented");
-        }
         public override Type GetRunTimeType()
         {
-            throw new NotImplementedException("Function RunTimeType not yet implemented");
+            throw new NotImplementedException($"{Span} Function RunTimeType not yet implemented");
         }
     }
     class ArrayType : FType
@@ -191,10 +168,6 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("Array type");
             type.Print(tabs + 1);
-        }
-        public override Type GetPrintableType() 
-        {
-            throw new NotImplementedException("Array type printing is not implemented");
         }
         public override Type GetRunTimeType() => typeof(FArray);
     }
@@ -214,10 +187,6 @@ namespace FFC.FAST
             key.Print(tabs + 1);
             value.Print(tabs + 1);
         }
-        public override Type GetPrintableType() 
-        {
-            throw new NotImplementedException("Map Type printing is not implemented");
-        }
         public override Type GetRunTimeType() => typeof(FMap);
     }
     class TupleType : FType
@@ -233,10 +202,6 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("Tuple type");
             types.Print(tabs + 1);
-        }
-        public override Type GetPrintableType() 
-        {
-            throw new NotImplementedException("Tuple type printing is not implemented");
         }
         public override Type GetRunTimeType() => typeof(FTuple);
     }
