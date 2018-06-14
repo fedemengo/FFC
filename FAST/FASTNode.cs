@@ -14,7 +14,7 @@ namespace FFC.FAST
 
         public virtual void Generate(System.Reflection.Emit.ILGenerator generator)
         {
-            throw new System.NotImplementedException();
+            throw new System.NotImplementedException(this.Span + " Code generation not implemented (" + this.GetType().Name + ")");
         }
     }
 }

@@ -144,4 +144,29 @@ namespace FFC.FAST
         }
 
     }
+
+    class IdentifierList : FValue
+    {
+        public List<Identifier> ids;
+
+        public IdentifierList(Identifier id, TextSpan span)
+        {
+            this.Span = span;
+            this.ids = new List<Identifier>{id};
+        }
+
+        public void Add(Identifier id)
+        {
+            this.ids.Add(id);
+        }
+        public override void Print(int tabs)
+        {
+            PrintTabs(tabs);
+            Console.WriteLine("Identifier list");
+            foreach(Identifier id in ids)
+            {
+                id.Print(tabs+1);
+            }
+        }
+    }
 }

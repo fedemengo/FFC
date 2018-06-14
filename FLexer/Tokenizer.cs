@@ -270,6 +270,7 @@ namespace FFC.FLexer
                             case "complex" : return new Token(ETokens.COMPLEX, begin, sr.GetPosition());
                             case "func" : return new Token(ETokens.FUNC, begin, sr.GetPosition());
                             case "print" : return new Token(ETokens.PRINT, begin, sr.GetPosition());
+                            case "read" : return new Token(ETokens.READ, begin, sr.GetPosition());
                             case "rational" : return new Token(ETokens.RATIONAL, begin, sr.GetPosition());
                             case "boolean" : return new Token(ETokens.BOOLEAN, begin, sr.GetPosition());
                             case "true" : return new Token(ETokens.BOOLEAN_VALUE, new List<object>{true}, begin, sr.GetPosition());

@@ -5,6 +5,7 @@
 %token INTEGER COMPLEX RATIONAL REAL STRING BOOLEAN
 %token ASSIGN ARROW
 %token FUNC DO RETURN PRINT
+%token READ
 %token IS IF THEN ELSE END
 %token WHILE FOR IN LOOP BREAK CONTINUE
 %token LROUND RROUND LSQUARE RSQUARE LCURLY RCURLY
@@ -42,6 +43,10 @@ declaration	:	identifier opt_type IS math_expr SEMICOLON				{ $$ = new Declarati
 			;
 
 identifier	:	ID														{ $$ = new Identifier(((TokenValue)$1)[0].ToString(), new TextSpan($1.Span)); }
+			;
+
+id_list		:	identifier												{ $$ = new IdentifierList((Identifier) $1, $1.Span); }
+			|	id_list COMMA identifier								{ ((IdentifierList) $1).Add((Identifier) $3); $1.Span = $1.Span.MergeTo($3.Span); $$ = $1; }
 			;
 
 opt_type	:	/* empty */												{ $$ = null; }
@@ -139,6 +144,7 @@ nif_stm		:	func_call SEMICOLON										{ $$ = $1; }
 			|	break_stm												{ $$ = $1; }
 			|	cont_stm												{ $$ = $1; }
 			|	print_stm												{ $$ = $1; }
+			|	read_stm												{ $$ = $1; }
 			;
 
 statement	: 	if_stm													{ $$ = $1; }
@@ -194,7 +200,10 @@ break_stm	:	BREAK SEMICOLON											{ $$ = new BreakStatement(new TextSpan($1.
 cont_stm	:	CONTINUE SEMICOLON										{ $$ = new ContinueStatement(new TextSpan($1.Span)); }
 			;
 
-print_stm	:	PRINT opt_exprs SEMICOLON					{ $$ = new PrintStatement((ExpressionList)$2, new TextSpan($1.Span, $3.Span)); }
+print_stm	:	PRINT opt_exprs SEMICOLON								{ $$ = new PrintStatement((ExpressionList)$2, new TextSpan($1.Span, $3.Span)); }
+			;
+
+read_stm	:	READ id_list SEMICOLON									{ $$ = new ReadStatement((IdentifierList )$2, new TextSpan($1.Span, $3.Span)); }
 			;
 
 array_def	:	LSQUARE opt_exprs RSQUARE 								{ $$ = new ArrayDefinition((ExpressionList)$2, new TextSpan($1.Span, $3.Span)); }
