@@ -30,11 +30,6 @@ namespace FFC.FLexer
         public TokenValue values = new TokenValue();
         //Position is in a [L, R) format
         public Position begin, end;
-        int GCD(int a, int b)
-        {
-            if(a == 0) return b;
-            return GCD(b % a, a);
-        }
         public Token(ETokens tokenType, Position begin, Position end)
         {
             #if DBG_TOKEN
