@@ -71,6 +71,7 @@ namespace FFC.FAST
         public override void Generate(ILGenerator generator)
         {
             generator.Emit(OpCodes.Ldc_R8, value);
+            generator.Emit(OpCodes.Newobj, typeof(FReal).GetConstructor(new Type[]{typeof(double)}));
         }
     }
     class RationalValue : FValue
@@ -89,6 +90,13 @@ namespace FFC.FAST
         {
             PrintTabs(tabs);
             Console.WriteLine($"Rational value({numerator} / { denominator})");
+        }
+
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Ldc_I4, this.numerator);
+            generator.Emit(OpCodes.Ldc_I4, this.denominator);
+            generator.Emit(OpCodes.Newobj, typeof(FRational).GetConstructor(new Type[]{typeof(int), typeof(int)}));
         }
     }
     class ComplexValue : FValue

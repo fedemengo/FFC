@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
-
 namespace FFC.FRunTime
 {
-    class FRational
+    public class FRational
     {
         public FRational(int n, int d)
         {
-            int gcd = GCD(Numerator, Denominator);
+            int gcd = GCD(n, d);
             Numerator = n / gcd;
             Denominator = d / gcd;
         }
@@ -16,8 +13,8 @@ namespace FFC.FRunTime
 
         private static int GCD(int a, int b)
         {
-            if(a == 0) return b;
-            return GCD(b % a, b);
+            if(b == 0) return a;
+            return GCD(b, a % b);
         }
         
         private static FRational Inverse(FRational r1) => new FRational(r1.Denominator, r1.Numerator);

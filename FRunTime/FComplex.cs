@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace FFC.FRunTime
 {
-    class FComplex
+    public class FComplex
     {
         public FComplex(double r, double i)
         {
