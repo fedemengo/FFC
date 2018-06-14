@@ -1,3 +1,3 @@
 main is func() :integer do
-    print(4 + "algebra");
+    print "asd" + "algebra";
 end

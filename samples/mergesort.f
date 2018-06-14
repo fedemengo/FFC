@@ -47,6 +47,6 @@ end
 main is func() do
 	v is [3, 5, 1, 2, 4, -2, 8];
 	s is mergesort(v);
-	for i in s loop print(i); end
+	for i in s loop print i; end
 end
 

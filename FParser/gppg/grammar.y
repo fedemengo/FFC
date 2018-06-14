@@ -194,7 +194,7 @@ break_stm	:	BREAK SEMICOLON											{ $$ = new BreakStatement(new TextSpan($1.
 cont_stm	:	CONTINUE SEMICOLON										{ $$ = new ContinueStatement(new TextSpan($1.Span)); }
 			;
 
-print_stm	:	PRINT LROUND opt_exprs RROUND SEMICOLON					{ $$ = new PrintStatement((ExpressionList)$3, new TextSpan($1.Span, $5.Span)); }
+print_stm	:	PRINT opt_exprs SEMICOLON					{ $$ = new PrintStatement((ExpressionList)$2, new TextSpan($1.Span, $3.Span)); }
 			;
 
 array_def	:	LSQUARE opt_exprs RSQUARE 								{ $$ = new ArrayDefinition((ExpressionList)$2, new TextSpan($1.Span, $3.Span)); }
