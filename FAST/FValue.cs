@@ -2,11 +2,17 @@ using System.Collections.Generic;
 using System;
 using System.Reflection.Emit;
 using FFC.FParser;
+using FFC.FRunTime;
 
 namespace FFC.FAST
 {
     abstract class FValue : FPrimary
     {
+
+        public override void Generate(ILGenerator generator)
+        {
+            throw new NotImplementedException($"{Span} - Generation for {GetType().Name} not implemented");
+        }
     }
     class BooleanValue : FValue
     {
@@ -22,11 +28,6 @@ namespace FFC.FAST
         {
             PrintTabs(tabs);
             Console.WriteLine($"Boolean value({value})");
-        }
-
-        public override void Generate(ILGenerator generator)
-        {
-            generator.Emit(OpCodes.Ldc_I4, value ? 1 : 0);
         }
     }
     class IntegerValue : FValue
@@ -47,7 +48,8 @@ namespace FFC.FAST
 
         public override void Generate(ILGenerator generator)
         {
-            generator.Emit(OpCodes.Ldc_I4, value);
+            generator.Emit(OpCodes.Ldc_I4_S, value);
+            generator.Emit(OpCodes.Call, typeof(FInteger).GetConstructor(new Type[]{typeof(int)}));
         }
     }
     class RealValue : FValue

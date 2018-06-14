@@ -85,13 +85,13 @@ namespace FFC.FAST
         public override void Generate(ILGenerator generator)
         {
             if(ValueType is ComplexType || ValueType is RationalType)
-                throw new NotImplementedException("Operations on rational / complex are not yet implemented.");
+                throw new NotImplementedException(this.Span + " - Operations on rational / complex are not yet implemented.");
             if(ValueType is ArrayType)
-                throw new NotImplementedException("Operations on arrays are not yet implemented.");
+                throw new NotImplementedException(this.Span + " - Operations on arrays are not yet implemented.");
             if(ValueType is MapType)
-                throw new NotImplementedException("Operations on maps are not yet implemented.");
+                throw new NotImplementedException(this.Span + " - Operations on maps are not yet implemented.");
             if(ValueType is TupleType)
-                throw new NotImplementedException("Operations on tuples are not yet implemented.");
+                throw new NotImplementedException(this.Span + " - Operations on tuples are not yet implemented.");
             
             FType targetType = ValueType;
             
@@ -100,6 +100,7 @@ namespace FFC.FAST
                 //we need to cast to the same type they would get summed to
                 targetType = new PlusOperator(null).GetTarget(left.ValueType, right.ValueType);
             }
+
             left.Generate(generator);
             if(left.ValueType.GetType() != targetType.GetType())
                 FType.Convert(left.ValueType, targetType, generator);
@@ -108,13 +109,16 @@ namespace FFC.FAST
             if(right.ValueType.GetType() != targetType.GetType())
                 FType.Convert(right.ValueType, targetType, generator);
 
+            string op_name = binOperator.GetMethodName();
+            Type rtt = targetType.GetRunTimeType();
+            generator.Emit(OpCodes.Call, rtt.GetMethod(op_name, new Type[]{rtt, rtt}));
             binOperator.Generate(generator);
         }
 
         public override void EmitPrint(ILGenerator generator)
         {
             Generate(generator);
-            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{ValueType.GetPrintableType()}));
+            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{ValueType.GetRunTimeType()}));
         }
     }
     class NegativeExpression : FExpression

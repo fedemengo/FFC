@@ -291,6 +291,7 @@ namespace FFC.FAST
         {
             foreach(FExpression expr in toPrint.expressions){
                 expr.EmitPrint(generator);
+                //scrive uno spazio come separatore
                 generator.Emit(OpCodes.Ldstr, " ");
                 generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{typeof(string)}));
             }
