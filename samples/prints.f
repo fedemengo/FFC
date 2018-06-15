@@ -73,6 +73,11 @@ main is func() do
     end
     print "";
 
+    // simple loop
+    while true loop print "loop 1"; break; print "loop 2"; end
+    // infinite loop
+    while true loop print "loop 1"; continue; print "loop 2"; end
+
     print "return stm (this is the last print)";
     return;
     print "you will never see this text";

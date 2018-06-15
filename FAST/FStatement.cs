@@ -50,6 +50,15 @@ namespace FFC.FAST
             foreach(FStatement stm in statements)
                 stm.Generate(generator);
         }
+        public void Generate(ILGenerator generator, Label conditionLabel, Label exitLabel)
+        {
+            foreach(FStatement stm in statements)
+            {
+                if(stm is BreakStatement) (stm as BreakStatement).Generate(generator, exitLabel);
+                else if (stm is ContinueStatement) (stm as ContinueStatement).Generate(generator, conditionLabel);
+                else stm.Generate(generator);
+            }
+        }
     }
     class ExpressionStatement : FStatement
     {
@@ -307,6 +316,11 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("Break statement");
         }
+
+        public void Generate(ILGenerator generator, Label exitLabel)
+        {
+            generator.Emit(OpCodes.Br, exitLabel);
+        }
     }
     class ContinueStatement : FStatement
     {
@@ -319,6 +333,11 @@ namespace FFC.FAST
         {
             PrintTabs(tabs);
             Console.WriteLine("Continue statement");
+        }
+
+        public void Generate(ILGenerator generator, Label conditionLabel)
+        {
+            generator.Emit(OpCodes.Br, conditionLabel);
         }
     }
     class PrintStatement : FStatement
