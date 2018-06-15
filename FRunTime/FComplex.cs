@@ -11,6 +11,8 @@ namespace FFC.FRunTime
             Real = r;
             Imaginary = i;
         }
+        public FComplex(FReal r) : this(r.Value, 0){}
+        public FComplex(FInteger i) : this(i.Value, 0){}
         public double Real {get; set;}
         public double Imaginary {get; set;}
         public FComplex Conjugate() => new FComplex(Real, -Imaginary);

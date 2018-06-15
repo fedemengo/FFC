@@ -5,6 +5,7 @@ namespace FFC.FRunTime
         public double Value {get; set;}
 
         public FReal(double val) => Value = val;
+        public FReal(FInteger i) => Value = i.Value;
 
         public static FReal operator+(FReal r1, FReal r2) => new FReal(r1.Value + r2.Value);
         public static FReal operator-(FReal r1, FReal r2) => new FReal(r1.Value - r2.Value);

@@ -8,6 +8,7 @@ namespace FFC.FRunTime
             Numerator = n / gcd;
             Denominator = d / gcd;
         }
+        public FRational(FInteger i) : this(i.Value, 1){}
         public int Numerator {get; set;}
         public int Denominator {get; set;}
 
@@ -55,6 +56,7 @@ namespace FFC.FRunTime
         public static FBoolean operator >=(FRational r1, FRational r2) => new FBoolean(r1.Value() >= r2.Value());
     
         public static FRational operator-(FRational r1) => new FRational(-r1.Numerator, r1.Denominator);
+
         public override string ToString() => Numerator.ToString() + "/" + Denominator.ToString();
     }
 }
