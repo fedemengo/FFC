@@ -114,9 +114,11 @@ namespace FFC.FLexer
                     }
                     else if(sr.GetChar() == '/')
                     {
+                        char prev = '/';
                         sr.Advance();
-                        while(sr.GetChar() != '\n' && sr.GetChar() != '\0')
+                        while(!(sr.GetChar() == '\0' || sr.GetChar() == '\n' && prev != '\\'))
                         {
+                            prev = sr.GetChar();                               
                             sr.Advance();
                         }
                         sr.Advance();
