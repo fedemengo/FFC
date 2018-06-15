@@ -3,14 +3,12 @@ A compiler for the F language (and it's definition)
 
 ## TODOs
 * Check this TODO list
-* Fix names in grammar
 * Action on the tree 
 	* Code generation (e.g. If is smth in stack and some conditional jump) (recursively within different statement)
 	* Reorganize tree (optimization)
 * Mappings between current and final code
 * Dynamically load external library 
 
-* Debugging on AST printing
 * Think if more `\` escaped character are needed (supported `\n`, `\t`, `\\`, `\"`)
 * Think about `\n` instead of `;` for SEMICOLON tokens
 * Add Lexer support for -2^31
