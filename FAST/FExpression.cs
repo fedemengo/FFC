@@ -98,12 +98,12 @@ namespace FFC.FAST
             }
 
             left.Generate(generator);
-            if(left.ValueType.GetType() != targetType.GetType())
-                FType.Convert(left.ValueType, targetType, generator);
+            if(left.ValueType.GetRunTimeType() != targetType.GetRunTimeType())
+                left.ValueType.ConvertTo(targetType, generator);
             
             right.Generate(generator);
-            if(right.ValueType.GetType() != targetType.GetType())
-                FType.Convert(right.ValueType, targetType, generator);
+            if(right.ValueType.GetRunTimeType() != targetType.GetRunTimeType())
+                right.ValueType.ConvertTo(targetType, generator);
 
             string op_name = binOperator.GetMethodName();
             Type rtt = targetType.GetRunTimeType();
@@ -181,14 +181,8 @@ namespace FFC.FAST
         }
         public override void Generate(ILGenerator generator)
         {
-            // "!a" -> "a = 0"
             expr.Generate(generator);
-            if(expr.ValueType is BooleanType == false)
-            {
-                throw new Exception($"Can't apply not operator to {expr.ValueType}");
-            }
-            generator.Emit(OpCodes.Ldc_I4_0);
-            generator.Emit(OpCodes.Ceq);
+            generator.Emit(OpCodes.Call, expr.ValueType.GetRunTimeType().GetMethod("op_LogicalNegation", new Type[]{expr.ValueType.GetRunTimeType()}));
         }
     }
 }

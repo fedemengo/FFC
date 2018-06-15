@@ -8,14 +8,17 @@ namespace FFC.FAST
 {
     abstract class FType : FASTNode
     {
-        public static void Convert(FType t1, FType t2, ILGenerator generator)
+        public virtual void ConvertTo(FType target, ILGenerator generator)
         {
-            if(t2.GetType() != typeof(RealType))
-                throw new NotImplementedException("Conversions are not implemented yet");
-            //anything (?) to real (double) 
-            generator.Emit(OpCodes.Conv_R8);
+            try
+            {
+                generator.Emit(OpCodes.Newobj, target.GetRunTimeType().GetConstructor(new Type[]{this.GetRunTimeType()}));
+            }
+            catch (Exception)
+            {
+                throw new NotImplementedException($"{Span} - No conversion from {this.GetType().Name} to {target.GetType().Name}");
+            }
         }
-
         public virtual Type GetRunTimeType() => throw new NotImplementedException($"{Span} - RunTimeType not available for {GetType().Name}");
     }
     class TypeList : FASTNode

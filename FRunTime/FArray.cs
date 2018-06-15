@@ -10,6 +10,10 @@ namespace FFC.FRunTime
         {
             Values = new List<V>{};
         }
+        public FArray(V v)
+        {
+            Values = new List<V>{v};
+        }
 
         //even if we create N FArray to create a (non immutable) FArray of size N,
         //GC should save us from wasted memory
