@@ -84,8 +84,6 @@ namespace FFC.FAST
 
         public override void Generate(ILGenerator generator)
         {
-            if(ValueType is ArrayType)
-                throw new NotImplementedException(this.Span + " - Operations on arrays are not yet implemented.");
             if(ValueType is MapType)
                 throw new NotImplementedException(this.Span + " - Operations on maps are not yet implemented.");
             if(ValueType is TupleType)

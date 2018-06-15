@@ -25,7 +25,8 @@ namespace FFC.FAST
         }
         public override void Generate(ILGenerator generator)
         {
-            generator.Emit(OpCodes.Newobj, typeof(FArray<FInteger>).GetConstructor(new Type[0]));
+            if(ValueType == null) throw new NotImplementedException($"{Span} - Emoty arrays are not implemented yet");
+            generator.Emit(OpCodes.Newobj, typeof(FArray<>).MakeGenericType(values.expressions[0].ValueType.GetRunTimeType()).GetConstructor(new Type[0]));
             foreach(var z in values.expressions)
             {
                 z.Generate(generator);
@@ -50,6 +51,7 @@ namespace FFC.FAST
                     {
                         throw new NotImplementedException($"{Span} - Can't handle arrays with multiple types {ValueType.GetType().Name} - {z.ValueType.GetType().Name}");
                     }
+                ValueType = new ArrayType(ValueType);
             }
         }
         

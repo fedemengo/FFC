@@ -10,10 +10,23 @@ namespace FFC.FRunTime
         {
             Values = new List<V>{};
         }
-        public FArray(FArray<V> l, V v)
+
+        //even if we create N FArray to create a (non immutable) FArray of size N,
+        //GC should save us from wasted memory
+        public FArray(FArray<V> a, V v)
         {
-            Values = l.Values;
+            Values = a.Values;
             Values.Add(v);
+        }
+        //non persistent concatenation
+        public FArray(FArray<V> a1, FArray<V> a2)
+        {
+            //we should handle empty arrays here too
+            Values = a1.Values;
+            //not even remotely efficient
+            foreach(V v in a2.Values)
+                Values.Add(v);
+            
         }
         public override string ToString()
         {
@@ -24,6 +37,14 @@ namespace FFC.FRunTime
             ans = ans.Remove(ans.Length - 2);
             ans += "}";
             return ans;
+        }
+        public static FArray<V> operator+(FArray<V> a1, FArray<V> a2)
+        {
+            return new FArray<V>(a1, a2);
+        }
+        public static FArray<V> operator+(FArray<V> a, V v)
+        {
+            return new FArray<V>(a, v);
         }
     }
 }
