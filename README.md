@@ -37,11 +37,12 @@ A compiler for the F language (and it's definition)
 	- [x] Arrays
 		- [ ] Empty arrays
 		- [x] Concatenation
-	- [ ] Strings
+	- [x] Strings
+		- [ ] Operators
 	- [ ] Maps
 	- [ ] Tuples
-	- [ ] Conditional expressions
-	- [ ] Conditional statements
+	- [x] Conditional expressions
+	- [x] Conditional statements
 	- [ ] Loop statements
 	- [ ] Ellipsis
 	- [ ] Functions

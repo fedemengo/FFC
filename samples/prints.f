@@ -38,6 +38,8 @@ main is func() do
     print [[1]] + [1];
     print [[1]] + [0] + [[1], [0]] + [1];
     print "";
-
+    print "a",
+          "b",
+          "c";
     print if !true | false then "true" else "false" end;
 end

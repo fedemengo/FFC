@@ -23,6 +23,8 @@ namespace FFC.FParser
                 //FLexerTTest.Test(args);
                 //string Path = "samples/declaration.f";
                 string Path = args[0];
+                if(Path.Substring(Path.Length-2) != ".f")
+                    throw new FormatException("Can't compile non-.f file");
                 Parser p = new Parser(new Scanner(new Tokenizer(), new SourceReader(Path)));
                 bool res = p.Parse();
                 Console.WriteLine($"\nParsing success : {res}\n");
