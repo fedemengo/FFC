@@ -13,22 +13,12 @@ namespace FFC.FRunTime
         }
         public double Real {get; set;}
         public double Imaginary {get; set;}
-        public override string ToString()
-        {
-            return Real.ToString() + "i" + Imaginary.ToString();
-        }
-        public FComplex Conjugate()
-        {
-            return new FComplex(Real, -Imaginary);
-        }
-        public static FComplex operator +(FComplex c1, FComplex c2)
-        {
-            return new FComplex(c1.Real + c2.Real, c1.Imaginary + c2.Imaginary);
-        }
-        public static FComplex operator -(FComplex c1, FComplex c2)
-        {
-            return new FComplex(c1.Real - c2.Real, c1.Imaginary - c2.Imaginary);
-        }
+        public FComplex Conjugate() => new FComplex(Real, -Imaginary);
+
+        public static FComplex operator +(FComplex c1, FComplex c2) => new FComplex(c1.Real + c2.Real, c1.Imaginary + c2.Imaginary);
+        
+        public static FComplex operator -(FComplex c1, FComplex c2) => new FComplex(c1.Real - c2.Real, c1.Imaginary - c2.Imaginary);
+
         public static FComplex operator *(FComplex c1, FComplex c2)
         {
             return new FComplex(c1.Real * c2.Real - c1.Imaginary * c2.Imaginary, c1.Imaginary * c2.Real + c1.Real * c2.Imaginary);
@@ -39,18 +29,19 @@ namespace FFC.FRunTime
             // maybe can be shortened, not sure
             FComplex num = c1 * c2.Conjugate();
             double den = c2.Real * c2.Real + c2.Imaginary * c2.Imaginary;
-            FComplex ans = new FComplex(num.Real / den, num.Imaginary / den);
-            return ans;
+            return new FComplex(num.Real / den, num.Imaginary / den);
         }
-        public double Modulo()
-        {
-            return Math.Sqrt(Real * Real + Imaginary * Imaginary);
-        }
+        public double Modulo() => Math.Sqrt(Real * Real + Imaginary * Imaginary);
+
         public static bool operator == (FComplex c1, FComplex c2) => c1.Real == c2.Real && c1.Imaginary == c2.Imaginary; 
         public static bool operator != (FComplex c1, FComplex c2) => c1.Real != c2.Real || c1.Imaginary != c2.Imaginary; 
         public static bool operator < (FComplex c1, FComplex c2) => c1.Modulo() < c2.Modulo();
         public static bool operator <= (FComplex c1, FComplex c2) => c1.Modulo() <= c2.Modulo();
         public static bool operator > (FComplex c1, FComplex c2) => c1.Modulo() > c2.Modulo();
         public static bool operator >= (FComplex c1, FComplex c2) => c1.Modulo() >= c2.Modulo();
+
+        public static FComplex operator -(FComplex c1) => new FComplex(-c1.Real, c1.Imaginary);
+
+        public override string ToString() => Real.ToString() + "i" + Imaginary.ToString();
     }
 }

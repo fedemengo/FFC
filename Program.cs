@@ -19,9 +19,6 @@ namespace FFC.FParser
             Console.ForegroundColor = ConsoleColor.White;
             try
             {
-                //Scanner.Test(args[0]);
-                //FLexerTTest.Test(args);
-                //string Path = "samples/declaration.f";
                 string Path = args[0];
                 if(Path.Substring(Path.Length-2) != ".f")
                     throw new FormatException("Can't compile non-.f file");
@@ -34,9 +31,7 @@ namespace FFC.FParser
                     //Print to see program's AST
                     stms.Print(0);
                     
-
-                    //Generate PE compiling all statements
-                
+                    //Generate PE compiling all statements   
                     string name = Path.Split('/')[1].Split('.')[0];
                     AppDomain appDomain = System.Threading.Thread.GetDomain();
                     AssemblyName asmName = new AssemblyName(name);

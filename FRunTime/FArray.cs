@@ -6,14 +6,8 @@ namespace FFC.FRunTime
     public class FArray<V> : FRTType where V: FRTType
     {
         public List<V> Values {get; set;}
-        public FArray()
-        {
-            Values = new List<V>{};
-        }
-        public FArray(V v)
-        {
-            Values = new List<V>{v};
-        }
+        public FArray() => Values = new List<V>{};
+        public FArray(V v) => Values = new List<V>{v};
 
         //even if we create N FArray to create a (non immutable) FArray of size N,
         //GC should save us from wasted memory
@@ -30,8 +24,10 @@ namespace FFC.FRunTime
             //not even remotely efficient
             foreach(V v in a2.Values)
                 Values.Add(v);
-            
         }
+        public static FArray<V> operator+(FArray<V> a1, FArray<V> a2) => new FArray<V>(a1, a2);
+        public static FArray<V> operator+(FArray<V> a, V v) => new FArray<V>(a, v);
+        
         public override string ToString()
         {
             string ans = "{";
@@ -41,14 +37,6 @@ namespace FFC.FRunTime
             ans = ans.Remove(ans.Length - 2);
             ans += "}";
             return ans;
-        }
-        public static FArray<V> operator+(FArray<V> a1, FArray<V> a2)
-        {
-            return new FArray<V>(a1, a2);
-        }
-        public static FArray<V> operator+(FArray<V> a, V v)
-        {
-            return new FArray<V>(a, v);
         }
     }
 }

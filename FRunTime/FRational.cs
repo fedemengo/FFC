@@ -21,7 +21,6 @@ namespace FFC.FRunTime
 
         private FReal Value() => new FReal(Numerator / (double)Denominator);
 
-        public override string ToString() => Numerator.ToString() + "/" + Denominator.ToString();
         
         public static FRational operator +(FRational r1, FRational r2)
         {
@@ -46,10 +45,7 @@ namespace FFC.FRunTime
             return new FRational(r1.Numerator / gcd1 * (r2.Numerator / gcd2), r1.Denominator / gcd2 * (r2.Numerator / gcd1));
         }
 
-        public static FRational operator /(FRational r1, FRational r2)
-        {
-            return r1 * Inverse(r2);
-        }
+        public static FRational operator /(FRational r1, FRational r2) => r1 * Inverse(r2);
 
         public static FBoolean operator ==(FRational r1, FRational r2) => new FBoolean(r1.Numerator == r2.Numerator && r1.Denominator == r2.Denominator); 
         public static FBoolean operator !=(FRational r1, FRational r2) => new FBoolean(r1.Numerator != r2.Numerator || r1.Denominator != r2.Denominator); 
@@ -58,9 +54,7 @@ namespace FFC.FRunTime
         public static FBoolean operator >(FRational r1, FRational r2) => new FBoolean(r1.Value() > r2.Value());
         public static FBoolean operator >=(FRational r1, FRational r2) => new FBoolean(r1.Value() >= r2.Value());
     
-        public static FRational operator-(FRational r1)
-        {
-            return new FRational(-r1.Numerator, r1.Denominator);
-        }
+        public static FRational operator-(FRational r1) => new FRational(-r1.Numerator, r1.Denominator);
+        public override string ToString() => Numerator.ToString() + "/" + Denominator.ToString();
     }
 }
