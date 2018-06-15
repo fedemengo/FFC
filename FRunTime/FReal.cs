@@ -1,6 +1,6 @@
 namespace FFC.FRunTime
 {
-    public class FReal
+    public class FReal : FRTType
     {
         public double Value {get; set;}
 

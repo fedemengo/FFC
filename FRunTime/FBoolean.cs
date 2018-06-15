@@ -1,6 +1,6 @@
 namespace FFC.FRunTime
 {
-    public class FBoolean
+    public class FBoolean : FRTType
     {
         public bool Value {get; set;}
         public FBoolean(bool val)

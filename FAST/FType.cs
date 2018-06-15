@@ -16,7 +16,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Conv_R8);
         }
 
-        public abstract Type GetRunTimeType();
+        public virtual Type GetRunTimeType() => throw new NotImplementedException($"{Span} - RunTimeType not available for {GetType().Name}");
     }
     class TypeList : FASTNode
     {
@@ -169,7 +169,10 @@ namespace FFC.FAST
             Console.WriteLine("Array type");
             type.Print(tabs + 1);
         }
-        public override Type GetRunTimeType() => typeof(FArray);
+        public override Type GetRunTimeType()
+        {
+            return typeof(FArray<>).MakeGenericType(type.GetRunTimeType());
+        }
     }
     class MapType : FType
     {

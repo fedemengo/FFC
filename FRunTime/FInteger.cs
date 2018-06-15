@@ -1,6 +1,6 @@
 namespace FFC.FRunTime
 {
-    public class FInteger
+    public class FInteger : FRTType
     {
         public int Value {get; set;}
         public FInteger(int val)

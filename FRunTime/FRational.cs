@@ -1,6 +1,6 @@
 namespace FFC.FRunTime
 {
-    public class FRational
+    public class FRational : FRTType
     {
         public FRational(int n, int d)
         {
@@ -27,19 +27,23 @@ namespace FFC.FRunTime
         {
             int gcd = GCD(r1.Denominator, r2.Denominator);
 		    int den = r1.Denominator / gcd * r2.Denominator;
-		    return new FRational(r1.Numerator * r2.Denominator + r2.Numerator * r1.Denominator, den);
+		    return new FRational(r2.Denominator / gcd * r1.Numerator + r1.Denominator / gcd * r2.Numerator, den);
         }
 
         public static FRational operator -(FRational r1, FRational r2)
         {
+            //shall we write this as r1 + (-r2) ?
             int gcd = GCD(r1.Denominator, r2.Denominator);
 		    int den = r1.Denominator / gcd * r2.Denominator;
-		    return new FRational(r1.Numerator * r2.Denominator - r2.Numerator * r1.Denominator, den);
+		    return new FRational(r2.Denominator / gcd * r1.Numerator - r1.Denominator / gcd * r2.Numerator, den);
         }
 
         public static FRational operator *(FRational r1, FRational r2)
         {
-            return new FRational(r1.Numerator * r2.Numerator, r1.Denominator * r2.Denominator);
+            //not fancy written but avoids overflow as much as possible
+            int gcd1 = GCD(r1.Numerator, r2.Denominator);
+            int gcd2 = GCD(r1.Denominator, r2.Numerator);
+            return new FRational(r1.Numerator / gcd1 * (r2.Numerator / gcd2), r1.Denominator / gcd2 * (r2.Numerator / gcd1));
         }
 
         public static FRational operator /(FRational r1, FRational r2)
@@ -53,5 +57,10 @@ namespace FFC.FRunTime
         public static FBoolean operator <=(FRational r1, FRational r2) => new FBoolean(r1.Value() <= r2.Value());
         public static FBoolean operator >(FRational r1, FRational r2) => new FBoolean(r1.Value() > r2.Value());
         public static FBoolean operator >=(FRational r1, FRational r2) => new FBoolean(r1.Value() >= r2.Value());
+    
+        public static FRational operator-(FRational r1)
+        {
+            return new FRational(-r1.Numerator, r1.Denominator);
+        }
     }
 }

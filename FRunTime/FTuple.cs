@@ -1,6 +1,6 @@
 namespace FFC.FRunTime
 {
-    public class FTuple
+    public class FTuple : FRTType
     {
         
     }

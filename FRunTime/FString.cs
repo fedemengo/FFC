@@ -1,6 +1,6 @@
 namespace FFC.FRunTime
 {
-    public class FString
+    public class FString : FRTType
     {
         
     }

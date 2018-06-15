@@ -8,7 +8,6 @@ namespace FFC.FAST
 {
     abstract class FValue : FPrimary
     {
-
         public override void Generate(ILGenerator generator)
         {
             throw new NotImplementedException($"{Span} - Generation for {GetType().Name} not implemented");
@@ -29,6 +28,12 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine($"Boolean value({value})");
         }
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(value ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0);
+            generator.Emit(OpCodes.Newobj, typeof(FBoolean).GetConstructor(new Type[]{typeof(bool)}));
+        }
+
     }
     class IntegerValue : FValue
     {
@@ -116,6 +121,13 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine($"Complex value({real}i{img})");
         }
+        public override void Generate(ILGenerator generator)
+        {
+            generator.Emit(OpCodes.Ldc_R8, real);
+            generator.Emit(OpCodes.Ldc_R8, img);
+            generator.Emit(OpCodes.Newobj, typeof(FComplex).GetConstructor(new Type[]{typeof(double), typeof(double)}));
+        }
+
     }
     class StringValue : FValue
     {
@@ -136,6 +148,7 @@ namespace FFC.FAST
         public override void Generate(ILGenerator generator)
         {
             generator.Emit(OpCodes.Ldstr, value);
+            generator.Emit(OpCodes.Newobj, typeof(FString).GetConstructor(new Type[]{typeof(string)}));
         }
     }
     class Identifier : FValue
@@ -152,7 +165,6 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine($"Identifier({name})");
         }
-
     }
 
     class IdentifierList : FValue

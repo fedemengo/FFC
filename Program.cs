@@ -1,6 +1,8 @@
 ﻿using System;
 using FFC.FLexer;
 using FFC.FAST;
+using FFC.FParser;
+using FFC.FRunTime;
 
 using System.Threading.Tasks;
 using System.Reflection;
@@ -21,7 +23,7 @@ namespace FFC.FParser
                 //FLexerTTest.Test(args);
                 //string Path = "samples/declaration.f";
                 string Path = args[0];
-                FFC.FParser.Parser p = new FFC.FParser.Parser(new Scanner(new Tokenizer(), new SourceReader(Path)));
+                Parser p = new Parser(new Scanner(new Tokenizer(), new SourceReader(Path)));
                 bool res = p.Parse();
                 Console.WriteLine($"\nParsing success : {res}\n");
                 if (res)
@@ -72,7 +74,7 @@ namespace FFC.FParser
                     Console.WriteLine("\nCompilation completed successfully!");
                 }
             }
-            catch (Exception ex)
+            catch (NotImplementedException ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\nCOMPILATION FAILED :");

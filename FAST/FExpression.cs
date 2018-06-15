@@ -32,7 +32,7 @@ namespace FFC.FAST
         }
         public virtual void BuildType()
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException($"{Span} - BuildType not impleented for {this.GetType().Name}");
         }
     }
     class ExpressionList : FASTNode
@@ -84,8 +84,6 @@ namespace FFC.FAST
 
         public override void Generate(ILGenerator generator)
         {
-            if(ValueType is ComplexType || ValueType is RationalType)
-                throw new NotImplementedException(this.Span + " - Operations on rational / complex are not yet implemented.");
             if(ValueType is ArrayType)
                 throw new NotImplementedException(this.Span + " - Operations on arrays are not yet implemented.");
             if(ValueType is MapType)
@@ -97,7 +95,7 @@ namespace FFC.FAST
             
             if(binOperator is RelationalOperator)
             {
-                //we need to cast to the same type they would get summed to
+                //we need to cast to the 2same type they would get summed to
                 targetType = new PlusOperator(null).GetTarget(left.ValueType, right.ValueType);
             }
 
@@ -143,7 +141,8 @@ namespace FFC.FAST
         public override void Generate(ILGenerator generator)
         {
             value.Generate(generator);
-            generator.Emit(OpCodes.Neg);
+            //we call -(obj) for ValueType
+            generator.Emit(OpCodes.Call, value.ValueType.GetRunTimeType().GetMethod("op_UnaryNegation", new Type[]{ValueType.GetRunTimeType()}));
         }
     }
     class EllipsisExpression : FExpression
