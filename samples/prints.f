@@ -76,7 +76,7 @@ main is func() do
     // simple loop
     while true loop print "loop 1"; break; print "loop 2"; end
     // infinite loop
-    while true loop print "loop 1"; continue; print "loop 2"; end
+    //while true loop print "loop 1"; continue; print "loop 2"; end
 
     print "return stm (this is the last print)";
     return;

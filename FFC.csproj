@@ -6,5 +6,9 @@
     <Compile Include="*/*.cs" />
     <Compile Include="*.cs" />
   </ItemGroup>
+  <PropertyGroup>
+	  <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
+
