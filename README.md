@@ -3,6 +3,7 @@ A compiler for the F language (and it's definition)
 
 ## TODOs
 * Check this TODO list
+* Update note section
 * Action on the tree 
 	* Code generation (e.g. If is smth in stack and some conditional jump) (recursively within different statement)
 	* Reorganize tree (optimization)
@@ -34,16 +35,20 @@ A compiler for the F language (and it's definition)
 	- [ ] Symbols lookup
 		- [ ] Nested scopes
 	- [x] Numeric types
+		- [x] Operators
+	- [ ] Standard functions
 	- [x] Arrays
 		- [ ] Empty arrays
 		- [x] Concatenation
 	- [x] Strings
-		- [ ] Operators
+		- [ ] Operators ?
 	- [ ] Maps
 	- [ ] Tuples
 	- [x] Conditional expressions
 	- [x] Conditional statements
 	- [ ] Loop statements
+		- [x] While loops
+		- [ ] For loops
 	- [ ] Ellipsis
 	- [ ] Functions
 		- [ ] Nested functions
