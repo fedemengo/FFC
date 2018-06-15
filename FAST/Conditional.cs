@@ -51,7 +51,6 @@ namespace FFC.FAST
             generator.MarkLabel(falseBranch);
             ifFalse.Generate(generator);
             generator.MarkLabel(exitBranch);
-            
         }
     }
 }

@@ -39,4 +39,5 @@ main is func() do
     print [[1]] + [0] + [[1], [0]] + [1];
     print "";
 
+    print if !true | false then "true" else "false" end;
 end

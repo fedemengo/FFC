@@ -182,7 +182,7 @@ namespace FFC.FAST
         public override void Generate(ILGenerator generator)
         {
             expr.Generate(generator);
-            generator.Emit(OpCodes.Call, expr.ValueType.GetRunTimeType().GetMethod("op_LogicalNegation", new Type[]{expr.ValueType.GetRunTimeType()}));
+            generator.Emit(OpCodes.Call, expr.ValueType.GetRunTimeType().GetMethod("op_LogicalNot", new Type[]{expr.ValueType.GetRunTimeType()}));
         }
     }
 }

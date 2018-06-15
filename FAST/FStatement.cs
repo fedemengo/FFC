@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using FFC.FParser;
+using FFC.FRunTime;
 
 namespace FFC.FAST
 {
@@ -176,6 +177,27 @@ namespace FFC.FAST
             elseIfs.Print(tabs + 1);
             ifFalse.Print(tabs + 1);
         }
+
+        public override void Generate(ILGenerator generator)
+        {
+            if(condition.ValueType.GetRunTimeType() != typeof(FBoolean))
+            {
+                throw new NotImplementedException($"Can't use conditional with {condition.ValueType}");
+            }
+            condition.Generate(generator);
+            generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
+            
+            Label falseBranch = generator.DefineLabel();
+            Label exitBranch = generator.DefineLabel();
+
+            generator.Emit(OpCodes.Brfalse, falseBranch);
+            ifTrue.Generate(generator);
+            generator.Emit(OpCodes.Br, exitBranch);
+            generator.MarkLabel(falseBranch);
+            elseIfs.Generate(generator, exitBranch);
+            ifFalse.Generate(generator);
+            generator.MarkLabel(exitBranch);
+        }
     }
 
     class ElseIfList : FASTNode
@@ -204,6 +226,12 @@ namespace FFC.FAST
             this.Span = span;
             list = new List<ElseIfStatement>{start};
         }
+
+        public void Generate(ILGenerator generator, Label exitBranch)
+        {
+            foreach(ElseIfStatement elif in list)
+                elif.Generate(generator, exitBranch);
+        }
     }
 
     class ElseIfStatement : FASTNode
@@ -223,6 +251,22 @@ namespace FFC.FAST
             Console.WriteLine("Else if");
             condition.Print(tabs + 1);
             ifTrue.Print(tabs + 1);
+        }
+
+        public void Generate(ILGenerator generator, Label exitBranch)
+        {
+            if(condition.ValueType.GetRunTimeType() != typeof(FBoolean))
+            {
+                throw new NotImplementedException($"Can't use conditional with {condition.ValueType}");
+            }
+            condition.Generate(generator);
+            generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
+            Label falseBranch = generator.DefineLabel();
+
+            generator.Emit(OpCodes.Brfalse, falseBranch);
+            ifTrue.Generate(generator);
+            generator.Emit(OpCodes.Br, exitBranch);
+            generator.MarkLabel(falseBranch);
         }
     }
 
