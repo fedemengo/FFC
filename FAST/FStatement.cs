@@ -272,7 +272,7 @@ namespace FFC.FAST
 
     class ReturnStatement : FStatement
     {
-        public FExpression value;
+        public FExpression value = null;
         public ReturnStatement(FExpression value, TextSpan span)
         {
             this.Span = span;
@@ -288,6 +288,11 @@ namespace FFC.FAST
             Console.WriteLine("Return statement");
             if(value != null)
                 value.Print(tabs + 1);
+        }
+        public override void Generate(ILGenerator generator)
+        {
+            if(value != null) value.Generate(generator);
+            generator.Emit(OpCodes.Ret);
         }
     }
     class BreakStatement : FStatement

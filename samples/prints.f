@@ -21,6 +21,7 @@ main is func() do
     print "";
 
     print "any type arrays";
+    print [3 + 4 - (1 * 2 - 7 % 3)];
     print [2.4];
     print [[1, 2], [3, 4]];
     print "";
@@ -38,8 +39,42 @@ main is func() do
     print [[1]] + [1];
     print [[1]] + [0] + [[1], [0]] + [1];
     print "";
-    print "a",
-          "b",
-          "c";
-    print if !true | false then "true" else "false" end;
+
+    print "conditional expressions";
+    print if !true | false then true else false end;
+    print if 3 > 1 then "3 > 1" else "3 <= 1" end;
+    print if 4 > 9 then "4 > 9" else "4 <= 9" end;
+    print "";
+
+    print "if statements";
+    //go to if
+    if true then
+        print 1, "first condition";
+    else if true then
+        print "2 : first condition";
+    else
+        print ["3 :", "no", "condition"];
+    end
+    //go to else if
+    if false then
+        print 1, "first condition";
+    else if true then
+        print "2 : first condition";
+    else
+        print ["3 :", "no", "condition"];
+    end
+    //go to else
+    if false then
+        print 1, "first condition";
+    else if false then
+        print "2 : first condition";
+    else
+        print ["3 :", "no", "condition"];
+    end
+    print "";
+
+    print "return stm (this is the last print)";
+    return;
+    print "you will never see this text";
+
 end
