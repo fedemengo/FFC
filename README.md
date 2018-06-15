@@ -2,12 +2,12 @@
 A compiler for the F language (and it's definition)
 
 ## TODOs
+* Check this TODO list
 * Fix names in grammar
 * Action on the tree 
 	* Code generation (e.g. If is smth in stack and some conditional jump) (recursively within different statement)
 	* Reorganize tree (optimization)
 * Mappings between current and final code
-* Generate code for simple program (e.g "hello world" and look into it with **ildasm.exe**)
 * Dynamically load external library 
 
 * Debugging on AST printing
@@ -19,18 +19,41 @@ A compiler for the F language (and it's definition)
 
 ## Progress
 
-- [x] Lexical analyser
+- [x] Lexical analysis
 	
-- [x] Parser
+- [x] Parsing
 	- [x] Grammar	
 	- [x] Semantic actions
 	- [x] AST structure
 
 - [ ] Mappings (main constructs, nested functions)
+	- Refer to code generation progress
 
 - [ ] Code generation (while creating mappings)
+	- [x] Expressions
+	- [x] Output
+	- [ ] Input
+	- [ ] Symbols lookup
+		- [ ] Nested scopes
+	- [x] Numeric types
+	- [x] Arrays
+		- [ ] Empty arrays
+		- [x] Concatenation
+	- [ ] Strings
+	- [ ] Maps
+	- [ ] Tuples
+	- [ ] Conditional expressions
+	- [ ] Conditional statements
+	- [ ] Loop statements
+	- [ ] Ellipsis
+	- [ ] Functions
+		- [ ] Nested functions
 
 - [ ] Debugging and Testing
+	- [ ] Lexer error handling support
+	- [ ] Parsing error handling support
+	- [ ] Compilation error handling support
+	- [ ] ~~Runtime error handling support~~
 
 - [ ] Writing a report
 
