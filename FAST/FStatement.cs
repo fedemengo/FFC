@@ -182,7 +182,7 @@ namespace FFC.FAST
         {
             if(condition.ValueType.GetRunTimeType() != typeof(FBoolean))
             {
-                throw new NotImplementedException($"Can't use conditional with {condition.ValueType}");
+                throw new NotImplementedException($"{Span} - Can't use conditional with {condition.ValueType}");
             }
             condition.Generate(generator);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
@@ -257,7 +257,7 @@ namespace FFC.FAST
         {
             if(condition.ValueType.GetRunTimeType() != typeof(FBoolean))
             {
-                throw new NotImplementedException($"Can't use conditional with {condition.ValueType}");
+                throw new NotImplementedException($"{Span} - Can't use conditional with {condition.ValueType}");
             }
             condition.Generate(generator);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
