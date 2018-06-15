@@ -46,28 +46,31 @@ perform_task() {
         echo ""
         return 0
         ;;
+    "clear")
+        echo "Remove all *.exe..."
+        rm *.exe*
+        return 0
+        ;;
     "parser")
         echo "Generating parser..."
         echo ""
         # generate original parser
         mono FParser/gppg/gppg.exe FParser/gppg/grammar.y > FParser/Parser.cs
-
+        
         echo "Cleaning up..."
+        PATT1="internal enum Etokens {"
+        PATT2=".*[a-zA-Z_]*=[0-9]*,.*"
+        PATT3=".*[a-zA-Z_]*=[0-9]*};.*"
         # Refactors error to ERROR
-        cat FParser/Parser.cs | sed -e 's/error/ERROR/' > tmp.parser
+        sed -i '' -e 's/error/ERROR/' FParser/Parser.cs
         # generate ETokens
-        echo "using System;" > FLexer/ETokens.cs
-        echo "" >> FLexer/ETokens.cs
-        echo "namespace FFC.FLexer" >> FLexer/ETokens.cs
-        echo "{" >> FLexer/ETokens.cs
+        echo $'using System;\n\nnamespace FFC.FLexer\n{' > FLexer/ETokens.cs
         # matches the tokens and prints them
-        awk '/[A-Z_]*=[0-9]*,/{print $0}' tmp.parser >> FLexer/ETokens.cs
+        awk '/(internal enum Etokens {)|([a-zA-Z_]*=[0-9]*,)|([a-zA-Z_]*=[0-9]*\};)/{print $0}' FParser/Parser.cs >> FLexer/ETokens.cs
         # finishes the file
         echo "}" >> FLexer/ETokens.cs
-        # remove tokens from tmp.parser and prints in Parser.cs
-        cat tmp.parser | tr '\n' '^' | tr '\r' '~' | sed -e 's/internal enum ETokens {.*[0-9]};~^~^//' | tr '^' '\n' | tr '~' '\r' > FParser/Parser.cs
-        # remove tmp.parser
-        rm tmp.parser
+        # remove tokens Parser.cs
+        sed -i '' -e "6,8d;10,11d;/\(\($PATT1\)\)/d;/\(\($PATT2\)\)/d;/\($PATT3\)/d" FParser/Parser.cs
         echo ""
         return 0
         ;;
