@@ -13,12 +13,12 @@ namespace FFC.FRunTime
         public static FReal operator/(FReal r1, FReal r2) => new FReal(r1.Value / r2.Value);
         public static FReal operator%(FReal r1, FReal r2) => new FReal(r1.Value % r2.Value);
 
-        public static bool operator== (FReal r1, FReal r2) => r1.Value == r2.Value; 
-        public static bool operator!= (FReal r1, FReal r2) => r1.Value != r2.Value; 
-        public static bool operator< (FReal r1, FReal r2) => r1.Value < r2.Value; 
-        public static bool operator<= (FReal r1, FReal r2) => r1.Value <= r2.Value; 
-        public static bool operator> (FReal r1, FReal r2) => r1.Value > r2.Value; 
-        public static bool operator>= (FReal r1, FReal r2) => r1.Value >= r2.Value;
+        public static FBoolean operator== (FReal r1, FReal r2) => new FBoolean(r1.Value == r2.Value); 
+        public static FBoolean operator!= (FReal r1, FReal r2) => new FBoolean(r1.Value != r2.Value); 
+        public static FBoolean operator< (FReal r1, FReal r2) => new FBoolean(r1.Value < r2.Value); 
+        public static FBoolean operator<= (FReal r1, FReal r2) => new FBoolean(r1.Value <= r2.Value); 
+        public static FBoolean operator> (FReal r1, FReal r2) => new FBoolean(r1.Value > r2.Value); 
+        public static FBoolean operator>= (FReal r1, FReal r2) => new FBoolean(r1.Value >= r2.Value);
 
         public static FReal operator-(FReal r1) => new FReal(- r1.Value);
         public override string ToString() => Value.ToString();

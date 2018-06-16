@@ -50,10 +50,10 @@ namespace FFC.FRunTime
 
         public static FBoolean operator ==(FRational r1, FRational r2) => new FBoolean(r1.Numerator == r2.Numerator && r1.Denominator == r2.Denominator); 
         public static FBoolean operator !=(FRational r1, FRational r2) => new FBoolean(r1.Numerator != r2.Numerator || r1.Denominator != r2.Denominator); 
-        public static FBoolean operator <(FRational r1, FRational r2) => new FBoolean(r1.Value() < r2.Value());
-        public static FBoolean operator <=(FRational r1, FRational r2) => new FBoolean(r1.Value() <= r2.Value());
-        public static FBoolean operator >(FRational r1, FRational r2) => new FBoolean(r1.Value() > r2.Value());
-        public static FBoolean operator >=(FRational r1, FRational r2) => new FBoolean(r1.Value() >= r2.Value());
+        public static FBoolean operator <(FRational r1, FRational r2) => r1.Value() < r2.Value();
+        public static FBoolean operator <=(FRational r1, FRational r2) => r1.Value() <= r2.Value();
+        public static FBoolean operator >(FRational r1, FRational r2) => r1.Value() > r2.Value();
+        public static FBoolean operator >=(FRational r1, FRational r2) => r1.Value() >= r2.Value();
     
         public static FRational operator-(FRational r1) => new FRational(-r1.Numerator, r1.Denominator);
 

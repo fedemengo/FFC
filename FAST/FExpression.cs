@@ -96,7 +96,6 @@ namespace FFC.FAST
                 //we need to cast to the 2same type they would get summed to
                 targetType = new PlusOperator(null).GetTarget(left.ValueType, right.ValueType);
             }
-
             left.Generate(generator);
             if(left.ValueType.GetRunTimeType() != targetType.GetRunTimeType())
                 left.ValueType.ConvertTo(targetType, generator);
@@ -109,12 +108,6 @@ namespace FFC.FAST
             Type rtt = targetType.GetRunTimeType();
             //this goes for binOperator.Generate();
             generator.Emit(OpCodes.Call, rtt.GetMethod(op_name, new Type[]{rtt, rtt}));
-        }
-
-        public override void EmitPrint(ILGenerator generator)
-        {
-            Generate(generator);
-            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{ValueType.GetRunTimeType()}));
         }
     }
     class NegativeExpression : FExpression
