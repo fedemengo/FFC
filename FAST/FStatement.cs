@@ -49,7 +49,10 @@ namespace FFC.FAST
         public override void Generate(ILGenerator generator, SymbolTable st)
         {
             foreach(FStatement stm in statements)
-                stm.Generate(generator, st);
+                if(stm is DeclarationStatement)
+                    (stm as DeclarationStatement).Generate(generator, ref st);
+                else
+                    stm.Generate(generator, st);
         }
         public void Generate(ILGenerator generator, Label conditionLabel, Label exitLabel, SymbolTable st)
         {
@@ -132,9 +135,15 @@ namespace FFC.FAST
             expr.Print(tabs + 1);
         }
 
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public void Generate(ILGenerator generator, ref SymbolTable st)
         {
+            FType t = expr.ValueType;
+            if(type != null && type != t) throw new NotImplementedException($"{Span} - Type doesn't match declaration");
+            type = t;
+            LocalBuilder var = generator.DeclareLocal(type.GetRunTimeType());
+            st = (SymbolTable) st.Assign(id.name, new Data(var, t.GetRunTimeType()));
             expr.Generate(generator, st);
+            generator.Emit(OpCodes.Stloc, var);
         }
     }
     class DeclarationStatementList : FASTNode
@@ -154,10 +163,11 @@ namespace FFC.FAST
         }
         public override void Generate(ILGenerator generator, SymbolTable st)
         {
-            foreach(var stm in statements)
-            {
-                stm.Generate(generator, st);
-            }
+            if(statements.Count == 1)
+                ((statements[0]).expr as FunctionDefinition).body.Generate(generator, st);
+            else
+                foreach(var stm in statements)
+                    stm.Generate(generator, ref st);
         }
         public void Add(DeclarationStatement stm)
         {

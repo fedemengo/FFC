@@ -37,7 +37,7 @@ namespace FFC.FGen
 
             ILGenerator mainMethGen = mainMeth.GetILGenerator();
             //generates all the statements in main
-            stms.Generate(mainMethGen, new SymbolTable());
+            stms.Generate(mainMethGen, new PersistentTreapMap());
 
             mainMethGen.Emit(OpCodes.Ret);
 

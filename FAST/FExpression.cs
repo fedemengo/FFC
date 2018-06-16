@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection.Emit;
 using FFC.FParser;
 using FFC.FGen;
+using FFC.FRunTime;
 
 namespace FFC.FAST
 {
@@ -18,7 +19,8 @@ namespace FFC.FAST
         public virtual void EmitPrint(ILGenerator generator, SymbolTable st)
         {
             Generate(generator, st);
-            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{ValueType.GetRunTimeType()}));
+            Type t = (this is Identifier ? st.Find((this as Identifier).name).type : ValueType.GetRunTimeType());
+            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{t}));
         }
         private FType _type;
         public virtual FType ValueType
@@ -31,7 +33,7 @@ namespace FFC.FAST
                 return _type;
             }
         }
-        public virtual void BuildType()
+        public virtual void BuildType(SymbolTable st)
         {
             throw new NotImplementedException($"{Span} - BuildType not impleented for {this.GetType().Name}");
         }
@@ -56,7 +58,6 @@ namespace FFC.FAST
             foreach(FExpression e in expressions)
                 e.Print(tabs + 1);
         }
-
     }
     class BinaryOperatorExpression : FExpression
     {

@@ -7,7 +7,7 @@ using FFC.FGen;
 
 namespace FFC.FAST
 {
-    abstract class FType : FASTNode
+    public abstract class FType : FASTNode
     {
         public virtual void ConvertTo(FType target, ILGenerator generator)
         {

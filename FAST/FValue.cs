@@ -166,6 +166,19 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine($"Identifier({name})");
         }
+
+        public override void Generate(ILGenerator generator, SymbolTable st)
+        {
+            if(st.Contains(name))
+                generator.Emit(OpCodes.Ldloc, st.Find(name).locBuilder);
+            else
+                throw new NotImplementedException($"{Span} - Identifier {name} not found");
+        }
+
+        public override void BuildType()
+        {
+            
+        }
     }
 
     class IdentifierList : FValue
