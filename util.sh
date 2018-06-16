@@ -17,6 +17,7 @@ perform_task() {
         echo "lib - Generate FFC.dll"
         echo "compile FILE - Compile the source FILE"
         echo "run EXE - Run the executable EXEC"
+        echo "clear - Remove all .exe files"
         return 1
         ;;
     "build")
@@ -62,7 +63,7 @@ perform_task() {
         PATT2=".*[a-zA-Z_]*=[0-9]*,.*"
         PATT3=".*[a-zA-Z_]*=[0-9]*};.*"
         # Refactors error to ERROR
-        sed -i '' -e 's/error/ERROR/' FParser/Parser.cs
+        sed -i '' -e 's/error/ERROR/' FParser/Parser.cs 2>/dev/null
         # generate ETokens
         echo $'using System;\n\nnamespace FFC.FLexer\n{' > FLexer/ETokens.cs
         # matches the tokens and prints them
@@ -70,7 +71,7 @@ perform_task() {
         # finishes the file
         echo "}" >> FLexer/ETokens.cs
         # remove tokens Parser.cs
-        sed -i '' -e "6,8d;10,11d;/\(\($PATT1\)\)/d;/\(\($PATT2\)\)/d;/\($PATT3\)/d" FParser/Parser.cs
+        sed -i '' -e "6,8d;10,11d;/\(\($PATT1\)\)/d;/\(\($PATT2\)\)/d;/\($PATT3\)/d" FParser/Parser.cs 2>/dev/null
         echo ""
         return 0
         ;;
