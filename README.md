@@ -2,19 +2,23 @@
 A compiler for the F language (and it's definition)
 
 ## TODOs
-* Check this TODO list
+
 * Update note section
-* Action on the tree 
-	* Code generation (e.g. If is smth in stack and some conditional jump) (recursively within different statement)
-	* Reorganize tree (optimization)
-* Mappings between current and final code
-* Dynamically load external library 
+* Load external library from another folder
 
-* Think if more `\` escaped character are needed (supported `\n`, `\t`, `\\`, `\"`)
-* Think about `\n` instead of `;` for SEMICOLON tokens
-* Add Lexer support for -2^31
+* Lexical analysis
+	* Think if more `\`-escaped character are needed (currently support `\n`, `\t`, `\\`, `\"`)
+	* Think about `\n` instead of `;` for SEMICOLON tokens
+	* Add Lexer support for -2^31
+	* Handling error token
+	* Add `read` keyword
 
-* Handling error token
+* Parsing
+	* Add `READ` token to declaration statements rules
+	* Maybe even to assignements ?
+
+* Code generation
+	* Fix SymbolTable class so that (type casting) is not needed
 
 ## Progress
 
@@ -32,16 +36,19 @@ A compiler for the F language (and it's definition)
 	- [x] Expressions
 	- [x] Output
 	- [ ] Input
-	- [ ] Symbols lookup
-		- [ ] Nested scopes
+	- [x] Symbols lookup
+		- [x] Nested scopes
+	- [x] Declarations
+	- [x] Assignements
 	- [x] Numeric types
 		- [x] Operators
-	- [ ] Standard functions
+	- [ ] Standard library functions
 	- [x] Arrays
 		- [ ] Empty arrays
 		- [x] Concatenation
+		- [ ] Indexed access
 	- [x] Strings
-		- [ ] Operators ?
+		* Same operators as arrays ?
 	- [ ] Maps
 	- [ ] Tuples
 	- [x] Conditional expressions
@@ -56,7 +63,8 @@ A compiler for the F language (and it's definition)
 - [ ] Debugging and Testing
 	- [ ] Lexer error handling support
 	- [ ] Parsing error handling support
-	- [ ] Compilation error handling support
+	- [x] Compilation error handling support
+		- [ ] Custom Exception type
 	- [ ] ~~Runtime error handling support~~
 
 - [ ] Writing a report
