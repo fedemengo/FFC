@@ -7,4 +7,6 @@ main is func(): integer do
     f is e + -a;
     print a, b, c, d, e;
     print f;
+    f := [1];
+    print f;
 end

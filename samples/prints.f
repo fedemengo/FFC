@@ -78,7 +78,14 @@ main is func() do
     // infinite loop
     //while true loop print "loop 1"; continue; print "loop 2"; end
 
-    print "return stm (this is the last print)";
+    print "\nassignements and declaration:";
+    x is 3;
+    print "x is ", x;
+    x := x * 2;
+    print "x became ", x;
+    print "";
+
+    print "return stm (this is the last print)\n";
     return;
     print "you will never see this text";
 

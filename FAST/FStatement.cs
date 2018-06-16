@@ -113,6 +113,19 @@ namespace FFC.FAST
             left.Print(tabs + 1);
             right.Print(tabs + 1);
         }
+        public override void Generate(ILGenerator generator, SymbolTable st)
+        {
+            if(left is Identifier)
+            {
+                Identifier x = left as Identifier;
+                var y = st.Find(x.name);
+                if(y == null) throw new NotImplementedException($"{Span} - Identifier {(left as Identifier).name} is not declared");
+                if(right.GetValueType(st).GetRunTimeType() != y.Type.GetRunTimeType()) throw new NotImplementedException($"{Span} - Can't assign type {right.GetValueType(st).GetRunTimeType()} to variable of type {x.GetValueType(st).GetRunTimeType()}"); 
+                right.Generate(generator, st);
+                generator.Emit(OpCodes.Stloc, y.LocBuilder);
+            }
+            else throw new NotImplementedException($"{Span} - Assignments to {left.GetType().Name} are not implemented");
+        }
     }
     class DeclarationStatement : FStatement
     {

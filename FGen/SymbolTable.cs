@@ -10,7 +10,6 @@ namespace FFC.FGen
     {
         public LocalBuilder LocBuilder {get; set;}
         public FType Type {get; set;}
-
         public Data(LocalBuilder locBuilder, FType type)
         {
             this.LocBuilder = locBuilder;
