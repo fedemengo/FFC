@@ -1,6 +1,6 @@
 perform_task() {
     arg=1
-    [[ ( "$1" =~ ^"compile"$|^"run"$ ) ]] && arg=2
+    [[ ( "$1" =~ ^"compile"$|^"run"$|^"crun"$ ) ]] && arg=2
     
     if [[ ( "$#" -lt "$arg" ) ]]; then
         echo "Too few argument"
@@ -18,39 +18,39 @@ perform_task() {
         echo "compile FILE - Compile the source FILE"
         echo "run EXE - Run the executable EXEC"
         echo "clear - Remove all .exe files"
-        return 1
         ;;
     "build")
         echo "Building the project..."
         echo ""
         msbuild
         echo ""
-        return 0
         ;;
     "compile")
         echo "Compiling..."
         echo ""
         mono bin/Release/FFC.exe "$2"
         echo ""
-        return 0
         ;;
     "run")
         echo ""
         mono "$2"
         echo ""
-        return 0
+        ;;
+    "crun")
+        echo ""
+        mono bin/Release/FFC.exe "$2"
+        mono "$(echo "$2" | awk '{n=split($0,v,"/"); print v[n]}' | awk '{split($0,v,"."); print v[1]}').exe" 2>/dev/null
+        echo ""
         ;;
     "lib")
         echo "Generating library..."
         echo ""
         csc FRunTime/*.cs /t:library /out:FFC.dll
         echo ""
-        return 0
         ;;
     "clear")
         echo "Remove all *.exe..."
         rm *.exe*
-        return 0
         ;;
     "parser")
         echo "Generating parser..."
@@ -73,7 +73,6 @@ perform_task() {
         # remove tokens Parser.cs
         sed -i '' -e "6,8d;10,11d;/\(\($PATT1\)\)/d;/\(\($PATT2\)\)/d;/\($PATT3\)/d" FParser/Parser.cs 2>/dev/null
         echo ""
-        return 0
         ;;
     *)
         echo "Unkwon argument"
