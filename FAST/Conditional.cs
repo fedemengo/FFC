@@ -29,18 +29,18 @@ namespace FFC.FAST
             ifFalse.Print(tabs + 1);
         }
 
-        public override void BuildType() 
+        public override void BuildType(SymbolTable st) 
         {
-            if(ifTrue.ValueType.GetRunTimeType() == ifFalse.ValueType.GetRunTimeType())
-                ValueType = ifTrue.ValueType;
+            if(ifTrue.GetValueType(st).GetRunTimeType() == ifFalse.GetValueType(st).GetRunTimeType())
+                valueType = ifTrue.GetValueType(st);
             else
                 throw new NotImplementedException($"{Span} - Different type in conditional expression");
         }
         public override void Generate(ILGenerator generator, SymbolTable st)
         {
-            if(condition.ValueType.GetRunTimeType() != typeof(FBoolean))
+            if(condition.GetValueType(st).GetRunTimeType() != typeof(FBoolean))
             {
-                throw new NotImplementedException($"{Span} - Can't use conditional with {condition.ValueType}");
+                throw new NotImplementedException($"{Span} - Can't use conditional with {condition.GetValueType(st)}");
             }
             condition.Generate(generator, st);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));

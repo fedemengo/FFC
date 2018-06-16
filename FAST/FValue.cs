@@ -22,7 +22,7 @@ namespace FFC.FAST
         {
             this.Span = span;
             this.value = value;
-            ValueType = new BooleanType();
+            valueType = new BooleanType();
         }
         public override void Print(int tabs)
         {
@@ -44,7 +44,7 @@ namespace FFC.FAST
         {
             this.Span = span;
             this.value = value;
-            ValueType = new IntegerType();
+            valueType = new IntegerType();
         }
         public override void Print(int tabs)
         {
@@ -66,7 +66,7 @@ namespace FFC.FAST
         {
             this.Span = span;
             this.value = value;
-            ValueType = new RealType();
+            valueType = new RealType();
         }
         public override void Print(int tabs)
         {
@@ -90,7 +90,7 @@ namespace FFC.FAST
             this.Span = span;
             this.numerator = numerator;
             this.denominator = denominator;
-            ValueType = new RationalType();
+            valueType = new RationalType();
         }
         public override void Print(int tabs)
         {
@@ -115,7 +115,7 @@ namespace FFC.FAST
             this.Span = span;
             this.real = real;
             this.img = img;
-            ValueType = new ComplexType();
+            valueType = new ComplexType();
         }
         public override void Print(int tabs)
         {
@@ -138,7 +138,7 @@ namespace FFC.FAST
         {
             this.Span = span;
             this.value = value;
-            ValueType = new StringType();
+            valueType = new StringType();
         }
         public override void Print(int tabs)
         {
@@ -170,14 +170,14 @@ namespace FFC.FAST
         public override void Generate(ILGenerator generator, SymbolTable st)
         {
             if(st.Contains(name))
-                generator.Emit(OpCodes.Ldloc, st.Find(name).locBuilder);
+                generator.Emit(OpCodes.Ldloc, st.Find(name).LocBuilder);
             else
                 throw new NotImplementedException($"{Span} - Identifier {name} not found");
         }
 
-        public override void BuildType()
+        public override void BuildType(SymbolTable st)
         {
-            
+            valueType = st.Find(name).Type;
         }
     }
 

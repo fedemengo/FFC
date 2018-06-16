@@ -82,9 +82,9 @@ namespace FFC.FAST
 
         public override void Generate(ILGenerator generator, Label exitLabel, SymbolTable st)
         {
-            if(condition.ValueType.GetRunTimeType() != typeof(FBoolean))
+            if(condition.GetValueType(st).GetRunTimeType() != typeof(FBoolean))
             {
-                throw new NotImplementedException($"{Span} - Can't use conditional with {condition.ValueType}");
+                throw new NotImplementedException($"{Span} - Can't use conditional with {condition.GetValueType(st)}");
             }
             condition.Generate(generator, st);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));

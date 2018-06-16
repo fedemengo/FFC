@@ -4,5 +4,7 @@ main is func(): integer do
     c is 4\4;
     d is 4.0i5.9;
     e is [1, 2, 3];
+    f is e + -a;
     print a, b, c, d, e;
+    print f;
 end

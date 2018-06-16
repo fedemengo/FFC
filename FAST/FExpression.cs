@@ -19,19 +19,14 @@ namespace FFC.FAST
         public virtual void EmitPrint(ILGenerator generator, SymbolTable st)
         {
             Generate(generator, st);
-            Type t = (this is Identifier ? st.Find((this as Identifier).name).type : ValueType.GetRunTimeType());
-            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{t}));
+            FType t = this is Identifier ? st.Find((this as Identifier).name).Type : GetValueType(st);
+            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{t.GetType()}));
         }
-        private FType _type;
-        public virtual FType ValueType
+        protected FType valueType = null;
+        public FType GetValueType(SymbolTable st)
         {
-            set => _type = value;
-            get
-            {
-                if(_type == null)
-                    BuildType();
-                return _type;
-            }
+            if(valueType == null) BuildType(st);
+            return valueType;
         }
         public virtual void BuildType(SymbolTable st)
         {
@@ -79,32 +74,33 @@ namespace FFC.FAST
             binOperator.Print(tabs+1);
             right.Print(tabs+1);
         }
-        public override void BuildType()
+        public override void BuildType(SymbolTable st)
         {
-            ValueType = binOperator.GetTarget(left.ValueType, right.ValueType);
+            valueType = binOperator.GetTarget(left.GetValueType(st), right.GetValueType(st));
         }
 
         public override void Generate(ILGenerator generator, SymbolTable st)
         {
-            if(ValueType is MapType)
+            GetValueType(st);
+            if(valueType is MapType)
                 throw new NotImplementedException(this.Span + " - Operations on maps are not yet implemented.");
-            if(ValueType is TupleType)
+            if(valueType is TupleType)
                 throw new NotImplementedException(this.Span + " - Operations on tuples are not yet implemented.");
             
-            FType targetType = ValueType;
+            FType targetType = valueType;
             
             if(binOperator is RelationalOperator)
             {
                 //we need to cast to the 2same type they would get summed to
-                targetType = new PlusOperator(null).GetTarget(left.ValueType, right.ValueType);
+                targetType = new PlusOperator(null).GetTarget(left.GetValueType(st), right.GetValueType(st));
             }
             left.Generate(generator, st);
-            if(left.ValueType.GetRunTimeType() != targetType.GetRunTimeType())
-                left.ValueType.ConvertTo(targetType, generator);
+            if(left.GetValueType(st).GetRunTimeType() != targetType.GetRunTimeType())
+                left.GetValueType(st).ConvertTo(targetType, generator);
             
             right.Generate(generator, st);
-            if(right.ValueType.GetRunTimeType() != targetType.GetRunTimeType())
-                right.ValueType.ConvertTo(targetType, generator);
+            if(right.GetValueType(st).GetRunTimeType() != targetType.GetRunTimeType())
+                right.GetValueType(st).ConvertTo(targetType, generator);
 
             string op_name = binOperator.GetMethodName();
             Type rtt = targetType.GetRunTimeType();
@@ -127,15 +123,15 @@ namespace FFC.FAST
             value.Print(tabs + 1);
         }
 
-        public override void BuildType()
+        public override void BuildType(SymbolTable st)
         {
-            ValueType = value.ValueType;
+            valueType = value.GetValueType(st);
         }
         public override void Generate(ILGenerator generator, SymbolTable st)
         {
             value.Generate(generator, st);
             //we call -(obj) for ValueType
-            generator.Emit(OpCodes.Call, value.ValueType.GetRunTimeType().GetMethod("op_UnaryNegation", new Type[]{ValueType.GetRunTimeType()}));
+            generator.Emit(OpCodes.Call, value.GetValueType(st).GetRunTimeType().GetMethod("op_UnaryNegation", new Type[]{valueType.GetRunTimeType()}));
         }
     }
     class EllipsisExpression : FExpression
@@ -170,14 +166,14 @@ namespace FFC.FAST
             Console.WriteLine("Not expression");
             expr.Print(tabs + 1);
         }
-        public override void BuildType()
+        public override void BuildType(SymbolTable st)
         {
-            ValueType = expr.ValueType;
+            valueType = expr.GetValueType(st);
         }
         public override void Generate(ILGenerator generator, SymbolTable st)
         {
             expr.Generate(generator, st);
-            generator.Emit(OpCodes.Call, expr.ValueType.GetRunTimeType().GetMethod("op_LogicalNot", new Type[]{expr.ValueType.GetRunTimeType()}));
+            generator.Emit(OpCodes.Call, expr.GetValueType(st).GetRunTimeType().GetMethod("op_LogicalNot", new Type[]{expr.GetValueType(st).GetRunTimeType()}));
         }
     }
 }

@@ -26,33 +26,33 @@ namespace FFC.FAST
         }
         public override void Generate(ILGenerator generator, SymbolTable st)
         {
-            if(ValueType == null) throw new NotImplementedException($"{Span} - Emoty arrays are not implemented yet");
-            generator.Emit(OpCodes.Newobj, typeof(FArray<>).MakeGenericType(values.expressions[0].ValueType.GetRunTimeType()).GetConstructor(new Type[0]));
+            if(GetValueType(st) == null) throw new NotImplementedException($"{Span} - Empty arrays are not implemented yet");
+            generator.Emit(OpCodes.Newobj, typeof(FArray<>).MakeGenericType(values.expressions[0].GetValueType(st).GetRunTimeType()).GetConstructor(new Type[0]));
             foreach(var z in values.expressions)
             {
                 z.Generate(generator, st);
                 //I heard you liked long lines
-                //generator.Emit(OpCodes.Newobj, typeof(FArray<>).MakeGenericType(z.ValueType.GetRunTimeType()).GetConstructor(new Type[]{typeof(FArray<>).MakeGenericType(z.ValueType.GetRunTimeType()), z.ValueType.GetRunTimeType()}));
-                Type t = z.ValueType.GetRunTimeType();
+                //generator.Emit(OpCodes.Newobj, typeof(FArray<>).MakeGenericType(z.ValueType(st).GetRunTimeType()).GetConstructor(new Type[]{typeof(FArray<>).MakeGenericType(z.ValueType(st).GetRunTimeType()), z.ValueType(st).GetRunTimeType()}));
+                Type t = z.GetValueType(st).GetRunTimeType();
                 Type a = typeof(FArray<>).MakeGenericType(t);
                 generator.Emit(OpCodes.Newobj, a.GetConstructor(new Type[]{a, t}));
             }
         }
 
-        public override void BuildType()
+        public override void BuildType(SymbolTable st)
         {
             //how to handle when array is empty???
             if(values == null || values.expressions == null || values.expressions.Count == 0)
-                ValueType = null;
+                valueType = null;
             else
             {
-                ValueType = values.expressions[0].ValueType;
+                valueType = values.expressions[0].GetValueType(st);
                 foreach(var z in values.expressions)
-                    if(z.ValueType.GetType() != ValueType.GetType())
+                    if(z.GetValueType(st).GetRunTimeType() != valueType.GetRunTimeType())
                     {
-                        throw new NotImplementedException($"{Span} - Can't handle arrays with multiple types {ValueType.GetType().Name} - {z.ValueType.GetType().Name}");
+                        throw new NotImplementedException($"{Span} - Can't handle arrays with multiple types {valueType.GetType().Name} - {z.GetValueType(st).GetType().Name}");
                     }
-                ValueType = new ArrayType(ValueType);
+                valueType = new ArrayType(valueType);
             }
         }
         

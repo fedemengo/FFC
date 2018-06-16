@@ -5,7 +5,7 @@ using FFC.FGen;
 
 namespace FFC.FAST
 {
-    abstract class FASTNode : FParser.TValue
+    public abstract class FASTNode : FParser.TValue
     {
         /*
             inherited by anyone

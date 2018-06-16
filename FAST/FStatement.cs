@@ -137,11 +137,11 @@ namespace FFC.FAST
 
         public void Generate(ILGenerator generator, ref SymbolTable st)
         {
-            FType t = expr.ValueType;
+            FType t = expr.GetValueType(st);
             if(type != null && type != t) throw new NotImplementedException($"{Span} - Type doesn't match declaration");
             type = t;
             LocalBuilder var = generator.DeclareLocal(type.GetRunTimeType());
-            st = (SymbolTable) st.Assign(id.name, new Data(var, t.GetRunTimeType()));
+            st = (SymbolTable) st.Assign(id.name, new Data(var, t));
             expr.Generate(generator, st);
             generator.Emit(OpCodes.Stloc, var);
         }
@@ -200,9 +200,9 @@ namespace FFC.FAST
 
         public override void Generate(ILGenerator generator, SymbolTable st)
         {
-            if(condition.ValueType.GetRunTimeType() != typeof(FBoolean))
+            if(condition.GetValueType(st).GetRunTimeType() != typeof(FBoolean))
             {
-                throw new NotImplementedException($"{Span} - Can't use conditional with {condition.ValueType}");
+                throw new NotImplementedException($"{Span} - Can't use conditional with {condition.GetValueType(st)}");
             }
             condition.Generate(generator, st);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
@@ -275,9 +275,9 @@ namespace FFC.FAST
 
         public void Generate(ILGenerator generator, Label exitBranch, SymbolTable st)
         {
-            if(condition.ValueType.GetRunTimeType() != typeof(FBoolean))
+            if(condition.GetValueType(st).GetRunTimeType() != typeof(FBoolean))
             {
-                throw new NotImplementedException($"{Span} - Can't use conditional with {condition.ValueType}");
+                throw new NotImplementedException($"{Span} - Can't use conditional with {condition.GetValueType(st)}");
             }
             condition.Generate(generator, st);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));

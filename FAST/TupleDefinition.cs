@@ -38,12 +38,12 @@ namespace FFC.FAST
             if(IsExpression()) elements.elements[0].value.Generate(generator, st);
             else throw new NotImplementedException("Tuple definition is not implemented yet");
         }
-        public override void BuildType()
+        public override void BuildType(SymbolTable st)
         {
             if(IsExpression())
             {
                 //get inner expression type
-                ValueType = elements.elements[0].value.ValueType;   
+                valueType = elements.elements[0].value.GetValueType(st);   
             }
             else throw new NotImplementedException("Tuple definition is not implemented yet");
         }

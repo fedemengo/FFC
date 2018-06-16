@@ -8,13 +8,13 @@ namespace FFC.FGen
 {
     public class Data
     {
-        public LocalBuilder locBuilder;
-        public FType type;
+        public LocalBuilder LocBuilder {get; set;}
+        public FType Type {get; set;}
 
         public Data(LocalBuilder locBuilder, FType type)
         {
-            this.locBuilder = locBuilder;
-            this.type = type;
+            this.LocBuilder = locBuilder;
+            this.Type = type;
         }
     }
 
