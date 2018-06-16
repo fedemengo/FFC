@@ -1,6 +1,9 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 using FFC.FParser;
+using FFC.FGen;
 
 namespace FFC.FAST
 {
@@ -29,10 +32,10 @@ namespace FFC.FAST
                 elements.Print(tabs + 1);
             }
         }
-        public override void Generate(System.Reflection.Emit.ILGenerator generator)
+        public override void Generate(ILGenerator generator, SymbolTable st)
         {
             //only for expression, tuple to do!
-            if(IsExpression()) elements.elements[0].value.Generate(generator);
+            if(IsExpression()) elements.elements[0].value.Generate(generator, st);
             else throw new NotImplementedException("Tuple definition is not implemented yet");
         }
         public override void BuildType()
@@ -73,7 +76,7 @@ namespace FFC.FAST
                     element.Print(tabs + 1);
             }
         }
-        public override void Generate(System.Reflection.Emit.ILGenerator generator)
+        public override void Generate(ILGenerator generator, SymbolTable st)
         {
             throw new NotImplementedException("tuple element list not implemented");
         }

@@ -1,5 +1,6 @@
 using System;
 using FFC.FLexer;
+using FFC.FGen;
 
 namespace FFC.FParser
 {

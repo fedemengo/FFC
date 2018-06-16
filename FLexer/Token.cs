@@ -2,7 +2,8 @@
 
 using System.Collections.Generic;
 using System;
-using FFC.FParser;
+using FFC.FParser;using FFC.FGen;
+
 namespace FFC.FLexer
 {
     class TokenValue : TValue

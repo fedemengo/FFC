@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using FFC.FGen;
 
 namespace FFC.FLexer
 {

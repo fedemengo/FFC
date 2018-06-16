@@ -30,7 +30,7 @@ namespace FFC.FParser
                     //Generate PE compiling all statements   
                     Generator.Generate(Path, (DeclarationStatementList) p.GetAST());
 
-                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("\nCompilation completed successfully!");
                 }
             }

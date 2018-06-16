@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using FFC.FParser;
+using FFC.FGen;
 
 namespace FFC.FAST
 {
@@ -14,9 +15,9 @@ namespace FFC.FAST
                 EllipsisExpr
                 FSecondary
         */
-        public virtual void EmitPrint(ILGenerator generator)
+        public virtual void EmitPrint(ILGenerator generator, SymbolTable st)
         {
-            Generate(generator);
+            Generate(generator, st);
             generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{ValueType.GetRunTimeType()}));
         }
         private FType _type;
@@ -82,7 +83,7 @@ namespace FFC.FAST
             ValueType = binOperator.GetTarget(left.ValueType, right.ValueType);
         }
 
-        public override void Generate(ILGenerator generator)
+        public override void Generate(ILGenerator generator, SymbolTable st)
         {
             if(ValueType is MapType)
                 throw new NotImplementedException(this.Span + " - Operations on maps are not yet implemented.");
@@ -96,11 +97,11 @@ namespace FFC.FAST
                 //we need to cast to the 2same type they would get summed to
                 targetType = new PlusOperator(null).GetTarget(left.ValueType, right.ValueType);
             }
-            left.Generate(generator);
+            left.Generate(generator, st);
             if(left.ValueType.GetRunTimeType() != targetType.GetRunTimeType())
                 left.ValueType.ConvertTo(targetType, generator);
             
-            right.Generate(generator);
+            right.Generate(generator, st);
             if(right.ValueType.GetRunTimeType() != targetType.GetRunTimeType())
                 right.ValueType.ConvertTo(targetType, generator);
 
@@ -129,9 +130,9 @@ namespace FFC.FAST
         {
             ValueType = value.ValueType;
         }
-        public override void Generate(ILGenerator generator)
+        public override void Generate(ILGenerator generator, SymbolTable st)
         {
-            value.Generate(generator);
+            value.Generate(generator, st);
             //we call -(obj) for ValueType
             generator.Emit(OpCodes.Call, value.ValueType.GetRunTimeType().GetMethod("op_UnaryNegation", new Type[]{ValueType.GetRunTimeType()}));
         }
@@ -172,9 +173,9 @@ namespace FFC.FAST
         {
             ValueType = expr.ValueType;
         }
-        public override void Generate(ILGenerator generator)
+        public override void Generate(ILGenerator generator, SymbolTable st)
         {
-            expr.Generate(generator);
+            expr.Generate(generator, st);
             generator.Emit(OpCodes.Call, expr.ValueType.GetRunTimeType().GetMethod("op_LogicalNot", new Type[]{expr.ValueType.GetRunTimeType()}));
         }
     }

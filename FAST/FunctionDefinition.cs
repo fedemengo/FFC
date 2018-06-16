@@ -1,6 +1,9 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Reflection.Emit;
+using System.Reflection;
 using FFC.FParser;
+using FFC.FGen;
 
 namespace FFC.FAST
 {
@@ -25,10 +28,10 @@ namespace FFC.FAST
             if(returnType != null) returnType.Print(tabs + 1);
             body.Print(tabs + 1);
         }
-        public override void Generate(System.Reflection.Emit.ILGenerator generator)
+        public override void Generate(ILGenerator generator, SymbolTable st)
         {
             //only generates body
-            body.Generate(generator);
+            body.Generate(generator, st);
         }
     }
 

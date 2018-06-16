@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System;
 using FFC.FParser;
+using FFC.FGen;
 
 namespace FFC.FAST
 {

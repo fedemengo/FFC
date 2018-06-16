@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 
 using FFC.FAST;
+using FFC.FGen;
 
 namespace FFC.FGen
 {
@@ -36,7 +37,7 @@ namespace FFC.FGen
 
             ILGenerator mainMethGen = mainMeth.GetILGenerator();
             //generates all the statements in main
-            stms.Generate(mainMethGen);
+            stms.Generate(mainMethGen, new SymbolTable());
 
             mainMethGen.Emit(OpCodes.Ret);
 

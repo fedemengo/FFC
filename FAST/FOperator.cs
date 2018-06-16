@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System;
 using System.Reflection.Emit;
 using FFC.FParser;
+using FFC.FGen;
 
 namespace FFC.FAST
 {
@@ -32,7 +33,7 @@ namespace FFC.FAST
             Console.ForegroundColor = prev;
         }
         public abstract FType GetTarget(FType t1, FType t2);
-        public override void Generate(ILGenerator generator)
+        public override void Generate(ILGenerator generator, SymbolTable st)
         {
             throw new NotImplementedException($"{this.Span} - Operators are not meant to be directly generated.");
         }

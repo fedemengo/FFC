@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Diagnostics.CodeAnalysis;
+using FFC.FGen;
 
 namespace QUT.Gppg{
     /// <summary>

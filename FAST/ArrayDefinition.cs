@@ -5,6 +5,7 @@ using System.Reflection.Emit;
 using FFC.FLexer;
 using FFC.FParser;
 using FFC.FRunTime;
+using FFC.FGen;
 
 namespace FFC.FAST
 {
@@ -23,13 +24,13 @@ namespace FFC.FAST
             Console.WriteLine("Array definition");
             values.Print(tabs + 1);
         }
-        public override void Generate(ILGenerator generator)
+        public override void Generate(ILGenerator generator, SymbolTable st)
         {
             if(ValueType == null) throw new NotImplementedException($"{Span} - Emoty arrays are not implemented yet");
             generator.Emit(OpCodes.Newobj, typeof(FArray<>).MakeGenericType(values.expressions[0].ValueType.GetRunTimeType()).GetConstructor(new Type[0]));
             foreach(var z in values.expressions)
             {
-                z.Generate(generator);
+                z.Generate(generator, st);
                 //I heard you liked long lines
                 //generator.Emit(OpCodes.Newobj, typeof(FArray<>).MakeGenericType(z.ValueType.GetRunTimeType()).GetConstructor(new Type[]{typeof(FArray<>).MakeGenericType(z.ValueType.GetRunTimeType()), z.ValueType.GetRunTimeType()}));
                 Type t = z.ValueType.GetRunTimeType();

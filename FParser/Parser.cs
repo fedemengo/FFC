@@ -13,6 +13,7 @@ using System.Text;
 using QUT.Gppg;
 using FFC.FAST;
 using FFC.FLexer;
+using FFC.FGen;
 
 namespace FFC.FParser
 {

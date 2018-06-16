@@ -4,6 +4,7 @@ using FFC.FParser;
 using System.Reflection.Emit;
 using System.Reflection;
 using FFC.FRunTime;
+using FFC.FGen;
 
 namespace FFC.FAST
 {
@@ -26,20 +27,20 @@ namespace FFC.FAST
             body.Print(tabs + 1);
         }
 
-        public override void Generate(ILGenerator generator)
+        public override void Generate(ILGenerator generator, SymbolTable st)
         {
             Label loopCondition = generator.DefineLabel();
             Label exitLabel = generator.DefineLabel();
             generator.MarkLabel(loopCondition);
-            header.Generate(generator, exitLabel);
-            body.Generate(generator, loopCondition, exitLabel);
+            header.Generate(generator, exitLabel, st);
+            body.Generate(generator, loopCondition, exitLabel, st);
             generator.Emit(OpCodes.Br, loopCondition);
             generator.MarkLabel(exitLabel);
         }
     }
     abstract class FLoopHeader : FASTNode
     {
-        public virtual void Generate(ILGenerator generator, Label label)
+        public virtual void Generate(ILGenerator generator, Label nextLabel, SymbolTable st)
         {
             throw new NotImplementedException($"{Span} - Generation not implemented for {GetType().Name}");
         }
@@ -79,13 +80,13 @@ namespace FFC.FAST
             condition.Print(tabs + 1);
         }
 
-        public override void Generate(ILGenerator generator, Label exitLabel)
+        public override void Generate(ILGenerator generator, Label exitLabel, SymbolTable st)
         {
             if(condition.ValueType.GetRunTimeType() != typeof(FBoolean))
             {
                 throw new NotImplementedException($"{Span} - Can't use conditional with {condition.ValueType}");
             }
-            condition.Generate(generator);
+            condition.Generate(generator, st);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
             generator.Emit(OpCodes.Brfalse, exitLabel);
         }

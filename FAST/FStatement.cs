@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection.Emit;
 using FFC.FParser;
 using FFC.FRunTime;
+using FFC.FGen;
 
 namespace FFC.FAST
 {
@@ -45,18 +46,18 @@ namespace FFC.FAST
             foreach(FStatement fs in statements)
                 fs.Print(tabs + 1);
         }
-        public override void Generate(ILGenerator generator)
+        public override void Generate(ILGenerator generator, SymbolTable st)
         {
             foreach(FStatement stm in statements)
-                stm.Generate(generator);
+                stm.Generate(generator, st);
         }
-        public void Generate(ILGenerator generator, Label conditionLabel, Label exitLabel)
+        public void Generate(ILGenerator generator, Label conditionLabel, Label exitLabel, SymbolTable st)
         {
             foreach(FStatement stm in statements)
             {
                 if(stm is BreakStatement) (stm as BreakStatement).Generate(generator, exitLabel);
                 else if (stm is ContinueStatement) (stm as ContinueStatement).Generate(generator, conditionLabel);
-                else stm.Generate(generator);
+                else stm.Generate(generator, st);
             }
         }
     }
@@ -131,9 +132,9 @@ namespace FFC.FAST
             expr.Print(tabs + 1);
         }
 
-        public override void Generate(ILGenerator generator)
+        public override void Generate(ILGenerator generator, SymbolTable st)
         {
-            expr.Generate(generator);
+            expr.Generate(generator, st);
         }
     }
     class DeclarationStatementList : FASTNode
@@ -151,11 +152,11 @@ namespace FFC.FAST
             foreach(DeclarationStatement stm in statements)
                 stm.Print(tabs + 1);
         }
-        public override void Generate(ILGenerator generator)
+        public override void Generate(ILGenerator generator, SymbolTable st)
         {
             foreach(var stm in statements)
             {
-                stm.Generate(generator);
+                stm.Generate(generator, st);
             }
         }
         public void Add(DeclarationStatement stm)
@@ -187,24 +188,24 @@ namespace FFC.FAST
             ifFalse.Print(tabs + 1);
         }
 
-        public override void Generate(ILGenerator generator)
+        public override void Generate(ILGenerator generator, SymbolTable st)
         {
             if(condition.ValueType.GetRunTimeType() != typeof(FBoolean))
             {
                 throw new NotImplementedException($"{Span} - Can't use conditional with {condition.ValueType}");
             }
-            condition.Generate(generator);
+            condition.Generate(generator, st);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
             
             Label falseBranch = generator.DefineLabel();
             Label exitBranch = generator.DefineLabel();
 
             generator.Emit(OpCodes.Brfalse, falseBranch);
-            ifTrue.Generate(generator);
+            ifTrue.Generate(generator, st);
             generator.Emit(OpCodes.Br, exitBranch);
             generator.MarkLabel(falseBranch);
-            elseIfs.Generate(generator, exitBranch);
-            ifFalse.Generate(generator);
+            elseIfs.Generate(generator, exitBranch, st);
+            ifFalse.Generate(generator, st);
             generator.MarkLabel(exitBranch);
         }
     }
@@ -236,10 +237,10 @@ namespace FFC.FAST
             list = new List<ElseIfStatement>{start};
         }
 
-        public void Generate(ILGenerator generator, Label exitBranch)
+        public void Generate(ILGenerator generator, Label exitBranch, SymbolTable st)
         {
             foreach(ElseIfStatement elif in list)
-                elif.Generate(generator, exitBranch);
+                elif.Generate(generator, exitBranch, st);
         }
     }
 
@@ -262,18 +263,18 @@ namespace FFC.FAST
             ifTrue.Print(tabs + 1);
         }
 
-        public void Generate(ILGenerator generator, Label exitBranch)
+        public void Generate(ILGenerator generator, Label exitBranch, SymbolTable st)
         {
             if(condition.ValueType.GetRunTimeType() != typeof(FBoolean))
             {
                 throw new NotImplementedException($"{Span} - Can't use conditional with {condition.ValueType}");
             }
-            condition.Generate(generator);
+            condition.Generate(generator, st);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
             Label falseBranch = generator.DefineLabel();
 
             generator.Emit(OpCodes.Brfalse, falseBranch);
-            ifTrue.Generate(generator);
+            ifTrue.Generate(generator, st);
             generator.Emit(OpCodes.Br, exitBranch);
             generator.MarkLabel(falseBranch);
         }
@@ -298,9 +299,9 @@ namespace FFC.FAST
             if(value != null)
                 value.Print(tabs + 1);
         }
-        public override void Generate(ILGenerator generator)
+        public override void Generate(ILGenerator generator, SymbolTable st)
         {
-            if(value != null) value.Generate(generator);
+            if(value != null) value.Generate(generator, st);
             generator.Emit(OpCodes.Ret);
         }
     }
@@ -355,10 +356,10 @@ namespace FFC.FAST
             toPrint.Print(tabs + 1);
         }
 
-        public override void Generate(ILGenerator generator)
+        public override void Generate(ILGenerator generator, SymbolTable st)
         {
             foreach(FExpression expr in toPrint.expressions){
-                expr.EmitPrint(generator);
+                expr.EmitPrint(generator, st);
                 //scrive uno spazio come separatore
                 generator.Emit(OpCodes.Ldstr, " ");
                 generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{typeof(string)}));

@@ -1,3 +1,8 @@
+using System.Reflection.Emit;
+using System.Reflection;
+using FFC.FGen;
+
+
 namespace FFC.FAST
 {
     abstract class FASTNode : FParser.TValue
@@ -12,7 +17,7 @@ namespace FFC.FAST
                 System.Console.Write("  ");
         }
 
-        public virtual void Generate(System.Reflection.Emit.ILGenerator generator)
+        public virtual void Generate(ILGenerator generator, SymbolTable st)
         {
             throw new System.NotImplementedException(this.Span + " Code generation not implemented (" + this.GetType().Name + ")");
         }

@@ -4,6 +4,7 @@ using FFC.FParser;
 using FFC.FRunTime;
 using System.Reflection.Emit;
 using System.Reflection;
+using FFC.FGen;
 
 namespace FFC.FAST
 {
@@ -35,21 +36,21 @@ namespace FFC.FAST
             else
                 throw new NotImplementedException($"{Span} - Different type in conditional expression");
         }
-        public override void Generate(System.Reflection.Emit.ILGenerator generator)
+        public override void Generate(ILGenerator generator, SymbolTable st)
         {
             if(condition.ValueType.GetRunTimeType() != typeof(FBoolean))
             {
                 throw new NotImplementedException($"{Span} - Can't use conditional with {condition.ValueType}");
             }
-            condition.Generate(generator);
+            condition.Generate(generator, st);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
             Label falseBranch = generator.DefineLabel();
             Label exitBranch = generator.DefineLabel();
             generator.Emit(OpCodes.Brfalse, falseBranch);
-            ifTrue.Generate(generator);
+            ifTrue.Generate(generator, st);
             generator.Emit(OpCodes.Br, exitBranch);
             generator.MarkLabel(falseBranch);
-            ifFalse.Generate(generator);
+            ifFalse.Generate(generator, st);
             generator.MarkLabel(exitBranch);
         }
     }

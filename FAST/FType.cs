@@ -3,6 +3,7 @@ using System;
 using System.Reflection.Emit;
 using FFC.FParser;
 using FFC.FRunTime;
+using FFC.FGen;
 
 namespace FFC.FAST
 {
