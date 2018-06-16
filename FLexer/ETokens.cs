@@ -1,5 +1,4 @@
 using System;
-using FFC.FGen;
 
 namespace FFC.FLexer
 {

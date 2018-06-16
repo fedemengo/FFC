@@ -1,11 +1,11 @@
 perform_task() {
     arg=1
-    [[ ( "$1" =~ ^"compile"$|^"run"$|^"crun"$ ) ]] && arg=2
+    [[ "$1" =~ ^"compile"$|^"run"$|^"crun"$ ]] && arg=2
     
-    if [[ ( "$#" -lt "$arg" ) ]]; then
+    if [[ "$#" -lt "$arg" ]]; then
         echo "Too few argument"
         return 1
-    elif [[ ( "$#" -gt "$arg" ) ]]; then 
+    elif [[ "$#" -gt "$arg" ]]; then 
         echo "Too many arguments"
         return 1
     fi
@@ -17,6 +17,7 @@ perform_task() {
         echo "lib - Generate FFC.dll"
         echo "compile FILE - Compile the source FILE"
         echo "run EXE - Run the executable EXEC"
+		echo "crun FILE - Compile and run the source FILE"
         echo "clear - Remove all .exe files"
         ;;
     "build")
@@ -57,21 +58,19 @@ perform_task() {
         echo ""
         # generate original parser
         mono FParser/gppg/gppg.exe FParser/gppg/grammar.y > FParser/Parser.cs
-        
         echo "Cleaning up..."
-        PATT1="internal enum Etokens {"
-        PATT2=".*[a-zA-Z_]*=[0-9]*,.*"
-        PATT3=".*[a-zA-Z_]*=[0-9]*};.*"
+        PATT1=".*[a-zA-Z_]*=[0-9]*,.*"
+        PATT2=".*[a-zA-Z_]*=[0-9]*};.*"
         # Refactors error to ERROR
         sed -i '' -e 's/error/ERROR/' FParser/Parser.cs 2>/dev/null
         # generate ETokens
         echo $'using System;\n\nnamespace FFC.FLexer\n{' > FLexer/ETokens.cs
         # matches the tokens and prints them
-        awk '/(internal enum Etokens {)|([a-zA-Z_]*=[0-9]*,)|([a-zA-Z_]*=[0-9]*\};)/{print $0}' FParser/Parser.cs >> FLexer/ETokens.cs
+        awk -v pattern="(${PATT1})|(${PATT2})" '$0~pattern {print}' FParser/Parser.cs >> FLexer/ETokens.cs
         # finishes the file
         echo "}" >> FLexer/ETokens.cs
         # remove tokens Parser.cs
-        sed -i '' -e "6,8d;10,11d;/\(\($PATT1\)\)/d;/\(\($PATT2\)\)/d;/\($PATT3\)/d" FParser/Parser.cs 2>/dev/null
+        sed -i '' -e "6,8d;10,11d;/\(\($PATT1\)\)/d;/\($PATT2\)/d" FParser/Parser.cs 2>/dev/null
         echo ""
         ;;
     *)

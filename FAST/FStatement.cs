@@ -151,9 +151,9 @@ namespace FFC.FAST
         public void Generate(ILGenerator generator, ref SymbolTable st)
         {
             FType t = expr.GetValueType(st);
-            if(type != null && type != t) throw new NotImplementedException($"{Span} - Type doesn't match declaration");
-            type = t;
-            LocalBuilder var = generator.DeclareLocal(type.GetRunTimeType());
+            if(type != null && type.GetType() != t.GetType())
+                throw new NotImplementedException($"{Span} - Type doesn't match declaration");
+            LocalBuilder var = generator.DeclareLocal(t.GetRunTimeType());
             st = (SymbolTable) st.Assign(id.name, new Data(var, t));
             expr.Generate(generator, st);
             generator.Emit(OpCodes.Stloc, var);
