@@ -1,3 +1,5 @@
+using System;
+
 namespace FFC.FRunTime
 {
     public class FReal : FRTType
@@ -22,5 +24,9 @@ namespace FFC.FRunTime
 
         public static FReal operator-(FReal r1) => new FReal(- r1.Value);
         public override string ToString() => Value.ToString();
+
+        //Refer to FInteger Read function
+        public static FReal Read() => new FReal(double.Parse(Console.ReadLine()));          
+
     }
 }

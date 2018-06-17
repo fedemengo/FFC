@@ -176,4 +176,27 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Call, expr.GetValueType(st).GetRunTimeType().GetMethod("op_LogicalNot", new Type[]{expr.GetValueType(st).GetRunTimeType()}));
         }
     }
+
+    class ReadExpression : FExpression
+    {
+        public FType type;
+        public ReadExpression(FType type)
+        {
+            if(type == null) throw new NotImplementedException($"{Span} - Can't use read keyword without specifying type");
+            if(type.GetRunTimeType().GetMethod("Read") == null) throw new NotImplementedException($"{Span} - Read does not support {type}");
+            this.type = type;
+        }
+        public override void Print(int tabs)
+        {
+            PrintTabs(tabs);
+            Console.WriteLine($"Read Expression");
+            type.Print(tabs + 1);
+        }
+        public override void Generate(ILGenerator generator, SymbolTable st)
+        {
+            //Idea is to use runtime function Read(), so that everything depends on library implementation of types
+            generator.Emit(OpCodes.Call, type.GetRunTimeType().GetMethod("Read"));
+        }
+        public override void BuildType(SymbolTable st) => valueType = type;
+    }
 }

@@ -40,15 +40,11 @@ dec_list
 declaration
 	: identifier opt_type IS math_expr SEMICOLON			{ $$ = new DeclarationStatement((Identifier)$1, (FType)$2, (FExpression)$4, new TextSpan($1.Span, $5.Span)); }
 	| identifier opt_type IS func_def						{ $$ = new DeclarationStatement((Identifier)$1, (FType)$2, (FExpression)$4, new TextSpan($1.Span, $4.Span)); }
+	| identifier opt_type IS READ SEMICOLON					{ $$ = new DeclarationStatement((Identifier)$1, (FType)$2, new ReadExpression((FType)$2), new TextSpan($1.Span, $5.Span)); }
 	;
 
 identifier
 	: ID													{ $$ = new Identifier(((TokenValue)$1)[0].ToString(), new TextSpan($1.Span)); }
-	;
-
-id_list
-	: identifier											{ $$ = new IdentifierList((Identifier) $1, $1.Span); }
-	| id_list COMMA identifier								{ ((IdentifierList) $1).Add((Identifier) $3); $1.Span = $1.Span.MergeTo($3.Span); $$ = $1; }
 	;
 
 opt_type
@@ -161,7 +157,6 @@ nif_stm
 	| break_stm												{ $$ = $1; }
 	| cont_stm												{ $$ = $1; }
 	| print_stm												{ $$ = $1; }
-	| read_stm												{ $$ = $1; }
 	;
 
 statement
@@ -233,10 +228,6 @@ cont_stm
 
 print_stm
 	: PRINT opt_exprs SEMICOLON								{ $$ = new PrintStatement((ExpressionList)$2, new TextSpan($1.Span, $3.Span)); }
-	;
-
-read_stm
-	: READ id_list SEMICOLON								{ $$ = new ReadStatement((IdentifierList )$2, new TextSpan($1.Span, $3.Span)); }
 	;
 
 array_def

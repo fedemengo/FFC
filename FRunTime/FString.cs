@@ -15,5 +15,8 @@ namespace FFC.FRunTime
         {
             return Text;
         }
+        //Refer to FInteger Read function
+        public static FString Read() => new FString(Console.ReadLine());          
+
     }
 }

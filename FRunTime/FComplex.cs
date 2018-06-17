@@ -42,5 +42,15 @@ namespace FFC.FRunTime
         public static FComplex operator -(FComplex c1) => new FComplex(-c1.Real, c1.Imaginary);
 
         public override string ToString() => Real.ToString() + "i" + Imaginary.ToString();
+        
+        //Refer to FInteger Read function
+        //I no longer like that we need to have REAL i REAL, I think we should also support INT i INT
+        public static FComplex Read()
+        {
+            string l = Console.ReadLine();
+            var p = l.Split('i');
+            if(p.Length != 2) throw new Exception();
+            return new FComplex(double.Parse(p[0]), double.Parse(p[1]));
+        }
     }
 }

@@ -403,22 +403,4 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("WriteLine", new Type[0]));
         }
     }
-
-    class ReadStatement : FStatement
-    {
-        public IdentifierList ids;
-
-        public ReadStatement(IdentifierList ids, TextSpan span)
-        {
-            this.Span = span;
-            this.ids = ids;
-        }
-
-        public override void Print(int tabs)
-        {
-            PrintTabs(tabs);
-            Console.WriteLine("Read statement");
-            ids.Print(tabs + 1);
-        }
-    }
 }

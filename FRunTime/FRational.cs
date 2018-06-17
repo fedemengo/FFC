@@ -1,3 +1,5 @@
+using System;
+
 namespace FFC.FRunTime
 {
     public class FRational : FRTType
@@ -58,5 +60,14 @@ namespace FFC.FRunTime
         public static FRational operator-(FRational r1) => new FRational(-r1.Numerator, r1.Denominator);
 
         public override string ToString() => Numerator.ToString() + "/" + Denominator.ToString();
+        
+        //Refer to FInteger Read function
+        public static FRational Read()
+        {
+            string l = Console.ReadLine();
+            var p = l.Split('\\');
+            if(p.Length != 2) throw new Exception();
+            return new FRational(int.Parse(p[0]), int.Parse(p[1]));
+        }
     }
 }
