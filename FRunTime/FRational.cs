@@ -45,7 +45,7 @@ namespace FFC.FRunTime
             //not fancy written but avoids overflow as much as possible
             int gcd1 = GCD(r1.Numerator, r2.Denominator);
             int gcd2 = GCD(r1.Denominator, r2.Numerator);
-            return new FRational(r1.Numerator / gcd1 * (r2.Numerator / gcd2), r1.Denominator / gcd2 * (r2.Numerator / gcd1));
+            return new FRational(r1.Numerator / gcd1 * (r2.Numerator / gcd2), r1.Denominator / gcd2 * (r2.Denominator / gcd1));
         }
 
         public static FRational operator /(FRational r1, FRational r2) => r1 * Inverse(r2);
