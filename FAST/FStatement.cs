@@ -109,7 +109,7 @@ namespace FFC.FAST
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
-            Console.WriteLine("Asssignement statement");
+            Console.WriteLine("Assignement statement");
             left.Print(tabs + 1);
             right.Print(tabs + 1);
         }
@@ -123,6 +123,19 @@ namespace FFC.FAST
                 if(right.GetValueType(st).GetRunTimeType() != y.Type.GetRunTimeType()) throw new NotImplementedException($"{Span} - Can't assign type {right.GetValueType(st).GetRunTimeType()} to variable of type {x.GetValueType(st).GetRunTimeType()}"); 
                 right.Generate(generator, st);
                 generator.Emit(OpCodes.Stloc, y.LocBuilder);
+            }
+            else if(left is IndexedAccess)
+            {
+                IndexedAccess x = left as IndexedAccess;
+                x.container.Generate(generator, st);
+                x.index.Generate(generator, st);
+                //generate expression to load
+                right.Generate(generator, st);
+                //ckeck types - currently too sleepy!
+                if(x.index is SquaresIndexer)
+                    generator.Emit(OpCodes.Callvirt, x.container.GetValueType(st).GetRunTimeType().GetMethod("set_Item", new Type[]{x.index.GetValueType(st).GetRunTimeType(), right.GetValueType(st).GetRunTimeType()}));
+                else
+                    throw new NotImplementedException($"{Span} - Generation not supported for {x.index.GetType().Name}");
             }
             else throw new NotImplementedException($"{Span} - Assignments to {left.GetType().Name} are not implemented");
         }

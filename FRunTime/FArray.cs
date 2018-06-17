@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using FFC.FGen;
 
 namespace FFC.FRunTime
 {
@@ -28,6 +27,12 @@ namespace FFC.FRunTime
         }
         public static FArray<V> operator+(FArray<V> a1, FArray<V> a2) => new FArray<V>(a1, a2);
         public static FArray<V> operator+(FArray<V> a, V v) => new FArray<V>(a, v);
+       
+        public V this[FInteger i]
+        {
+            get => Values[i.Value];
+            set => Values[i.Value] = value;
+        }
         
         public override string ToString()
         {

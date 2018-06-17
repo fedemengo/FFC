@@ -46,7 +46,8 @@ A compiler for the F language (and it's definition)
 	- [x] Arrays
 		- [ ] Empty arrays
 		- [x] Concatenation
-		- [ ] Indexed access
+		- [x] Indexed access
+		- [ ] Type checking in indexed access !!!
 	- [x] Strings
 		* Same operators as arrays ?
 	- [ ] Maps
