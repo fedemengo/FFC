@@ -5,20 +5,26 @@ A compiler for the F language (and it's definition)
 
 * Update note section
 * Load external library from another folder
+* Investigate complex number read behaviour
+	* Shall we accept INT i INT as complex?
+* Improve Read() run time function
+	* consider Buffer approach
+	* more precise "type checking"
+	* consider reading advanced types (arrays, tuples, maps)
+* Add warning when declaring variables overriding an existing name
 
 * Lexical analysis
 	* Think if more `\`-escaped character are needed (currently support `\n`, `\t`, `\\`, `\"`)
 	* Think about `\n` instead of `;` for SEMICOLON tokens
 	* Add Lexer support for -2^31
 	* Handling error token
-	* Add `read` keyword
 
 * Parsing
-	* Add `READ` token to declaration statements rules
-	* Maybe even to assignements ?
+	* Nothing - except if we decide to think that we should READ assignements or other stuff too
 
 * Code generation
 	* Fix SymbolTable class so that (type casting) is not needed
+	* Check how we deal with types in declaration / indexed access
 
 ## Progress
 
@@ -34,8 +40,8 @@ A compiler for the F language (and it's definition)
 
 - [ ] Code generation (while creating mappings)
 	- [x] Expressions
-	- [x] Output
-	- [ ] Input
+	- [x] Print
+	- [x] Read
 	- [x] Symbols lookup
 		- [x] Nested scopes
 	- [x] Declarations
