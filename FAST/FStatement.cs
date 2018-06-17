@@ -167,7 +167,7 @@ namespace FFC.FAST
             if(type != null && type.GetType() != t.GetType())
                 throw new NotImplementedException($"{Span} - Type doesn't match declaration");
             LocalBuilder var = generator.DeclareLocal(t.GetRunTimeType());
-            st = (SymbolTable) st.Assign(id.name, new Data(var, t));
+            st = st.Assign(id.name, new NameInfo(var, t));
             expr.Generate(generator, st);
             generator.Emit(OpCodes.Stloc, var);
         }

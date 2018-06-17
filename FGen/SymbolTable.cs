@@ -6,17 +6,6 @@ using FFC.FAST;
 
 namespace FFC.FGen
 {
-    public class Data
-    {
-        public LocalBuilder LocBuilder {get; set;}
-        public FType Type {get; set;}
-        public Data(LocalBuilder locBuilder, FType type)
-        {
-            this.LocBuilder = locBuilder;
-            this.Type = type;
-        }
-    }
-
     #region  Treap-based implementation of a persistent map/dictionary
     public interface PersistentMap<K, T> where K : IComparable
     {
@@ -31,19 +20,19 @@ namespace FFC.FGen
         void PrintInOrder();
         void PrintPreOrder();
     }
-    public class PersistentTreapMap : SymbolTable
+    public class PersistentTreapMap <K, T> : PersistentMap<K, T> where K : IComparable
     {
         static Random rnd = new Random();
 
         internal class TreapNode
         {
-            public string key;
-            public Data value;
+            public K key;
+            public T value;
             public UInt32 size;
             public Byte height;
             public TreapNode left, right;
             //instead of using an update function, we use a constructor each time
-            public TreapNode(string key, Data value)
+            public TreapNode(K key, T value)
             {
                 size = height = 1;
                 left = right = null;
@@ -92,7 +81,7 @@ namespace FFC.FGen
                     return new TreapNode(other, l, other.right);
                 }
             }
-            public TreapNode[] Split(string k)
+            public TreapNode[] Split(K k)
             {
                 int res = this.key.CompareTo(k);
                 TreapNode[] ans = new TreapNode[]{null, null};
@@ -119,14 +108,14 @@ namespace FFC.FGen
                 }
                 return ans;
             }
-            public TreapNode Find(string k)
+            public TreapNode Find(K k)
             {
                 int b = k.CompareTo(key);
                 if(b == 0) return this;
                 if(b < 0) return left != null ? left.Find(k) : null;
                 else return right != null ? right.Find(k) : null;
             }
-            public TreapNode Change(string key, Data value)
+            public TreapNode Change(K key, T value)
             {
                 int b = key.CompareTo(this.key);
                 if(b == 0){
@@ -142,7 +131,7 @@ namespace FFC.FGen
                 var y = this.Split(other.key);
                 return (y[0] != null ? y[0].Merge(other) : other).Merge(y[1]);
             }
-            public TreapNode Remove(string key)
+            public TreapNode Remove(K key)
             {
                 int b = key.CompareTo(this.key);
                 if(b == 0)
@@ -178,7 +167,7 @@ namespace FFC.FGen
                 if(b < 0) return left.GetKth(k);
                 else return right.GetKth(k - pos - 1);
             }
-            internal TreapNode ChangeKth(uint k, Data value)
+            internal TreapNode ChangeKth(uint k, T value)
             {
                 uint pos = left != null ? left.size : 0;
                 int b = k.CompareTo(pos);
@@ -197,35 +186,35 @@ namespace FFC.FGen
 
         public uint Height => (uint) (root == null ? 0 : root.height);
 
-        public PersistentMap<string, Data> Assign(string key, Data value)
+        public PersistentMap<K, T> Assign(K key, T value)
         {
             if(root == null)
             {
-                return new PersistentTreapMap(new TreapNode(key, value));
+                return new PersistentTreapMap<K, T>(new TreapNode(key, value));
             }
             TreapNode y = root.Find(key);
-            if(y == null) return new PersistentTreapMap(root.Insert(new TreapNode(key, value)));
-            return new PersistentTreapMap(root.Change(key, value));
+            if(y == null) return new PersistentTreapMap<K, T>(root.Insert(new TreapNode(key, value)));
+            return new PersistentTreapMap<K, T>(root.Change(key, value));
         }
 
-        public PersistentMap<string, Data> ChangeKth(uint pos, Data value)
+        public PersistentMap<K, T> ChangeKth(uint pos, T value)
         {
-            return new PersistentTreapMap(root.ChangeKth(pos, value));
+            return new PersistentTreapMap<K, T>(root.ChangeKth(pos, value));
         }
 
-        public bool Contains(string key)
+        public bool Contains(K key)
         {
             return (root != null) ? root.Find(key) != null : false;
         }
 
-        public Data Find(string key)
+        public T Find(K key)
         {
-            if(root == null) return default(Data);
+            if(root == null) return default(T);
             var y = root.Find(key);
-            return y == null ? default(Data) : y.value;
+            return y == null ? default(T) : y.value;
         }
 
-        public Data GetKth(uint k)
+        public T GetKth(uint k)
         {
             if(k < 0 || k >= Size) throw new IndexOutOfRangeException();
             return root.GetKth(k).value;
@@ -243,10 +232,10 @@ namespace FFC.FGen
             Console.WriteLine();
         }
 
-        public PersistentMap<string, Data> Remove(string key)
+        public PersistentMap<K, T> Remove(K key)
         {
-            if(!Contains(key)) return new PersistentTreapMap(root);
-            return new PersistentTreapMap(root.Remove(key));
+            if(!Contains(key)) return new PersistentTreapMap<K,T>(root);
+            return new PersistentTreapMap<K, T>(root.Remove(key));
         }
 
         private PersistentTreapMap(TreapNode root)
@@ -258,12 +247,40 @@ namespace FFC.FGen
 
         }
     }
-    #endregion    
-
-    //This class implements PersistentMap interface and is internally represented with a Treap.
-    //It will associate a Data to each variable name.
-    //Shall it support FieldBuilder instead? 
-    public interface SymbolTable : PersistentMap<string, Data>
+    #endregion 
+    //This is just a name proposal, feel free to change / revert back to Data
+    public class NameInfo
     {
+        public LocalBuilder LocBuilder {get; set;}
+        public FType Type {get; set;}
+        public NameInfo(LocalBuilder locBuilder, FType type)
+        {
+            this.LocBuilder = locBuilder;
+            this.Type = type;
+        }
+    }   
+
+    //Using a class wrapper approach (it's an actual pattern!)
+    //instead of inheritence, the use is easier although more code is required
+    public class SymbolTable
+    {
+        private PersistentMap<string, NameInfo> map;
+        public SymbolTable() => map = new PersistentTreapMap<string, NameInfo>();
+
+        public SymbolTable(PersistentMap<string, NameInfo> map) => this.map = map;
+        public SymbolTable Assign(string name, NameInfo info) => new SymbolTable(map.Assign(name, info));
+        public NameInfo Find(string name) => map.Find(name);
+        public bool Contains(string name) => map.Contains(name);
+        
+        //Not used, but makes me feel sad to get rid of them :(
+        public SymbolTable Remove(string name) => new SymbolTable(map.Remove(name));
+        public NameInfo GetKth(uint pos) => map.GetKth(pos);
+        public SymbolTable ChangeKth(uint pos, NameInfo info) => new SymbolTable(map.ChangeKth(pos, info));
+        public UInt32 Size => map.Size;
+        public UInt32 Height => map.Size;
+        public void PrintInOrder() => map.PrintInOrder();
+        public void PrintPreOrder() => map.PrintPreOrder();
+
+        
     }
 }

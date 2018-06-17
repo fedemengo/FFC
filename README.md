@@ -5,12 +5,13 @@ A compiler for the F language (and it's definition)
 
 * Update note section
 * Load external library from another folder
-* Investigate complex number read behaviour
-	* Shall we accept INT i INT as complex?
+* Shall we accept INT i INT as complex?
+	* sfilippo(s)'s 0.02$ : "we should, but also in Lexer to keep it consistent"
 * Improve Read() run time function
 	* consider Buffer approach
 	* more precise "type checking"
 	* consider reading advanced types (arrays, tuples, maps)
+	* Allow `\`-escaped characters in string read ?
 * Add warning when declaring variables overriding an existing name
 
 * Lexical analysis
@@ -18,12 +19,12 @@ A compiler for the F language (and it's definition)
 	* Think about `\n` instead of `;` for SEMICOLON tokens
 	* Add Lexer support for -2^31
 	* Handling error token
+	* Fix Ellipsis so that they work without a blank before
 
 * Parsing
 	* Nothing - except if we decide to think that we should READ assignements or other stuff too
 
 * Code generation
-	* Fix SymbolTable class so that (type casting) is not needed
 	* Check how we deal with types in declaration / indexed access
 
 ## Progress
