@@ -2,7 +2,7 @@ namespace FFC.FRunTime
 {
     public interface FIterable<T>  where T : FRTType
     {
-        FIterator<T> getIterator();
+        FIterator<T> GetIterator();
     }
     public interface FIterator<T> where T : FRTType
     {
