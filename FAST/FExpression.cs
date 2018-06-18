@@ -30,7 +30,7 @@ namespace FFC.FAST
         }
         public virtual void BuildType(SymbolTable st)
         {
-            throw new NotImplementedException($"{Span} - BuildType not impleented for {this.GetType().Name}");
+            throw new NotImplementedException($"{Span} - BuildType not implemented for {this.GetType().Name}");
         }
     }
     class ExpressionList : FASTNode
