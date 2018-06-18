@@ -1,6 +1,6 @@
 main is func() do
-    a: integer is 0;
-    for a in a..3 loop
-        print a;
+    a :integer is read;
+    for i in 1..a loop
+        print i;
     end
 end

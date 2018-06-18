@@ -53,18 +53,21 @@ A compiler for the F language (and it's definition)
 		- [ ] Empty arrays
 		- [x] Concatenation
 		- [x] Indexed access
+		- [ ] Iterator
 	- [x] Strings
 		* Same operators as arrays ?
 	- [ ] Maps
 	- [ ] Tuples
 	- [x] Conditional expressions
 	- [x] Conditional statements
-	- [ ] Loop statements
+	- [x] Loop statements
 		- [x] While loops
-		- [ ] For loops
-	- [ ] Ellipsis
+		- [x] For loops
+		- [ ] Just loop ?
+	- [x] Ellipsis
 	- [ ] Functions
 		- [ ] Nested functions
+
 
 - [ ] Debugging and Testing
 	- [ ] Lexer error handling support

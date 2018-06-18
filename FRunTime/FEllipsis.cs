@@ -1,3 +1,4 @@
+using System;
 namespace FFC.FRunTime
 {
     public class FEllipsis : FRTType, FIterable<FInteger>
@@ -29,7 +30,10 @@ namespace FFC.FRunTime
                 return true;
             }
             //Make a new one so that modifying the returned value won't affect the iterator
-            public FInteger GetCurrent() => new FInteger(current);
+            public FInteger GetCurrent()
+            {
+                return new FInteger(current);
+            }
         }
         public FIterator<FInteger> GetIterator()
         {

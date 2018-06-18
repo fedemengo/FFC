@@ -33,8 +33,8 @@ namespace FFC.FAST
         {
             Label loopCondition = generator.DefineLabel();
             Label exitLabel = generator.DefineLabel();
-            generator.MarkLabel(loopCondition);
-            header.Generate(generator, exitLabel, st);
+            //loop condition is generated inside FLoopHeader
+            header.Generate(generator, loopCondition, exitLabel, ref st);
             body.Generate(generator, loopCondition, exitLabel, st);
             generator.Emit(OpCodes.Br, loopCondition);
             generator.MarkLabel(exitLabel);
@@ -42,7 +42,8 @@ namespace FFC.FAST
     }
     abstract class FLoopHeader : FASTNode
     {
-        public virtual void Generate(ILGenerator generator, Label nextLabel, SymbolTable st)
+        //A loop header has to jump to exitLabel if false, and has to Mark condLabel
+        public virtual void Generate(ILGenerator generator, Label condLabel, Label exitLabel, ref SymbolTable st)
         {
             throw new NotImplementedException($"{Span} - Generation not implemented for {GetType().Name}");
         }
@@ -66,7 +67,7 @@ namespace FFC.FAST
             collection.Print(tabs + 1);
         }
 
-        public override void Generate(ILGenerator generator, Label exitLabel, SymbolTable st)
+        public override void Generate(ILGenerator generator, Label condLabel, Label exitLabel, ref SymbolTable st)
         {
             // Generate iterator
             FType collType = collection.GetValueType(st);
@@ -80,13 +81,31 @@ namespace FFC.FAST
                 throw new NotImplementedException($"{Span} - {collType.GetRunTimeType().Name} is not FIterable {iterableType.type.GetRunTimeType().Name}");
             generator.Emit(OpCodes.Callvirt, collType.GetRunTimeType().GetMethod("GetIterator"));
             
-            // Save iterator
+            // Create lb for iterator
             LocalBuilder it = generator.DeclareLocal(typeof(FIterator<>).MakeGenericType(collValueRTType));
             generator.Emit(OpCodes.Stloc, it);
-            Label condition = generator.DefineLabel();
-            generator.MarkLabel(condition);
+            // If header has id, loads it
+            if(id != null)
+            {
+                //assign new Local to id in SymbolTable 
+                st = st.Assign(id.name, new NameInfo(generator.DeclareLocal(collValueRTType), iterableType.type));
+            }
 
-            
+            // Advance iterator
+            generator.MarkLabel(condLabel); // Has to repeat from here
+            generator.Emit(OpCodes.Ldloc, it);
+            generator.Emit(OpCodes.Callvirt, typeof(FIterator<>).MakeGenericType(collValueRTType).GetMethod("MoveNext"));
+            //If false (reached it end) exit from loop
+            generator.Emit(OpCodes.Brfalse, exitLabel);
+            //if id was set, updates it
+            if(id != null)
+            {
+                generator.Emit(OpCodes.Ldloc, it);
+                //get value
+                generator.Emit(OpCodes.Callvirt, typeof(FIterator<>).MakeGenericType(collValueRTType).GetMethod("GetCurrent"));
+                //assign it to "iterating" variable
+                generator.Emit(OpCodes.Stloc, st.Find(id.name).LocBuilder);
+            }
         }
     }
     class WhileHeader : FLoopHeader
@@ -105,12 +124,11 @@ namespace FFC.FAST
             condition.Print(tabs + 1);
         }
 
-        public override void Generate(ILGenerator generator, Label exitLabel, SymbolTable st)
+        public override void Generate(ILGenerator generator, Label condLabel, Label exitLabel, ref SymbolTable st)
         {
+            generator.MarkLabel(condLabel); //While repeats from condition check
             if(condition.GetValueType(st).GetRunTimeType() != typeof(FBoolean))
-            {
                 throw new NotImplementedException($"{Span} - Can't use conditional with {condition.GetValueType(st)}");
-            }
             condition.Generate(generator, st);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
             generator.Emit(OpCodes.Brfalse, exitLabel);
