@@ -1,8 +1,10 @@
-using System.Collections.Generic;
 using System;
-using FFC.FParser;
+using System.Linq;
+using System.Collections.Generic;
 using System.Reflection.Emit;
 using System.Reflection;
+
+using FFC.FParser;
 using FFC.FRunTime;
 using FFC.FGen;
 
@@ -62,6 +64,29 @@ namespace FFC.FAST
             Console.WriteLine("For header");
             if(id != null) id.Print(tabs + 1);
             collection.Print(tabs + 1);
+        }
+
+        public override void Generate(ILGenerator generator, Label exitLabel, SymbolTable st)
+        {
+            // Generate iterator
+            FType collType = collection.GetValueType(st);
+            IterableType iterableType = collType as IterableType;
+            Type collValueRTType = iterableType.type.GetRunTimeType();
+            
+            if(iterableType == null)
+                throw new NotImplementedException($"{Span} - Can't iterate on {collType}");
+            collection.Generate(generator, st);
+            if(!collType.GetRunTimeType().GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(FIterable<>)))
+                throw new NotImplementedException($"{Span} - {collType.GetRunTimeType().Name} is not FIterable {iterableType.type.GetRunTimeType().Name}");
+            generator.Emit(OpCodes.Callvirt, collType.GetRunTimeType().GetMethod("GetIterator"));
+            
+            // Save iterator
+            LocalBuilder it = generator.DeclareLocal(typeof(FIterator<>).MakeGenericType(collValueRTType));
+            generator.Emit(OpCodes.Stloc, it);
+            Label condition = generator.DefineLabel();
+            generator.MarkLabel(condition);
+
+            
         }
     }
     class WhileHeader : FLoopHeader
