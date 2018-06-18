@@ -115,12 +115,18 @@ namespace FFC.FAST
         }
         public override void Generate(ILGenerator generator, SymbolTable st)
         {
+            //Empty array assignment
+            if(right is ArrayDefinition && left.GetValueType(st) is ArrayType)
+            {
+                (right as ArrayDefinition).SetEmpty((left.GetValueType(st)));
+            }
             if(left is Identifier)      // get
             {
                 Identifier x = left as Identifier;
                 var y = st.Find(x.name);
                 if(y == null) throw new NotImplementedException($"{Span} - Identifier {(left as Identifier).name} is not declared");
                 if(right.GetValueType(st).GetRunTimeType() != y.Type.GetRunTimeType()) throw new NotImplementedException($"{Span} - Can't assign type {right.GetValueType(st).GetRunTimeType()} to variable of type {x.GetValueType(st).GetRunTimeType()}"); 
+                //Empty array on identifier
                 right.Generate(generator, st);
                 generator.Emit(OpCodes.Stloc, y.LocBuilder);
             }
@@ -128,6 +134,7 @@ namespace FFC.FAST
             {
                 IndexedAccess x = left as IndexedAccess;
                 FType collection = x.container.GetValueType(st);
+                //Empty array on index access to something
                 if(collection is ArrayType && (collection as ArrayType).type.GetRunTimeType() != right.GetValueType(st).GetRunTimeType())
                 {
                     FType element = right.GetValueType(st);
@@ -169,9 +176,20 @@ namespace FFC.FAST
 
         public void Generate(ILGenerator generator, ref SymbolTable st)
         {
-            FType t = expr.GetValueType(st);
-            if(type != null && type.GetType() != t.GetType())
-                throw new NotImplementedException($"{Span} - Type doesn't match declaration");
+            FType t;
+            //Empty array
+            if(expr is ArrayDefinition && (expr as ArrayDefinition).values.expressions.Count == 0)
+            {
+                if(type == null)
+                    throw new NotImplementedException($"{Span} - Can't create empty array without specifying type");
+                t = type;
+                (expr as ArrayDefinition).SetEmpty(t);
+            }
+            else
+                t = expr.GetValueType(st);
+            
+            if(type != null && type.GetRunTimeType() != t.GetRunTimeType())
+                throw new NotImplementedException($"{Span} - Type {t.GetRunTimeType().Name} doesn't match declaration {type.GetRunTimeType().Name}");
             LocalBuilder var = generator.DeclareLocal(t.GetRunTimeType());
             st = st.Assign(id.name, new NameInfo(var, t));
             expr.Generate(generator, st);

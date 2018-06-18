@@ -11,6 +11,10 @@ namespace FFC.FAST
 {
     class ArrayDefinition : FPrimary
     {
+        public void SetEmpty(FType t)
+        {
+            valueType = t;
+        }
         public ExpressionList values;
         public ArrayDefinition(ExpressionList values, TextSpan span = null)
         {
@@ -26,8 +30,7 @@ namespace FFC.FAST
         }
         public override void Generate(ILGenerator generator, SymbolTable st)
         {
-            if(GetValueType(st) == null) throw new NotImplementedException($"{Span} - Empty arrays are not implemented yet");
-            generator.Emit(OpCodes.Newobj, typeof(FArray<>).MakeGenericType(values.expressions[0].GetValueType(st).GetRunTimeType()).GetConstructor(new Type[0]));
+            generator.Emit(OpCodes.Newobj, typeof(FArray<>).MakeGenericType((GetValueType(st) as ArrayType).type.GetRunTimeType()).GetConstructor(new Type[0]));
             foreach(var z in values.expressions)
             {
                 z.Generate(generator, st);
@@ -41,17 +44,14 @@ namespace FFC.FAST
 
         public override void BuildType(SymbolTable st)
         {
-            //how to handle when array is empty???
+            //empty arrays are already typed by SetEmpty, so we can throw if it happens here
             if(values == null || values.expressions == null || values.expressions.Count == 0)
-                valueType = null;
-            else
-            {
-                valueType = values.expressions[0].GetValueType(st);
-                foreach(var z in values.expressions)
-                    if(z.GetValueType(st).GetRunTimeType() != valueType.GetRunTimeType())
-                        throw new NotImplementedException($"{Span} - Can't handle arrays with multiple types {valueType.GetType().Name} - {z.GetValueType(st).GetType().Name}");
-                valueType = new ArrayType(valueType);
-            }
+                throw new NotImplementedException($"{Span} - Empty arrays can only be used in declarations/assignments, you pig!");
+            valueType = values.expressions[0].GetValueType(st);
+            foreach(var z in values.expressions)
+                if(z.GetValueType(st).GetRunTimeType() != valueType.GetRunTimeType())
+                    throw new NotImplementedException($"{Span} - Can't handle arrays with multiple types {valueType.GetType().Name} - {z.GetValueType(st).GetType().Name}");
+            valueType = new ArrayType(valueType);
         }
         
     }

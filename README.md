@@ -50,7 +50,7 @@ A compiler for the F language (and it's definition)
 		- [x] Operators
 	- [ ] Standard library functions
 	- [x] Arrays
-		- [ ] Empty arrays
+		- [x] Empty arrays
 		- [x] Concatenation
 		- [x] Indexed access
 		- [x] Iterator

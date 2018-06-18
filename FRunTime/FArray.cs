@@ -16,7 +16,7 @@ namespace FFC.FRunTime
             Values = a.Values;
             Values.Add(v);
         }
-        //non persistent concatenation
+        // concatenation
         public FArray(FArray<V> a1, FArray<V> a2)
         {
             //not even remotely efficient
@@ -27,7 +27,7 @@ namespace FFC.FRunTime
                 Values.Add(v);
         }
         public static FArray<V> operator+(FArray<V> a1, FArray<V> a2) => new FArray<V>(a1, a2);
-        public static FArray<V> operator+(FArray<V> a, V v) => new FArray<V>(a, v);
+        public static FArray<V> operator+(FArray<V> a, V v) => new FArray<V>(a, new FArray<V>(v));
        
         public V this[FInteger i]
         {
@@ -41,7 +41,7 @@ namespace FFC.FRunTime
             foreach(V v in Values)
                 ans += v.ToString() + ", ";
             //remove last ", "
-            ans = ans.Remove(ans.Length - 2);
+            if(ans.Length >= 4) ans = ans.Remove(ans.Length - 2);
             ans += "}";
             return ans;
         }
@@ -52,10 +52,7 @@ namespace FFC.FRunTime
         {
             private FArray<V> collection;
             private int index = -1;
-            public VIterator (FArray<V> collection)
-            {
-                this.collection = collection;
-            }
+            public VIterator (FArray<V> collection) => this.collection = collection;
             public V GetCurrent() => collection.Values[index];
             public bool MoveNext() => ++index < collection.Length;
         }
