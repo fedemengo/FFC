@@ -115,7 +115,7 @@ namespace FFC.FAST
         }
         public override void Generate(ILGenerator generator, SymbolTable st)
         {
-            if(left is Identifier)
+            if(left is Identifier)      // get
             {
                 Identifier x = left as Identifier;
                 var y = st.Find(x.name);
@@ -124,9 +124,18 @@ namespace FFC.FAST
                 right.Generate(generator, st);
                 generator.Emit(OpCodes.Stloc, y.LocBuilder);
             }
-            else if(left is IndexedAccess)
+            else if(left is IndexedAccess)      // set
             {
                 IndexedAccess x = left as IndexedAccess;
+                if(x.container.GetValueType(st).GetRunTimeType() != right.GetValueType(st).GetRunTimeType())
+                {
+                    FType element = right.GetValueType(st);
+                    FType collection = x.container.GetValueType(st);
+                    if(collection is ArrayType)
+                        throw new NotImplementedException($"{Span} - Can't assign {element.GetRunTimeType().Name} to {collection.GetRunTimeType().Name}[{(collection as ArrayType).type.GetRunTimeType().Name}]");
+                    else
+                        throw new NotImplementedException($"{Span} - Type checking not yet implemented");
+                }
                 x.container.Generate(generator, st);
                 x.index.Generate(generator, st);
                 //generate expression to load
