@@ -127,14 +127,11 @@ namespace FFC.FAST
             else if(left is IndexedAccess)      // set
             {
                 IndexedAccess x = left as IndexedAccess;
-                if(x.container.GetValueType(st).GetRunTimeType() != right.GetValueType(st).GetRunTimeType())
+                FType collection = x.container.GetValueType(st);
+                if(collection is ArrayType && (collection as ArrayType).type.GetRunTimeType() != right.GetValueType(st).GetRunTimeType())
                 {
                     FType element = right.GetValueType(st);
-                    FType collection = x.container.GetValueType(st);
-                    if(collection is ArrayType)
-                        throw new NotImplementedException($"{Span} - Can't assign {element.GetRunTimeType().Name} to {collection.GetRunTimeType().Name}[{(collection as ArrayType).type.GetRunTimeType().Name}]");
-                    else
-                        throw new NotImplementedException($"{Span} - Type checking not yet implemented");
+                    throw new NotImplementedException($"{Span} - Can't assign {element.GetRunTimeType().Name} to {collection.GetRunTimeType().Name}[{(collection as ArrayType).type.GetRunTimeType().Name}]");
                 }
                 x.container.Generate(generator, st);
                 x.index.Generate(generator, st);
