@@ -144,12 +144,25 @@ namespace FFC.FAST
             this.from = from;
             this.to = to;
         }
+        public override void BuildType(SymbolTable st)
+        {
+            if(from.GetValueType(st).GetType() != typeof(IntegerType) || to.GetValueType(st).GetType() != typeof(IntegerType))
+                throw new NotImplementedException($"{Span} - Can't use ellipsis with {from.GetValueType(st)}-{to.GetValueType(st)}");
+            valueType = new EllipsisType();
+        }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Ellipsis expression");
             from.Print(tabs + 1);
             to.Print(tabs + 1);
+        }
+
+        public override void Generate(ILGenerator generator, SymbolTable st)
+        {
+            from.Generate(generator, st);
+            to.Generate(generator, st);
+            generator.Emit(OpCodes.Newobj, typeof(FEllipsis).GetConstructor(new Type[]{typeof(FInteger), typeof(FInteger)}));
         }
     }
     class NotExpression : FExpression

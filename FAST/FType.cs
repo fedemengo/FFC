@@ -159,9 +159,19 @@ namespace FFC.FAST
             throw new NotImplementedException($"{Span} Function RunTimeType not yet implemented");
         }
     }
-    class ArrayType : FType
+
+    public abstract class IterableType : FType
     {
         public FType type;
+    }
+
+    class EllipsisType : IterableType
+    {
+        public EllipsisType() => type = new IntegerType();
+        public override Type GetRunTimeType() => typeof(FEllipsis);
+    }
+    class ArrayType : IterableType
+    {
         public ArrayType(FType type, TextSpan span = null)
         {
             this.Span = span;

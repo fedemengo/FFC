@@ -1,5 +1,6 @@
 main is func() do
-    for a in 0..3 loop
+    a: integer is 0;
+    for a in a..3 loop
         print a;
     end
 end

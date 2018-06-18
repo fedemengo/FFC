@@ -10,7 +10,7 @@ namespace FFC.FAST
         /*
             inherited by anyone
          */
-        abstract public void Print(int tabs);
+        public virtual void Print(int tabs) => throw new System.NotImplementedException($"{Span} - Print not implemented for type {GetType().Name}");
         static public void PrintTabs(int i)
         {
             while(i-- != 0)
@@ -19,7 +19,7 @@ namespace FFC.FAST
 
         public virtual void Generate(ILGenerator generator, SymbolTable st)
         {
-            throw new System.NotImplementedException(this.Span + " Code generation not implemented (" + this.GetType().Name + ")");
+            throw new System.NotImplementedException($"{Span} - Code generation not implemented for type {GetType().Name}");
         }
     }
 }
