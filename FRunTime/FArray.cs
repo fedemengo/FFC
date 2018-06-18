@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace FFC.FRunTime
 {
-    public class FArray<V> : FRTType where V: FRTType
+    public class FArray<V> : FRTType, FIterable<V> where V: FRTType
     {
         public List<V> Values {get; set;}
         public FArray() => Values = new List<V>{};
@@ -19,9 +19,10 @@ namespace FFC.FRunTime
         //non persistent concatenation
         public FArray(FArray<V> a1, FArray<V> a2)
         {
-            //we should handle empty arrays here too
-            Values = a1.Values;
             //not even remotely efficient
+            Values = new List<V>();
+            foreach(V v in a1.Values)
+                Values.Add(v);
             foreach(V v in a2.Values)
                 Values.Add(v);
         }
@@ -43,6 +44,25 @@ namespace FFC.FRunTime
             ans = ans.Remove(ans.Length - 2);
             ans += "}";
             return ans;
+        }
+
+        public uint Length => (uint)Values.Count;
+
+        class VIterator : FIterator<V>
+        {
+            private FArray<V> collection;
+            private int index = -1;
+            public VIterator (FArray<V> collection)
+            {
+                this.collection = collection;
+            }
+            public V GetCurrent() => collection.Values[index];
+            public bool MoveNext() => ++index < collection.Length;
+        }
+
+        public FIterator<V> GetIterator()
+        {
+            return new VIterator(this);
         }
     }
 }

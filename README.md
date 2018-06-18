@@ -53,7 +53,7 @@ A compiler for the F language (and it's definition)
 		- [ ] Empty arrays
 		- [x] Concatenation
 		- [x] Indexed access
-		- [ ] Iterator
+		- [x] Iterator
 	- [x] Strings
 		* Same operators as arrays ?
 	- [ ] Maps

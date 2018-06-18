@@ -29,7 +29,9 @@ main is func() do
     print "arrays concatenation";
     print [3] + [3];
     print [[1, 2], [3, 4]] + [[5, 6], [7, 8]];
-    print [[[1]]] + [[[1]]] + [[[1, 2],[3],[4, 5, 6]]];
+    x is [[[1]]] + [[[1]]] + [[[1, 2],[3],[4, 5, 6]]];
+    print x;
+    for y in x loop print y; end
     print "";
 
     print "arrays additions";
