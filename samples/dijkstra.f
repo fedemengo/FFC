@@ -10,20 +10,20 @@ dijkstra is func(adj :[[(integer, integer)]], source :integer) :[integer] do
     
     //distance array
     dist :[integer] is [];
-    for i in 1 ..length(adj) loop
+    for i in 1..length(adj) loop
         dist := dist + inf;
     end
     dist[source] := source;
 
     //queue declaration
     queue :[integer] is [];
-    for i in 0 ..(length(adj)-1) loop
+    for i in 0..(length(adj)-1) loop
         queue := queue + dist[i];
     end
 
     get_min is func(v: [integer], ignore: integer) :integer do
         ans is -1;
-        for i in 0 ..length(size) loop
+        for i in 0..length(size) loop
             if v[i] = skip then
                 continue;
             end

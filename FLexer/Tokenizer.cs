@@ -6,6 +6,8 @@ namespace FFC.FLexer
 {
     class Tokenizer
     {
+        private Token next = null;
+        private bool blank = true;
         static bool IsBlank(char c)
         {
             switch(c)
@@ -52,7 +54,25 @@ namespace FFC.FLexer
             ans.Add(current);
             return ans;
         }
+
         public Token NextToken(SourceReader sr)
+        {
+            Token t;
+            if(next != null)
+            {
+                t = next;
+                next = null;
+            }
+            else
+                t = _NextToken(sr);
+            // to avoid blank before ellipsis
+            if(t.type == ETokens.ELLIPSIS && (blank || IsBlank(sr.GetChar())))
+                t.type = ETokens.ERROR;
+            else
+                blank = false;
+            return t;
+        }
+        private Token _NextToken(SourceReader sr)
         {
             Position begin = sr.GetPosition();
             if(sr.Empty()) return new Token(ETokens.EOF, begin, sr.GetPosition());
@@ -148,7 +168,7 @@ namespace FFC.FLexer
                 case '}' : sr.Advance(); return new Token(ETokens.RCURLY, begin, sr.GetPosition());
                 case ' ':
                 case '\n':
-                case '\t': sr.Advance(); return NextToken(sr);
+                case '\t': blank = true; sr.Advance(); return NextToken(sr);
                 case '"' :
                     sr.Advance(); //get first "
                     string val = "";
@@ -190,6 +210,13 @@ namespace FFC.FLexer
                         if(sr.GetChar() == '.')
                         {
                             sr.Advance();
+                            if(sr.GetChar() == '.')
+                            {
+                                sr.Advance();
+                                Position pos = sr.GetPosition();
+                                next = new Token(ETokens.ELLIPSIS, new Position(pos.Row, pos.Column-2), pos);
+                                return new Token(ETokens.INTEGER_VALUE, new List<object>{int.Parse(tmp)}, begin, new Position(pos.Row, pos.Column-2));
+                            }
                             string tmp2 = GetDigits(sr);
                             //check missing suffix
                             if(tmp2.Length == 0)

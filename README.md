@@ -19,7 +19,6 @@ A compiler for the F language (and it's definition)
 	* Think about `\n` instead of `;` for SEMICOLON tokens
 	* Add Lexer support for -2^31
 	* Handling error token
-	* Fix Ellipsis so that they work without a blank before
 
 * Parsing
 	* Nothing - except if we decide to think that we should READ assignements or other stuff too

@@ -29,6 +29,11 @@ namespace FFC.FLexer
             Row = copy.Row;
             Column = copy.Column;
         }
+        public Position(int r, int c)
+        {
+            Row = r;
+            Column = c;
+        }
         public override string ToString()
         {
             return "[" + Row + ", " + Column + "]";
