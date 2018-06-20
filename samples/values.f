@@ -1,4 +1,18 @@
 main is func() do
+    // test complex
+    a is 3i4;
+    b is 3.1i4;
+    c is 3i4.1;
+    d is 3.1i4.1;
+    a1 is -3i-4;
+    b1 is -3.1i-4;
+    c1 is -3i-4.1;
+    d1 is -3.1i-4.1;
+    print a, b, c, d;
+    print a1 * 2, b1 * 2, c1 * 2, d1 * 2;
+    print a * b, c * d;
+    print a * b / c * d;
+
     i :integer is 1;
     d :real is -3.57;
     r :rational is -7\3;

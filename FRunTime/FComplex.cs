@@ -50,6 +50,10 @@ namespace FFC.FRunTime
             string l = Console.ReadLine();
             var p = l.Split('i');
             if(p.Length != 2) throw new Exception();
+            if(p[0].Length == 0 || p[0][p[0].Length-1] == '.' || p[0][0] == '.')
+                throw new Exception("Wrong complex format");
+            if(p[1].Length == 0 || p[1][p[1].Length-1] == '.' || p[1][0] == '.')
+                throw new Exception("Wrong complex format");
             return new FComplex(double.Parse(p[0]), double.Parse(p[1]));
         }
     }

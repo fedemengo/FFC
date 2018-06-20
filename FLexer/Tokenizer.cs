@@ -72,6 +72,37 @@ namespace FFC.FLexer
                 blank = false;
             return t;
         }
+        private Token ParseComplex(string num, string frac, SourceReader sr, Position begin)
+        {
+            sr.Advance(); //skips the i
+            string tmp3 = "";
+            if(sr.GetChar() == '-')
+            {
+                tmp3 = "-";
+                sr.Advance();
+            }
+            tmp3 += GetDigits(sr);
+            if(Char.IsLetter(sr.GetChar()))
+                return new Token(ETokens.ERROR, new List<object>{"Letter after number - identifier can't begin with numbers."}, begin, sr.GetPosition());
+
+            if(tmp3.Length == 0 || tmp3.Length == 1 && tmp3[0] == '-')
+                return new Token(ETokens.ERROR, new List<object>{"Imaginary part is missing."}, begin, sr.GetPosition());
+
+            string tmp4 = "0";
+            if(sr.GetChar() == '.')
+            {
+                sr.Advance(); //skip .
+                tmp4 = GetDigits(sr);
+                if(tmp4.Length == 0)
+                    return new Token(ETokens.ERROR, new List<object>{"Mantissa is missing."}, begin, sr.GetPosition());
+            }
+            if(Char.IsLetter(sr.GetChar()))
+                return new Token(ETokens.ERROR, new List<object>{"Letter after number - identifier can't begin with numbers."}, begin, sr.GetPosition());
+
+            double real = GetDouble(num, frac);
+            double img = GetDouble(tmp3, tmp4);
+            return new Token(ETokens.COMPLEX_VALUE, new List<object>{real, img}, begin, sr.GetPosition());
+        }
         private Token _NextToken(SourceReader sr)
         {
             Position begin = sr.GetPosition();
@@ -223,36 +254,7 @@ namespace FFC.FLexer
                                 return new Token(ETokens.ERROR, new List<object>{"Mantissa is missing."}, begin, sr.GetPosition());
                             //complex values
                             if(sr.GetChar() == 'i')
-                            {
-                                sr.Advance(); //skips the i
-                                string tmp3 = "";
-                                if(sr.GetChar() == '-')
-                                {
-                                    tmp3 = "-";
-                                    sr.Advance();
-                                }
-                                tmp3 += GetDigits(sr);
-                                if(Char.IsLetter(sr.GetChar()))
-                                    return new Token(ETokens.ERROR, new List<object>{"Letter after number - identifier can't begin with numbers."}, begin, sr.GetPosition());
-
-                                if(tmp3.Length == 0 || tmp3.Length == 1 && tmp3[0] == '-')
-                                    return new Token(ETokens.ERROR, new List<object>{"Imaginary part is missing."}, begin, sr.GetPosition());
-                                
-                                if(sr.GetChar() != '.')
-                                    return new Token(ETokens.ERROR, new List<object>{"Mantissa is missing."}, begin, sr.GetPosition());
-
-                                sr.Advance(); //skip .
-                                
-                                string tmp4 = GetDigits(sr);
-                                if(tmp4.Length == 0)
-                                    return new Token(ETokens.ERROR, new List<object>{"Mantissa is missing."}, begin, sr.GetPosition());
-                                if(Char.IsLetter(sr.GetChar()))
-                                    return new Token(ETokens.ERROR, new List<object>{"Letter after number - identifier can't begin with numbers."}, begin, sr.GetPosition());
-                                double real = GetDouble(tmp, tmp2);
-                                double img = GetDouble(tmp3, tmp4);
-                                
-                                return new Token(ETokens.COMPLEX_VALUE, new List<object>{real, img}, begin, sr.GetPosition());
-                            }
+                                return ParseComplex(tmp, tmp2, sr, begin);
                             //can be checked only after i
                             if(Char.IsLetter(sr.GetChar()))
                                 return new Token(ETokens.ERROR, new List<object>{"Letter after number - identifier can't begin with numbers."}, begin, sr.GetPosition());
@@ -273,8 +275,14 @@ namespace FFC.FLexer
                                 return new Token(ETokens.ERROR, new List<object>{"Denominator has to be an integer number"}, begin, sr.GetPosition());
                             return new Token(ETokens.RATIONAL_VALUE, new List<object>{GetInt(tmp), GetInt(tmp2)}, begin, sr.GetPosition());
                         }
+                        else if(sr.GetChar() == 'i')
+                        {
+                            return ParseComplex(tmp, "0", sr, begin);
+                        }
                         else if(Char.IsLetter(sr.GetChar()))
+                        {
                             return new Token(ETokens.ERROR, new List<object>{"Letter after number - identifier can't begin with numbers."}, begin, sr.GetPosition());
+                        }
                         return new Token(ETokens.INTEGER_VALUE, new List<object>{GetInt(tmp)}, begin, sr.GetPosition());
                     }
                     //might be letter or not known symbol

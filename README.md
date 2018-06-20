@@ -80,4 +80,4 @@ A compiler for the F language (and it's definition)
 
 ## Notes
 
-* **dotnet core** CIL generation https://github.com/dotnet/coreclr
+* No main function, the entry point is specified at compile time `compile source.f entry_point`
