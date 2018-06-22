@@ -5,13 +5,14 @@ A compiler for the F language (and it's definition)
 
 * Update note section
 * Load external library from another folder
-* Shall we accept INT i INT as complex?
-	* sfilippo(s)'s 0.02$ : "we should, but also in Lexer to keep it consistent"
 * Improve Read() run time function
-	* consider Buffer approach
-	* more precise "type checking"
-	* consider reading advanced types (arrays, tuples, maps)
+	* Consider Buffer approach
+	* More precise "type checking"
+	* Consider reading advanced types (arrays, tuples, maps)
 	* Allow `\`-escaped characters in string read ?
+	* Consider assignment support
+* Improve for / foreach behaviour, so that values can be modified
+* Catch exception when using a variable that is not declared
 * Add warning when declaring variables overriding an existing name
 
 * Lexical analysis

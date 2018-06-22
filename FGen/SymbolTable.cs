@@ -280,7 +280,5 @@ namespace FFC.FGen
         public UInt32 Height => map.Size;
         public void PrintInOrder() => map.PrintInOrder();
         public void PrintPreOrder() => map.PrintPreOrder();
-
-        
     }
 }
