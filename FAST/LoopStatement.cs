@@ -25,7 +25,8 @@ namespace FFC.FAST
         {
             PrintTabs(tabs);
             Console.WriteLine("Loop statement");
-            header.Print(tabs + 1);
+            if(header != null)
+                header.Print(tabs + 1);
             body.Print(tabs + 1);
         }
 
@@ -34,7 +35,10 @@ namespace FFC.FAST
             Label loopCondition = generator.DefineLabel();
             Label exitLabel = generator.DefineLabel();
             //loop condition is generated inside FLoopHeader
-            header.Generate(generator, loopCondition, exitLabel, ref st);
+            if(header != null)
+                header.Generate(generator, loopCondition, exitLabel, ref st);
+            else
+                generator.MarkLabel(loopCondition);
             body.Generate(generator, loopCondition, exitLabel, st);
             generator.Emit(OpCodes.Br, loopCondition);
             generator.MarkLabel(exitLabel);

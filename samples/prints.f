@@ -75,6 +75,13 @@ main is func() do
     end
     print "";
 
+    loop
+        a: integer is read;
+        //if a = 0 then         not working
+        //    break;
+        //end
+    end
+
     // simple loop
     while true loop print "loop 1"; break; print "loop 2"; end
     // infinite loop

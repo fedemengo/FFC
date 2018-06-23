@@ -12,7 +12,7 @@ A compiler for the F language (and it's definition)
 	* Consider reading advanced types (arrays, tuples, maps)
 	* Allow `\`-escaped characters in string read ?
 	* Consider assignment support
-* Improve for / foreach behaviour, so that values can be modified
+* Improve for / foreach behavior, so that values can be modified
 * Catch exception when using a variable that is not declared
 * Add warning when declaring variables overriding an existing name
 
@@ -23,9 +23,10 @@ A compiler for the F language (and it's definition)
 	* Handling error token
 
 * Parsing
-	* Nothing - except if we decide to think that we should READ assignements or other stuff too
+	* Nothing - except if we decide to think that we should READ assignments or other stuff too
 
 * Code generation
+	* Modify generate method to always carry the needed information (loop label, ..)
 	* Check how we deal with types in declaration / indexed access
 
 ## Progress
@@ -47,7 +48,7 @@ A compiler for the F language (and it's definition)
 	- [x] Symbols lookup
 		- [x] Nested scopes
 	- [x] Declarations
-	- [x] Assignements
+	- [x] Assignments
 	- [x] Numeric types
 		- [x] Operators
 	- [ ] Standard library functions

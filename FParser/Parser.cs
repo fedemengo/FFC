@@ -3,7 +3,7 @@
 // (see accompanying GPPGcopyright.rtf)
 
 // GPPG version 1.5.2
-// Input file <FParser/gppg/grammar.y - 6/23/2018 12:16:46 PM>
+// Input file <FParser/gppg/grammar.y - 6/23/2018 2:41:36 PM>
 
 using System;
 using System.Collections.Generic;
@@ -846,7 +846,7 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 91: // loop_stm -> loop_header, LOOP, stm_list, END
 #line 206 "FParser/gppg/grammar.y"
-                                       { CurrentSemanticValue = new LoopStatement((FLoopHeader)ValueStack[ValueStack.Depth-4], (StatementList)ValueStack[ValueStack.Depth-2], new TextSpan(ValueStack[ValueStack.Depth-4].Span, ValueStack[ValueStack.Depth-1].Span)); }
+                                       { CurrentSemanticValue = new LoopStatement(ValueStack[ValueStack.Depth-4] as FLoopHeader, (StatementList)ValueStack[ValueStack.Depth-2], new TextSpan(ValueStack[ValueStack.Depth-4] != null ? ValueStack[ValueStack.Depth-4].Span : ValueStack[ValueStack.Depth-3].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 92: // loop_header -> /* empty */

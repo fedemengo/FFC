@@ -60,6 +60,7 @@ namespace FFC.FAST
             {
                 if(stm is BreakStatement) (stm as BreakStatement).Generate(generator, exitLabel);
                 else if (stm is ContinueStatement) (stm as ContinueStatement).Generate(generator, conditionLabel);
+                else if (stm is DeclarationStatement) (stm as DeclarationStatement).Generate(generator, ref st);
                 else stm.Generate(generator, st);
             }
         }

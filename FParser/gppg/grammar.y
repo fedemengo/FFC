@@ -203,7 +203,7 @@ nif_stmlist
 	;
 
 loop_stm
-	: loop_header LOOP stm_list END							{ $$ = new LoopStatement((FLoopHeader)$1, (StatementList)$3, new TextSpan($1.Span, $4.Span)); }
+	: loop_header LOOP stm_list END							{ $$ = new LoopStatement($1 as FLoopHeader, (StatementList)$3, new TextSpan($1 != null ? $1.Span : $2.Span, $4.Span)); }
 	;
 
 loop_header
