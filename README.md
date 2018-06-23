@@ -5,6 +5,7 @@ A compiler for the F language (and it's definition)
 
 * Update note section
 * Load external library from another folder
+* Catch exception in wrong.f ?
 * Improve Read() run time function
 	* Consider Buffer approach
 	* More precise "type checking"

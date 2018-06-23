@@ -152,7 +152,11 @@ namespace FFC.FLexer
                         sr.Advance();
                         return new Token(ETokens.ELLIPSIS, begin, sr.GetPosition());
                     }
-                    return new Token(ETokens.DOT, begin, sr.GetPosition());
+                    //we have either a name or an integer
+                    Position p = sr.GetPosition();
+                    string num = GetDigits(sr);
+                    if(num.Length > 0) next = new Token(ETokens.INTEGER_VALUE, new List<object>{int.Parse(num)}, p, sr.GetPosition());
+                    return new Token(ETokens.DOT, begin, p);
                 case '+' : sr.Advance(); return new Token(ETokens.PLUS, begin, sr.GetPosition());
                 case '-' : sr.Advance(); return new Token(ETokens.MINUS, begin, sr.GetPosition());
                 case '*' : sr.Advance(); return new Token(ETokens.STAR, begin, sr.GetPosition());
