@@ -3,7 +3,7 @@
 // (see accompanying GPPGcopyright.rtf)
 
 // GPPG version 1.5.2
-// Input file <FParser/gppg/grammar.y - 6/18/2018 12:47:51 AM>
+// Input file <FParser/gppg/grammar.y - 6/23/2018 12:16:46 PM>
 
 using System;
 using System.Collections.Generic;
@@ -936,7 +936,7 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 109: // tuple_elist -> tuple_elist, COMMA, tuple_elem
 #line 257 "FParser/gppg/grammar.y"
-                                      { ((TupleElementList)ValueStack[ValueStack.Depth-3]).elements.Add((TupleElement)ValueStack[ValueStack.Depth-1]); ValueStack[ValueStack.Depth-3].Span = ValueStack[ValueStack.Depth-3].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
+                                      { ((TupleElementList)ValueStack[ValueStack.Depth-3]).Add((TupleElement)ValueStack[ValueStack.Depth-1]); ValueStack[ValueStack.Depth-3].Span = ValueStack[ValueStack.Depth-3].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
 #line default
         break;
       case 110: // tuple_elem -> identifier, IS, expr

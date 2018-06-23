@@ -4,6 +4,7 @@ using System.Reflection.Emit;
 
 using FFC.FParser;
 using FFC.FGen;
+using FFC.FRunTime;
 
 namespace FFC.FAST
 {
@@ -29,16 +30,30 @@ namespace FFC.FAST
         {
             valueType = container.GetValueType(st);
             if(valueType is ArrayType) valueType = (valueType as ArrayType).type;
+            else if(valueType is TupleType)
+            {
+                if(index is DotIndexer == false)
+                    throw new NotImplementedException($"{Span} - Can't generate not DotIndexer for tuple");
+
+                valueType = (valueType as TupleType).GetIndexType(index as DotIndexer);
+            }
             else throw new NotImplementedException($"{Span} - Can't use indexers on type {valueType.GetType().Name}");
         }
         public override void Generate(ILGenerator generator, SymbolTable st)
         {
             container.Generate(generator, st);
-            index.Generate(generator, st);
             if(index is SquaresIndexer)
+            { 
+                index.Generate(generator, st);
                 generator.Emit(OpCodes.Callvirt, container.GetValueType(st).GetRunTimeType().GetMethod("get_Item", new Type[]{index.GetValueType(st).GetRunTimeType()}));
-            else
-                throw new NotImplementedException($"{Span} - Generation not supported for {index.GetType().Name}");
+            }
+            else if(index is DotIndexer)
+            {
+                IntegerValue tupleIndex = new IntegerValue((container.GetValueType(st) as TupleType).GetMappedIndex(index as DotIndexer), Span);
+                tupleIndex.Generate(generator, st);
+                generator.Emit(OpCodes.Callvirt, container.GetValueType(st).GetRunTimeType().GetMethod("Get", new Type[]{typeof(FInteger)}));
+            }
+            else  throw new NotImplementedException($"{Span} - Generation not supported for {index.GetType().Name}");
         }
     }
     abstract class Indexer : FExpression
@@ -61,6 +76,21 @@ namespace FFC.FAST
             Console.WriteLine("DotIndexer");
             if(id != null) id.Print(tabs + 1);
             else index.Print(tabs + 1);
+        }
+        public override void Generate(ILGenerator generator, SymbolTable st)
+        {
+            if(id == null)
+                index.Generate(generator, st);
+            else
+            {
+                generator.Emit(OpCodes.Ldstr, id.name);
+                generator.Emit(OpCodes.Newobj, typeof(FString).GetConstructor(new Type[]{typeof(string)}));
+            }
+        }
+
+        public override void BuildType(SymbolTable st)
+        {
+            valueType = id.GetValueType(st);
         }
     }
     class SquaresIndexer : Indexer

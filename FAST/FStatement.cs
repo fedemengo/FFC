@@ -176,7 +176,7 @@ namespace FFC.FAST
 
         public void Generate(ILGenerator generator, ref SymbolTable st)
         {
-            FType t;
+            FType t = null;
             //Empty array
             if(expr is ArrayDefinition && (expr as ArrayDefinition).values.expressions.Count == 0)
             {
@@ -184,6 +184,10 @@ namespace FFC.FAST
                     throw new NotImplementedException($"{Span} - Can't create empty array without specifying type");
                 t = type;
                 (expr as ArrayDefinition).SetEmpty(t);
+            }
+            else if(expr is TupleDefinition)
+            {
+                t = expr.GetValueType(st);
             }
             else
                 t = expr.GetValueType(st);

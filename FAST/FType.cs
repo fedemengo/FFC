@@ -22,7 +22,7 @@ namespace FFC.FAST
         }
         public virtual Type GetRunTimeType() => throw new NotImplementedException($"{Span} - RunTimeType not available for {GetType().Name}");
     }
-    class TypeList : FASTNode
+    class TypeList : FType
     {
         public List<FType> types;
         public TypeList(TextSpan span = null)
@@ -35,6 +35,7 @@ namespace FFC.FAST
             this.Span = span;
             types = new List<FType>{type};
         }
+        public void Add(FType type) => types.Add(type);
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
@@ -209,10 +210,12 @@ namespace FFC.FAST
     class TupleType : FType
     {
         public TypeList types;
+        public Dictionary<string, int> names;
         public TupleType(TypeList types, TextSpan span = null)
         {
             this.Span = span;
             this.types = types;
+            names = new Dictionary<string, int>();
         }
         public override void Print(int tabs)
         {
@@ -220,6 +223,11 @@ namespace FFC.FAST
             Console.WriteLine("Tuple type");
             types.Print(tabs + 1);
         }
+
+        public FType GetIndexType(DotIndexer index) => types.types[(index.id != null ? names[index.id.name] : index.index.value) - 1];
+
+        public int GetMappedIndex(DotIndexer index) => index.id != null ? names[index.id.name] : index.index.value;
+        
         public override Type GetRunTimeType() => typeof(FTuple);
     }
 }

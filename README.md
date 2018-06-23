@@ -59,7 +59,9 @@ A compiler for the F language (and it's definition)
 	- [x] Strings
 		* Same operators as arrays ?
 	- [ ] Maps
-	- [ ] Tuples
+	- [x] Tuples
+		- [ ] Define type for tuple (useful in assignment) 
+		- [ ] Consider printing identifiers when present  
 	- [x] Conditional expressions
 	- [x] Conditional statements
 	- [x] Loop statements

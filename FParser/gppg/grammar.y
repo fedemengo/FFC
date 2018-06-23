@@ -254,7 +254,7 @@ tuple_def
 
 tuple_elist 
 	: tuple_elem											{ $$ = new TupleElementList((TupleElement)$1, new TextSpan($1.Span)); }
-	| tuple_elist COMMA tuple_elem							{ ((TupleElementList)$1).elements.Add((TupleElement)$3); $1.Span = $1.Span.MergeTo($3.Span); $$ = $1; }
+	| tuple_elist COMMA tuple_elem							{ ((TupleElementList)$1).Add((TupleElement)$3); $1.Span = $1.Span.MergeTo($3.Span); $$ = $1; }
 	;
 
 tuple_elem

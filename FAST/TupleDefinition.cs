@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using FFC.FParser;
 using FFC.FGen;
+using FFC.FRunTime;
 
 namespace FFC.FAST
 {
@@ -35,8 +36,26 @@ namespace FFC.FAST
         public override void Generate(ILGenerator generator, SymbolTable st)
         {
             //only for expression, tuple to do!
-            if(IsExpression()) elements.elements[0].value.Generate(generator, st);
-            else throw new NotImplementedException("Tuple definition is not implemented yet");
+            if(IsExpression()) 
+            {
+                elements.elements[0].value.Generate(generator, st);
+            }
+            else
+            {
+                //throw new NotImplementedException("Tuple definition is not implemented yet");
+                // construct a tuple
+                LocalBuilder localTuple = generator.DeclareLocal(typeof(FTuple));
+                generator.Emit(OpCodes.Newobj, typeof(FTuple).GetConstructor(Type.EmptyTypes));
+                generator.Emit(OpCodes.Stloc, localTuple);
+                foreach(TupleElement elem in elements.elements)
+                {
+                    generator.Emit(OpCodes.Ldloc, localTuple);
+                    elem.Generate(generator, st);
+                    Type elementType = elem.value.GetValueType(st).GetRunTimeType();
+                    generator.Emit(OpCodes.Callvirt, typeof(FTuple).GetMethod("Add", new Type[]{elementType}));
+                }
+                generator.Emit(OpCodes.Ldloc, localTuple);
+            }
         }
         public override void BuildType(SymbolTable st)
         {
@@ -45,7 +64,20 @@ namespace FFC.FAST
                 //get inner expression type
                 valueType = elements.elements[0].value.GetValueType(st);   
             }
-            else throw new NotImplementedException("Tuple definition is not implemented yet");
+            else
+            {
+                TypeList types = new TypeList();
+                foreach(TupleElement e in elements.elements)
+                    types.Add(e.value.GetValueType(st));
+
+                TupleType tupleType = new TupleType(types);
+                for(int i=0; i<elements.elements.Count; ++i)
+                    if(elements.elements[i].id != null)
+                        tupleType.names.Add(elements.elements[i].id.name, i + 1);
+
+                valueType = tupleType;
+                // throw new NotImplementedException("Tuple definition is not implemented yet");
+            }
         }
     }
     class TupleElementList : FASTNode
@@ -61,6 +93,7 @@ namespace FFC.FAST
             this.Span = span;
             elements = new List<TupleElement>{element};
         }
+        public void Add(TupleElement e) => elements.Add(e);
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
@@ -75,10 +108,6 @@ namespace FFC.FAST
                 foreach(var element in elements)
                     element.Print(tabs + 1);
             }
-        }
-        public override void Generate(ILGenerator generator, SymbolTable st)
-        {
-            throw new NotImplementedException("tuple element list not implemented");
         }
     }
     class TupleElement : FASTNode
@@ -98,6 +127,10 @@ namespace FFC.FAST
             Console.WriteLine("Tuple element");
             if(id != null) id.Print(tabs + 1);
             value.Print(tabs + 1);   
+        }
+        public override void Generate(ILGenerator generator, SymbolTable st)
+        {
+            value.Generate(generator, st);
         }
     }
 }
