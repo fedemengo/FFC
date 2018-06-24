@@ -7,14 +7,14 @@ using FFC.FGen;
 
 namespace FFC.FAST
 {
-    abstract class FValue : FPrimary
+    abstract public class FValue : FPrimary
     {
         public override void Generate(ILGenerator generator, SymbolTable st)
         {
             throw new NotImplementedException($"{Span} - Generation for {GetType().Name} not implemented");
         }
     }
-    class BooleanValue : FValue
+    public class BooleanValue : FValue
     {
         public bool value;
 
@@ -36,7 +36,7 @@ namespace FFC.FAST
         }
 
     }
-    class IntegerValue : FValue
+    public class IntegerValue : FValue
     {
         public int value;
 
@@ -58,7 +58,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Newobj, typeof(FInteger).GetConstructor(new Type[]{typeof(int)}));
         }
     }
-    class RealValue : FValue
+    public class RealValue : FValue
     {
         public double value;
 
@@ -80,7 +80,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Newobj, typeof(FReal).GetConstructor(new Type[]{typeof(double)}));
         }
     }
-    class RationalValue : FValue
+    public class RationalValue : FValue
     {
         public int numerator;
         public int denominator;
@@ -105,7 +105,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Newobj, typeof(FRational).GetConstructor(new Type[]{typeof(int), typeof(int)}));
         }
     }
-    class ComplexValue : FValue
+    public class ComplexValue : FValue
     {
         public double real;
         public double img;
@@ -130,7 +130,7 @@ namespace FFC.FAST
         }
 
     }
-    class StringValue : FValue
+    public class StringValue : FValue
     {
         public string value;
 
@@ -152,7 +152,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Newobj, typeof(FString).GetConstructor(new Type[]{typeof(string)}));
         }
     }
-    class Identifier : FValue
+    public class Identifier : FValue
     {
         public string name;
 
@@ -181,7 +181,7 @@ namespace FFC.FAST
         }
     }
 
-    class IdentifierList : FValue
+    public class IdentifierList : FValue
     {
         public List<Identifier> ids;
 

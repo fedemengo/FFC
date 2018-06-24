@@ -7,7 +7,7 @@ using FFC.FRunTime;
 
 namespace FFC.FAST
 {
-    abstract class FExpression : FASTNode
+    abstract public class FExpression : FASTNode
     {
         /*
             inherited by
@@ -33,7 +33,7 @@ namespace FFC.FAST
             throw new NotImplementedException($"{Span} - BuildType not implemented for {this.GetType().Name}");
         }
     }
-    class ExpressionList : FASTNode
+    public class ExpressionList : FASTNode
     {
         public List<FExpression> expressions;
         public ExpressionList(FExpression expr, TextSpan span)
@@ -54,7 +54,7 @@ namespace FFC.FAST
                 e.Print(tabs + 1);
         }
     }
-    class BinaryOperatorExpression : FExpression
+    public class BinaryOperatorExpression : FExpression
     {
         public FExpression left;
         public FOperator binOperator;
@@ -108,7 +108,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Call, rtt.GetMethod(op_name, new Type[]{rtt, rtt}));
         }
     }
-    class NegativeExpression : FExpression
+    public class NegativeExpression : FExpression
     {
         public FSecondary value;
         public NegativeExpression(FSecondary value, TextSpan span)
@@ -134,7 +134,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Call, value.GetValueType(st).GetRunTimeType().GetMethod("op_UnaryNegation", new Type[]{valueType.GetRunTimeType()}));
         }
     }
-    class EllipsisExpression : FExpression
+    public class EllipsisExpression : FExpression
     {
         public FSecondary from;
         public FSecondary to;
@@ -165,7 +165,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Newobj, typeof(FEllipsis).GetConstructor(new Type[]{typeof(FInteger), typeof(FInteger)}));
         }
     }
-    class NotExpression : FExpression
+    public class NotExpression : FExpression
     {
         public FExpression expr;
         public NotExpression(FExpression expr, TextSpan span)
@@ -190,7 +190,7 @@ namespace FFC.FAST
         }
     }
 
-    class ReadExpression : FExpression
+    public class ReadExpression : FExpression
     {
         public FType type;
         public ReadExpression(FType type)

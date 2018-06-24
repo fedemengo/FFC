@@ -8,7 +8,7 @@ using FFC.FRunTime;
 
 namespace FFC.FAST
 {
-    class IndexedAccess : FSecondary
+    public class IndexedAccess : FSecondary
     {
         public FSecondary container;
         public Indexer index;
@@ -56,10 +56,10 @@ namespace FFC.FAST
             else  throw new NotImplementedException($"{Span} - Generation not supported for {index.GetType().Name}");
         }
     }
-    abstract class Indexer : FExpression
+    abstract public class Indexer : FExpression
     {
     }
-    class DotIndexer : Indexer
+    public class DotIndexer : Indexer
     {
         public Identifier id;
         public IntegerValue index;
@@ -93,7 +93,7 @@ namespace FFC.FAST
             valueType = id.GetValueType(st);
         }
     }
-    class SquaresIndexer : Indexer
+    public class SquaresIndexer : Indexer
     {
         public FExpression index;
 

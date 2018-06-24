@@ -22,7 +22,7 @@ namespace FFC.FAST
         }
         public virtual Type GetRunTimeType() => throw new NotImplementedException($"{Span} - RunTimeType not available for {GetType().Name}");
     }
-    class TypeList : FType
+    public class TypeList : FType
     {
         public List<FType> types;
         public TypeList(TextSpan span = null)
@@ -138,7 +138,7 @@ namespace FFC.FAST
         public override Type GetRunTimeType() => typeof(FBoolean);
     }
     
-    class FunctionType : FType
+    public class FunctionType : FType
     {
         public TypeList paramTypes;
         public FType returnType;
@@ -166,12 +166,12 @@ namespace FFC.FAST
         public FType type;
     }
 
-    class EllipsisType : IterableType
+    public class EllipsisType : IterableType
     {
         public EllipsisType() => type = new IntegerType();
         public override Type GetRunTimeType() => typeof(FEllipsis);
     }
-    class ArrayType : IterableType
+    public class ArrayType : IterableType
     {
         public ArrayType(FType type, TextSpan span = null)
         {
@@ -189,7 +189,7 @@ namespace FFC.FAST
             return typeof(FArray<>).MakeGenericType(type.GetRunTimeType());
         }
     }
-    class MapType : FType
+    public class MapType : FType
     {
         public FType key;
         public FType value;
@@ -207,7 +207,7 @@ namespace FFC.FAST
         }
         public override Type GetRunTimeType() => typeof(FMap);
     }
-    class TupleType : FType
+    public class TupleType : FType
     {
         public TypeList types;
         public Dictionary<string, int> names;

@@ -6,7 +6,7 @@ using FFC.FGen;
 
 namespace FFC.FAST
 {
-    abstract class FOperator : FASTNode
+    abstract public class FOperator : FASTNode
     {
         /*
             inherited by
@@ -43,7 +43,7 @@ namespace FFC.FAST
         }
     }
 
-    abstract class RelationalOperator : FOperator
+    abstract public class RelationalOperator : FOperator
     {
         public override FType GetTarget(FType t1, FType t2)
         {
@@ -61,7 +61,7 @@ namespace FFC.FAST
             return new BooleanType();
         }
     }
-    class LessOperator : RelationalOperator
+    public class LessOperator : RelationalOperator
     {
         public LessOperator(TextSpan span)
         {
@@ -69,7 +69,7 @@ namespace FFC.FAST
         }
         public override string GetMethodName() => "op_LessThan";
     }
-    class LessEqualOperator : RelationalOperator
+    public class LessEqualOperator : RelationalOperator
     {
         public LessEqualOperator(TextSpan span)
         {
@@ -77,7 +77,7 @@ namespace FFC.FAST
         }
         public override string GetMethodName() => "op_LessThanOrEqual";
     }
-    class GreaterOperator : RelationalOperator
+    public class GreaterOperator : RelationalOperator
     {
         public GreaterOperator(TextSpan span)
         {
@@ -85,7 +85,7 @@ namespace FFC.FAST
         }
         public override string GetMethodName() => "op_GreaterThan";
     }
-    class GreaterEqualOperator : RelationalOperator
+    public class GreaterEqualOperator : RelationalOperator
     {
         public GreaterEqualOperator(TextSpan span)
         {
@@ -93,7 +93,7 @@ namespace FFC.FAST
         }
         public override string GetMethodName() => "op_GreaterThanOrEqual";
     }
-    class EqualOperator : RelationalOperator
+    public class EqualOperator : RelationalOperator
     {
         public EqualOperator(TextSpan span)
         {
@@ -101,7 +101,7 @@ namespace FFC.FAST
         }
         public override string GetMethodName() => "op_Equality";
     }
-    class NotEqualOperator : RelationalOperator
+    public class NotEqualOperator : RelationalOperator
     {
         public NotEqualOperator(TextSpan span)
         {
@@ -111,7 +111,7 @@ namespace FFC.FAST
         public override string GetMethodName() => "op_Inequality";
     }
 
-    abstract class BooleanOperator : FOperator
+    abstract public class BooleanOperator : FOperator
     {
         public override FType GetTarget(FType t1, FType t2)
         {
@@ -120,7 +120,7 @@ namespace FFC.FAST
             throw new NotImplementedException($"{this.Span.Begin} - Can't use boolean operator {this.GetType().Name} on non-boolean values");            
         }
     }
-    class AndOperator : BooleanOperator
+    public class AndOperator : BooleanOperator
     {
         public AndOperator(TextSpan span)
         {
@@ -128,7 +128,7 @@ namespace FFC.FAST
         }
         public override string GetMethodName() => "op_BitwiseAnd";
     }
-    class OrOperator : BooleanOperator
+    public class OrOperator : BooleanOperator
     {
         public OrOperator(TextSpan span)
         {
@@ -136,7 +136,7 @@ namespace FFC.FAST
         }
         public override string GetMethodName() => "op_BitwiseOr";
     }
-    class XorOperator : BooleanOperator
+    public class XorOperator : BooleanOperator
     {
         public XorOperator(TextSpan span)
         {
@@ -145,7 +145,7 @@ namespace FFC.FAST
         public override string GetMethodName() => "op_ExclusiveOr";
     }
 
-    abstract class MathOperator : FOperator
+    abstract public class MathOperator : FOperator
     {
         public override FType GetTarget(FType t1, FType t2)
         {
@@ -168,7 +168,7 @@ namespace FFC.FAST
             return new IntegerType();
         }
     }
-    class PlusOperator : MathOperator
+    public class PlusOperator : MathOperator
     {
         public PlusOperator(TextSpan span)
         {
@@ -188,7 +188,7 @@ namespace FFC.FAST
             return base.GetTarget(t1, t2);
         }
     }
-    class MinusOperator : MathOperator
+    public class MinusOperator : MathOperator
     {
         public MinusOperator(TextSpan span)
         {
@@ -197,7 +197,7 @@ namespace FFC.FAST
 
         public override string GetMethodName() => "op_Subtraction";
     }
-    class StarOperator : MathOperator
+    public class StarOperator : MathOperator
     {
         public StarOperator(TextSpan span)
         {
@@ -206,7 +206,7 @@ namespace FFC.FAST
 
         public override string GetMethodName() => "op_Multiply";
     }
-    class SlashOperator : MathOperator
+    public class SlashOperator : MathOperator
     {
         public SlashOperator(TextSpan span)
         {
@@ -234,7 +234,7 @@ namespace FFC.FAST
             return new RealType();
         }
     }
-    class ModuloOperator : MathOperator
+    public class ModuloOperator : MathOperator
     {
         public ModuloOperator(TextSpan span)
         {
