@@ -45,10 +45,10 @@ namespace FFC.FAST
         }
     }
 
-    abstract class NumericType : FType
+    public abstract class NumericType : FType
     {
     }
-    class IntegerType : NumericType
+    public class IntegerType : NumericType
     {
         public IntegerType(TextSpan span = null)
         {
@@ -63,7 +63,7 @@ namespace FFC.FAST
         public override Type GetRunTimeType() => typeof(FInteger);
     }
 
-    class RealType : NumericType
+    public class RealType : NumericType
     {
         public RealType(TextSpan span = null)
         {
@@ -78,7 +78,7 @@ namespace FFC.FAST
         public override Type GetRunTimeType() => typeof(FReal);
     }
 
-    class ComplexType : NumericType
+    public class ComplexType : NumericType
     {
         public ComplexType(TextSpan span = null)
         {
@@ -93,7 +93,7 @@ namespace FFC.FAST
         public override Type GetRunTimeType() => typeof(FComplex);
     }
 
-    class RationalType : NumericType
+    public class RationalType : NumericType
     {
         public RationalType(TextSpan span = null)
         {
@@ -108,7 +108,7 @@ namespace FFC.FAST
         public override Type GetRunTimeType() => typeof(FRational);
     }
 
-    class StringType : FType
+    public class StringType : FType
     {
         public StringType(TextSpan span = null)
         {
@@ -123,7 +123,7 @@ namespace FFC.FAST
         public override Type GetRunTimeType() => typeof(FString);
     }
 
-    class BooleanType : FType
+    public class BooleanType : FType
     {
         public BooleanType(TextSpan span = null)
         {

@@ -7,7 +7,7 @@ using FFC.FGen;
 
 namespace FFC.FAST
 {
-    abstract class FStatement : FASTNode
+    public abstract class FStatement : FASTNode
     {
         /*
             inherited by
@@ -22,7 +22,7 @@ namespace FFC.FAST
             PrintStm
          */
     }
-    class StatementList : FASTNode
+    public class StatementList : FASTNode
     {
         public List<FStatement> statements;
         public StatementList(FStatement statement, TextSpan span)
@@ -65,7 +65,7 @@ namespace FFC.FAST
             }
         }
     }
-    class ExpressionStatement : FStatement
+    public class ExpressionStatement : FStatement
     {
         public FExpression expression;
         public ExpressionStatement(FExpression expression, TextSpan span)
@@ -82,7 +82,7 @@ namespace FFC.FAST
 
         
     }
-    class FunctionCallStatement : FStatement
+    public class FunctionCallStatement : FStatement
     {
         public FunctionCall function;
         public FunctionCallStatement(FunctionCall function, TextSpan span)
@@ -97,7 +97,7 @@ namespace FFC.FAST
             function.Print(tabs + 1);
         }
     }
-    class AssignmentStatemt : FStatement
+    public class AssignmentStatemt : FStatement
     {
         public FSecondary left;
         public FExpression right;
@@ -154,7 +154,7 @@ namespace FFC.FAST
             else throw new NotImplementedException($"{Span} - Assignments to {left.GetType().Name} are not implemented");
         }
     }
-    class DeclarationStatement : FStatement
+    public class DeclarationStatement : FStatement
     {
         public Identifier id;
         public FType type;
@@ -201,7 +201,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Stloc, var);
         }
     }
-    class DeclarationStatementList : FASTNode
+    public class DeclarationStatementList : FASTNode
     {
         public List<DeclarationStatement> statements;
         public DeclarationStatementList(DeclarationStatement stm, TextSpan span)
@@ -229,7 +229,7 @@ namespace FFC.FAST
             statements.Add(stm);
         }
     }
-    class IfStatement : FStatement
+    public class IfStatement : FStatement
     {
         public FExpression condition;
         public StatementList ifTrue;
@@ -275,7 +275,7 @@ namespace FFC.FAST
         }
     }
 
-    class ElseIfList : FASTNode
+    public class ElseIfList : FASTNode
     {
         public List<ElseIfStatement> list;
         public void Add(ElseIfStatement other)
@@ -309,7 +309,7 @@ namespace FFC.FAST
         }
     }
 
-    class ElseIfStatement : FASTNode
+    public class ElseIfStatement : FASTNode
     {
         public FExpression condition;
         public StatementList ifTrue;
@@ -345,7 +345,7 @@ namespace FFC.FAST
         }
     }
 
-    class ReturnStatement : FStatement
+    public class ReturnStatement : FStatement
     {
         public FExpression value = null;
         public ReturnStatement(FExpression value, TextSpan span)
@@ -370,7 +370,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Ret);
         }
     }
-    class BreakStatement : FStatement
+    public class BreakStatement : FStatement
     {
         public BreakStatement(TextSpan span)
         {
@@ -388,7 +388,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Br, exitLabel);
         }
     }
-    class ContinueStatement : FStatement
+    public class ContinueStatement : FStatement
     {
         public ContinueStatement(TextSpan span)
         {
@@ -406,7 +406,7 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Br, conditionLabel);
         }
     }
-    class PrintStatement : FStatement
+    public class PrintStatement : FStatement
     {
         public ExpressionList toPrint;
         public PrintStatement(ExpressionList toPrint, TextSpan span)

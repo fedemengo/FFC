@@ -7,7 +7,7 @@ using FFC.FRunTime;
 
 namespace FFC.FAST
 {
-    abstract public class FExpression : FASTNode
+    public abstract class FExpression : FASTNode
     {
         /*
             inherited by

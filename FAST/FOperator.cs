@@ -6,7 +6,7 @@ using FFC.FGen;
 
 namespace FFC.FAST
 {
-    abstract public class FOperator : FASTNode
+    public abstract class FOperator : FASTNode
     {
         /*
             inherited by
@@ -43,7 +43,7 @@ namespace FFC.FAST
         }
     }
 
-    abstract public class RelationalOperator : FOperator
+    public abstract class RelationalOperator : FOperator
     {
         public override FType GetTarget(FType t1, FType t2)
         {
@@ -111,7 +111,7 @@ namespace FFC.FAST
         public override string GetMethodName() => "op_Inequality";
     }
 
-    abstract public class BooleanOperator : FOperator
+    public abstract class BooleanOperator : FOperator
     {
         public override FType GetTarget(FType t1, FType t2)
         {
@@ -145,7 +145,7 @@ namespace FFC.FAST
         public override string GetMethodName() => "op_ExclusiveOr";
     }
 
-    abstract public class MathOperator : FOperator
+    public abstract class MathOperator : FOperator
     {
         public override FType GetTarget(FType t1, FType t2)
         {

@@ -56,7 +56,7 @@ namespace FFC.FAST
             else  throw new NotImplementedException($"{Span} - Generation not supported for {index.GetType().Name}");
         }
     }
-    abstract public class Indexer : FExpression
+    public abstract class Indexer : FExpression
     {
     }
     public class DotIndexer : Indexer

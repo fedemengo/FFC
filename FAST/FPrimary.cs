@@ -3,7 +3,7 @@ using FFC.FGen;
 
 namespace FFC.FAST
 {
-    abstract public class FPrimary : FSecondary
+    public abstract class FPrimary : FSecondary
     {
         /* inherited by
             FValue

@@ -5,7 +5,7 @@ using FFC.FGen;
 
 namespace FFC.FAST
 {
-    class MapDefinition : FPrimary
+    public class MapDefinition : FPrimary
     {
         public ExpressionPairList entries;
 
@@ -21,7 +21,7 @@ namespace FFC.FAST
             entries.Print(tabs + 1);
         }
     }
-    class ExpressionPairList : FASTNode
+    public class ExpressionPairList : FASTNode
     {
         public List<ExpressionPair> pairs;
         public ExpressionPairList(ExpressionPair pair, TextSpan span = null)
@@ -42,7 +42,7 @@ namespace FFC.FAST
                 e.Print(tabs + 1);
         }
     }
-    class ExpressionPair : FASTNode
+    public class ExpressionPair : FASTNode
     {
         public FExpression first;
         public FExpression second;

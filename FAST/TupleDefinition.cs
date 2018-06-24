@@ -8,7 +8,7 @@ using FFC.FRunTime;
 
 namespace FFC.FAST
 {
-    class TupleDefinition : FPrimary //this count as (Expression)
+    public class TupleDefinition : FPrimary //this count as (Expression)
     {
         public TupleElementList elements;
 
@@ -80,7 +80,7 @@ namespace FFC.FAST
             }
         }
     }
-    class TupleElementList : FASTNode
+    public class TupleElementList : FASTNode
     {
         public List<TupleElement> elements;
         public TupleElementList(TextSpan span)
@@ -110,7 +110,7 @@ namespace FFC.FAST
             }
         }
     }
-    class TupleElement : FASTNode
+    public class TupleElement : FASTNode
     {
         public Identifier id;
         public FExpression value;

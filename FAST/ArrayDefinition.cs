@@ -9,7 +9,7 @@ using FFC.FGen;
 
 namespace FFC.FAST
 {
-    class ArrayDefinition : FPrimary
+    public class ArrayDefinition : FPrimary
     {
         public void SetEmpty(FType t)
         {

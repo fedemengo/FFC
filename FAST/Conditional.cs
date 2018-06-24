@@ -8,7 +8,7 @@ using FFC.FGen;
 
 namespace FFC.FAST
 {
-    class Conditional : FPrimary
+    public class Conditional : FPrimary
     {
         public FExpression condition;
         public FExpression ifTrue;

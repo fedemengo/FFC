@@ -7,7 +7,7 @@ using FFC.FGen;
 
 namespace FFC.FAST
 {
-    class FunctionDefinition : FPrimary
+    public class FunctionDefinition : FPrimary
     {
         public ParameterList parameters;
         public FType returnType;
@@ -35,7 +35,7 @@ namespace FFC.FAST
         }
     }
 
-    class ParameterList : FASTNode
+    public class ParameterList : FASTNode
     {
         public List<Parameter> parameters;
         public ParameterList(Parameter p, TextSpan span)
@@ -57,7 +57,7 @@ namespace FFC.FAST
         }
     }
 
-    class Parameter : FASTNode
+    public class Parameter : FASTNode
     {
         public Identifier id;
         public FType type;

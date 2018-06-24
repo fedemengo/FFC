@@ -10,7 +10,7 @@ using FFC.FGen;
 
 namespace FFC.FAST
 {
-    class LoopStatement : FStatement
+    public class LoopStatement : FStatement
     {
         public FLoopHeader header;
         public StatementList body;
@@ -44,7 +44,7 @@ namespace FFC.FAST
             generator.MarkLabel(exitLabel);
         }
     }
-    abstract class FLoopHeader : FASTNode
+    public abstract class FLoopHeader : FASTNode
     {
         //A loop header has to jump to exitLabel if false, and has to Mark condLabel
         public virtual void Generate(ILGenerator generator, Label condLabel, Label exitLabel, ref SymbolTable st)
@@ -52,7 +52,7 @@ namespace FFC.FAST
             throw new NotImplementedException($"{Span} - Generation not implemented for {GetType().Name}");
         }
     }
-    class ForHeader : FLoopHeader
+    public class ForHeader : FLoopHeader
     {
         public Identifier id;
         public FExpression collection;
@@ -112,7 +112,7 @@ namespace FFC.FAST
             }
         }
     }
-    class WhileHeader : FLoopHeader
+    public class WhileHeader : FLoopHeader
     {
         public FExpression condition;
 

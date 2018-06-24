@@ -5,7 +5,7 @@ using FFC.FGen;
 
 namespace FFC.FAST
 {
-    class FunctionCall : FSecondary
+    public class FunctionCall : FSecondary
     {
         public FSecondary toCall;
         public ExpressionList exprs;

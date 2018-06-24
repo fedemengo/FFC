@@ -1,13 +1,14 @@
 using System;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Collections.Generic;
 
 using FFC.FAST;
 using FFC.FGen;
 
 namespace FFC.FGen
 {
-    class Generator
+    public partial class Generator
     {
         public static bool Generate(string Path, DeclarationStatementList stms)
         {
@@ -49,6 +50,6 @@ namespace FFC.FGen
             asmBuilder.Save(name + ".exe");
 
             return true;
-        }
+        }        
     }
 }

@@ -7,7 +7,7 @@ using FFC.FGen;
 
 namespace FFC.FAST
 {
-    abstract public class FValue : FPrimary
+    public abstract class FValue : FPrimary
     {
         public override void Generate(ILGenerator generator, SymbolTable st)
         {

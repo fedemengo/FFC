@@ -1,4 +1,5 @@
 main is func(): integer do
+    e is [func() do print "hello"; end];
     a is 3;
     b is [4.4, 1.0, 9.99, 100.01, 0.1];
     c is 4\4;
