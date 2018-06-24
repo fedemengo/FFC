@@ -184,10 +184,7 @@ namespace FFC.FAST
             Console.WriteLine("Array type");
             type.Print(tabs + 1);
         }
-        public override Type GetRunTimeType()
-        {
-            return typeof(FArray<>).MakeGenericType(type.GetRunTimeType());
-        }
+        public override Type GetRunTimeType() => typeof(FArray<>).MakeGenericType(type.GetRunTimeType());
     }
     public class MapType : FType
     {
@@ -205,7 +202,7 @@ namespace FFC.FAST
             key.Print(tabs + 1);
             value.Print(tabs + 1);
         }
-        public override Type GetRunTimeType() => typeof(FMap);
+        public override Type GetRunTimeType() => typeof(FMap<,>).MakeGenericType(new Type[]{key.GetRunTimeType(), value.GetRunTimeType()});
     }
     public class TupleType : FType
     {
