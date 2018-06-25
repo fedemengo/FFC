@@ -31,10 +31,6 @@ namespace FFC.FAST
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             FunctionType t = GetValueType(st) as FunctionType;
-            //create a new class and emit there the stuff you need.
-            //delegate this stuff to generator
-            //if(Generator.FunctionTypes.ContainsKey(t) == false)
-            //    Generator.AddFunctionType(t);
             TypeBuilder function = Generator.GetFunction(currentType, t);
             MethodBuilder funcMeth = function.DefineMethod("Invoke", MethodAttributes.Public);
             var funcGen = funcMeth.GetILGenerator();

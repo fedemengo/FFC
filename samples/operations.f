@@ -32,8 +32,6 @@ main is func() do
     print 1.0i1.0 / 1.5;
     print 1.0i1.0 / 2.0i-2.0;
 
-    // shall we really not support (integer or real) / complex ?
-
     print 1 / 1.0i1.0;
     print 1.5 / 1.0i1.0;
 

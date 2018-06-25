@@ -1,15 +1,13 @@
-n is 3;
-g is func() do
-    return n;
-end
-
 a is func() : integer do
     return 1;
 end
 
 /*
 
-
+n :integer is 3;
+g is func() do
+    return n;
+end
 
 square is func(n : integer) do
     return n * n;
@@ -30,4 +28,12 @@ fib is func(n: integer) do
         return fib(n-1) + fib(n-2);
     end
 end
+
+z is 5;
+bigF is func(a : integer) do
+    return func(x : integer) => (z + x + a);
+end
+
+k is bigF(3)(5);
+
 */

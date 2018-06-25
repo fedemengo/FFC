@@ -212,6 +212,15 @@ namespace FFC.FAST
             expr.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Stloc, var);
         }
+        //Shall declaration have types?
+        public override void BuildType(SymbolTable st)
+        {
+            valueType = type;
+            if(type == null || expr.GetValueType(st) == type)
+                valueType = expr.GetValueType(st);
+            else
+                throw new NotImplementedException($"{Span} - Type mismatch in variable {id.name}, {expr.GetValueType(st)} is not {type}");
+        }
     }
     public class DeclarationStatementList : FASTNode
     {

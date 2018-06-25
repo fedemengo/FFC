@@ -155,10 +155,7 @@ namespace FFC.FAST
             paramTypes.Print(tabs + 1);
             if(returnType != null) returnType.Print(tabs + 1);
         }
-        public override Type GetRunTimeType()
-        {
-            throw new NotImplementedException($"{Span} Function RunTimeType not yet implemented");
-        }
+        public override Type GetRunTimeType() => throw new Exception($"{Span} - GetRunTimeType() is not implemented for type {GetType().Name}");
     }
 
     public abstract class IterableType : FType
