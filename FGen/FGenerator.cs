@@ -10,6 +10,14 @@ namespace FFC.FGen
 {
     public partial class Generator
     {
+        //call reset to have it start compilation of a new file
+        public static void Reset() => throw new NotImplementedException("Reset of the generator status is not currently implemented");
+        
+        //stored globally to emit delegate types for function types
+        private static TypeBuilder programType;
+
+        //might we need to store more stuff globally ?
+
         public static bool Generate(string Path, DeclarationStatementList stms)
         {
             
@@ -23,7 +31,8 @@ namespace FFC.FGen
             moduleBuilder.CreateGlobalFunctions();
 
             /* Class 'Program' that will run all the statements */
-            TypeBuilder programType = moduleBuilder.DefineType("Program", TypeAttributes.Public);
+            
+            programType = moduleBuilder.DefineType("Program", TypeAttributes.Public);
             ConstructorBuilder progConstr = programType.DefineConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName,
                                                         CallingConventions.Standard,
                                                         new Type[0]);
@@ -38,7 +47,7 @@ namespace FFC.FGen
 
             ILGenerator mainMethGen = mainMeth.GetILGenerator();
             //generates all the statements in main
-            stms.Generate(mainMethGen, new SymbolTable());
+            stms.Generate(mainMethGen, programType, new SymbolTable());
 
             mainMethGen.Emit(OpCodes.Ret);
 
@@ -50,6 +59,19 @@ namespace FFC.FGen
             asmBuilder.Save(name + ".exe");
 
             return true;
-        }        
+        }
+        public static Dictionary<FunctionType, TypeBuilder> FunctionTypes;
+        public static void AddFunctionType(FunctionType f)
+        {
+            throw new NotImplementedException($"I don't know how to emit delegate types");
+        }
+        private static int funcCount = 0;
+        private static string GetNextFuncName() => "___f" + funcCount.ToString();
+        public static TypeBuilder GetFunction(TypeBuilder parentType, FunctionType funcType)
+        {
+            if(FunctionTypes.ContainsKey(funcType) == false)
+                AddFunctionType(funcType);
+            throw new NotImplementedException($"I don't know how to emit function types of some given deleagates");
+        }
     }
 }

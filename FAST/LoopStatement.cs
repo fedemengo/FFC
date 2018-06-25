@@ -30,27 +30,34 @@ namespace FFC.FAST
             body.Print(tabs + 1);
         }
 
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            Label loopCondition = generator.DefineLabel();
-            Label exitLabel = generator.DefineLabel();
+            conditionLabel = generator.DefineLabel();
+            exitLabel = generator.DefineLabel();
             //loop condition is generated inside FLoopHeader
             if(header != null)
-                header.Generate(generator, loopCondition, exitLabel, ref st);
+                header.Generate(generator, currentType, ref st, exitLabel, conditionLabel);
             else
-                generator.MarkLabel(loopCondition);
-            body.Generate(generator, loopCondition, exitLabel, st);
-            generator.Emit(OpCodes.Br, loopCondition);
+                generator.MarkLabel(conditionLabel);
+            body.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            generator.Emit(OpCodes.Br, conditionLabel);
             generator.MarkLabel(exitLabel);
+        }
+        public override void BuildType(SymbolTable st)
+        {
+            //shall test this part
+            if(header is ForHeader)
+            {
+                var x = header as ForHeader;
+                if(x.id != null)
+                    st = st.Assign(x.id.name, new NameInfo(null, (x.collection.GetValueType(st) as IterableType).type));
+            }
+            valueType = body.GetValueType(st);
         }
     }
     public abstract class FLoopHeader : FASTNode
     {
-        //A loop header has to jump to exitLabel if false, and has to Mark condLabel
-        public virtual void Generate(ILGenerator generator, Label condLabel, Label exitLabel, ref SymbolTable st)
-        {
-            throw new NotImplementedException($"{Span} - Generation not implemented for {GetType().Name}");
-        }
+        
     }
     public class ForHeader : FLoopHeader
     {
@@ -71,7 +78,7 @@ namespace FFC.FAST
             collection.Print(tabs + 1);
         }
 
-        public override void Generate(ILGenerator generator, Label condLabel, Label exitLabel, ref SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             // Generate iterator
             FType collType = collection.GetValueType(st);
@@ -80,7 +87,7 @@ namespace FFC.FAST
             
             if(iterableType == null)
                 throw new NotImplementedException($"{Span} - Can't iterate on {collType}");
-            collection.Generate(generator, st);
+            collection.Generate(generator, currentType, st, exitLabel, conditionLabel);
             if(!collType.GetRunTimeType().GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(FIterable<>)))
                 throw new NotImplementedException($"{Span} - {collType.GetRunTimeType().Name} is not FIterable {iterableType.type.GetRunTimeType().Name}");
             generator.Emit(OpCodes.Callvirt, collType.GetRunTimeType().GetMethod("GetIterator"));
@@ -96,7 +103,7 @@ namespace FFC.FAST
             }
 
             // Advance iterator
-            generator.MarkLabel(condLabel); // Has to repeat from here
+            generator.MarkLabel(conditionLabel); // Has to repeat from here
             generator.Emit(OpCodes.Ldloc, it);
             generator.Emit(OpCodes.Callvirt, typeof(FIterator<>).MakeGenericType(collValueRTType).GetMethod("MoveNext"));
             //If false (reached it end) exit from loop
@@ -128,12 +135,12 @@ namespace FFC.FAST
             condition.Print(tabs + 1);
         }
 
-        public override void Generate(ILGenerator generator, Label condLabel, Label exitLabel, ref SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            generator.MarkLabel(condLabel); //While repeats from condition check
+            generator.MarkLabel(conditionLabel); //While repeats from condition check
             if(condition.GetValueType(st).GetRunTimeType() != typeof(FBoolean))
                 throw new NotImplementedException($"{Span} - Can't use conditional with {condition.GetValueType(st)}");
-            condition.Generate(generator, st);
+            condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
             generator.Emit(OpCodes.Brfalse, exitLabel);
         }

@@ -22,5 +22,11 @@ namespace FFC.FAST
             toCall.Print(tabs + 1);
             exprs.Print(tabs + 1);
         }
+        public override void BuildType(SymbolTable st)
+        {
+            var t = toCall.GetValueType(st) as FunctionType;
+            if(t == null) throw new NotImplementedException($"{Span} - Can't call function on {toCall.GetValueType(st)}.");
+            valueType = t.returnType;
+        }
     }
 }

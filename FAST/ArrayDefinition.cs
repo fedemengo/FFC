@@ -28,12 +28,12 @@ namespace FFC.FAST
             Console.WriteLine("Array definition");
             values.Print(tabs + 1);
         }
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             generator.Emit(OpCodes.Newobj, typeof(FArray<>).MakeGenericType((GetValueType(st) as ArrayType).type.GetRunTimeType()).GetConstructor(new Type[0]));
             foreach(var z in values.expressions)
             {
-                z.Generate(generator, st);
+                z.Generate(generator, currentType, st, exitLabel, conditionLabel);
                 //I heard you liked long lines
                 //generator.Emit(OpCodes.Newobj, typeof(FArray<>).MakeGenericType(z.ValueType(st).GetRunTimeType()).GetConstructor(new Type[]{typeof(FArray<>).MakeGenericType(z.ValueType(st).GetRunTimeType()), z.ValueType(st).GetRunTimeType()}));
                 Type t = z.GetValueType(st).GetRunTimeType();

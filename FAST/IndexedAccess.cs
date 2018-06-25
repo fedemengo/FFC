@@ -39,18 +39,18 @@ namespace FFC.FAST
             }
             else throw new NotImplementedException($"{Span} - Can't use indexers on type {valueType.GetType().Name}");
         }
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            container.Generate(generator, st);
+            container.Generate(generator, currentType, st, exitLabel, conditionLabel);
             if(index is SquaresIndexer)
             { 
-                index.Generate(generator, st);
+                index.Generate(generator, currentType, st, exitLabel, conditionLabel);
                 generator.Emit(OpCodes.Callvirt, container.GetValueType(st).GetRunTimeType().GetMethod("get_Item", new Type[]{index.GetValueType(st).GetRunTimeType()}));
             }
             else if(index is DotIndexer)
             {
                 IntegerValue tupleIndex = new IntegerValue((container.GetValueType(st) as TupleType).GetMappedIndex(index as DotIndexer), Span);
-                tupleIndex.Generate(generator, st);
+                tupleIndex.Generate(generator, currentType, st, exitLabel, conditionLabel);
                 generator.Emit(OpCodes.Callvirt, container.GetValueType(st).GetRunTimeType().GetMethod("Get", new Type[]{typeof(FInteger)}));
             }
             else  throw new NotImplementedException($"{Span} - Generation not supported for {index.GetType().Name}");
@@ -77,10 +77,10 @@ namespace FFC.FAST
             if(id != null) id.Print(tabs + 1);
             else index.Print(tabs + 1);
         }
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             if(id == null)
-                index.Generate(generator, st);
+                index.Generate(generator, currentType, st, exitLabel, conditionLabel);
             else
             {
                 generator.Emit(OpCodes.Ldstr, id.name);
@@ -109,10 +109,10 @@ namespace FFC.FAST
             index.Print(tabs + 1);
         }
 
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             //object is already emitted - we emit expression
-            index.Generate(generator, st);
+            index.Generate(generator, currentType, st, exitLabel, conditionLabel);
         }
 
         public override void BuildType(SymbolTable st)

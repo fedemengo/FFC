@@ -33,12 +33,12 @@ namespace FFC.FAST
                 elements.Print(tabs + 1);
             }
         }
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             //only for expression, tuple to do!
             if(IsExpression()) 
             {
-                elements.elements[0].value.Generate(generator, st);
+                elements.elements[0].value.Generate(generator, currentType, st, exitLabel, conditionLabel);
             }
             else
             {
@@ -50,7 +50,7 @@ namespace FFC.FAST
                 foreach(TupleElement elem in elements.elements)
                 {
                     generator.Emit(OpCodes.Ldloc, localTuple);
-                    elem.Generate(generator, st);
+                    elem.Generate(generator, currentType, st, exitLabel, conditionLabel);
                     Type elementType = elem.value.GetValueType(st).GetRunTimeType();
                     generator.Emit(OpCodes.Callvirt, typeof(FTuple).GetMethod("Add", new Type[]{elementType}));
                 }
@@ -128,9 +128,9 @@ namespace FFC.FAST
             if(id != null) id.Print(tabs + 1);
             value.Print(tabs + 1);   
         }
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            value.Generate(generator, st);
+            value.Generate(generator, currentType, st, exitLabel, conditionLabel);
         }
     }
 }

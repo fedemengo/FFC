@@ -33,7 +33,7 @@ namespace FFC.FAST
             Console.ForegroundColor = prev;
         }
         public abstract FType GetTarget(FType t1, FType t2);
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             throw new NotImplementedException($"{this.Span} - Operators are not meant to be directly generated.");
         }

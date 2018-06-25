@@ -3,6 +3,7 @@ A compiler for the F language (and it's definition)
 
 ## TODOs
 
+* Look into if/elseif/else code generation, it's definitely messing things up with break statements at least. Consider adding a new parameter to generate?
 * Update note section
 * Load external library from another folder
 * Catch exception in wrong.f ?
@@ -38,7 +39,7 @@ A compiler for the F language (and it's definition)
 	- [x] Semantic actions
 	- [x] AST structure
 
-- [ ] Mappings (main constructs, nested functions)
+- [x] Mappings (main constructs, nested functions)
 	- Refer to code generation progress
 
 - [ ] Code generation (while creating mappings)

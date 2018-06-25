@@ -28,10 +28,26 @@ namespace FFC.FAST
             if(returnType != null) returnType.Print(tabs + 1);
             body.Print(tabs + 1);
         }
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            //only generates body
-            body.Generate(generator, st);
+            FunctionType t = GetValueType(st) as FunctionType;
+            //create a new class and emit there the stuff you need.
+            //delegate this stuff to generator
+            //if(Generator.FunctionTypes.ContainsKey(t) == false)
+            //    Generator.AddFunctionType(t);
+            TypeBuilder function = Generator.GetFunction(currentType, t);
+            MethodBuilder funcMeth = function.DefineMethod("Invoke", MethodAttributes.Public);
+            var funcGen = funcMeth.GetILGenerator();
+            body.Generate(funcGen, function, st, exitLabel, conditionLabel);
+        }
+        public override void BuildType(SymbolTable st)
+        {
+            var t = new FunctionType(null, null);
+            t.returnType = body.GetValueType(st);
+            t.paramTypes = new TypeList();
+            foreach(var p in parameters.parameters)
+                t.paramTypes.Add(p.GetValueType(st));
+            valueType = t;
         }
     }
 

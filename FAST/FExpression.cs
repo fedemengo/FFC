@@ -16,21 +16,11 @@ namespace FFC.FAST
                 EllipsisExpr
                 FSecondary
         */
-        public virtual void EmitPrint(ILGenerator generator, SymbolTable st)
+        public virtual void EmitPrint(ILGenerator generator, TypeBuilder currentType, SymbolTable st)
         {
-            Generate(generator, st);
+            Generate(generator, currentType, st);
             FType t = this is Identifier ? st.Find((this as Identifier).name).Type : GetValueType(st);
             generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{t.GetType()}));
-        }
-        protected FType valueType = null;
-        public FType GetValueType(SymbolTable st)
-        {
-            if(valueType == null) BuildType(st);
-            return valueType;
-        }
-        public virtual void BuildType(SymbolTable st)
-        {
-            throw new NotImplementedException($"{Span} - BuildType not implemented for {this.GetType().Name}");
         }
     }
     public class ExpressionList : FASTNode
@@ -79,7 +69,7 @@ namespace FFC.FAST
             valueType = binOperator.GetTarget(left.GetValueType(st), right.GetValueType(st));
         }
 
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             GetValueType(st);
             if(valueType is MapType)
@@ -94,11 +84,11 @@ namespace FFC.FAST
                 //we need to cast to the 2same type they would get summed to
                 targetType = new PlusOperator(null).GetTarget(left.GetValueType(st), right.GetValueType(st));
             }
-            left.Generate(generator, st);
+            left.Generate(generator, currentType, st, exitLabel, conditionLabel);
             if(left.GetValueType(st).GetRunTimeType() != targetType.GetRunTimeType())
                 left.GetValueType(st).ConvertTo(targetType, generator);
             
-            right.Generate(generator, st);
+            right.Generate(generator, currentType, st, exitLabel, conditionLabel);
             if(right.GetValueType(st).GetRunTimeType() != targetType.GetRunTimeType())
                 right.GetValueType(st).ConvertTo(targetType, generator);
 
@@ -127,9 +117,9 @@ namespace FFC.FAST
         {
             valueType = value.GetValueType(st);
         }
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            value.Generate(generator, st);
+            value.Generate(generator, currentType, st, exitLabel, conditionLabel);
             //we call -(obj) for ValueType
             generator.Emit(OpCodes.Call, value.GetValueType(st).GetRunTimeType().GetMethod("op_UnaryNegation", new Type[]{valueType.GetRunTimeType()}));
         }
@@ -158,10 +148,10 @@ namespace FFC.FAST
             to.Print(tabs + 1);
         }
 
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            from.Generate(generator, st);
-            to.Generate(generator, st);
+            from.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            to.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Newobj, typeof(FEllipsis).GetConstructor(new Type[]{typeof(FInteger), typeof(FInteger)}));
         }
     }
@@ -183,9 +173,9 @@ namespace FFC.FAST
         {
             valueType = expr.GetValueType(st);
         }
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            expr.Generate(generator, st);
+            expr.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Call, expr.GetValueType(st).GetRunTimeType().GetMethod("op_LogicalNot", new Type[]{expr.GetValueType(st).GetRunTimeType()}));
         }
     }
@@ -205,7 +195,7 @@ namespace FFC.FAST
             Console.WriteLine($"Read Expression");
             type.Print(tabs + 1);
         }
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             //Idea is to use runtime function Read(), so that everything depends on library implementation of types
             generator.Emit(OpCodes.Call, type.GetRunTimeType().GetMethod("Read"));

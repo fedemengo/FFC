@@ -36,21 +36,21 @@ namespace FFC.FAST
             else
                 throw new NotImplementedException($"{Span} - Different type in conditional expression");
         }
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             if(condition.GetValueType(st).GetRunTimeType() != typeof(FBoolean))
             {
                 throw new NotImplementedException($"{Span} - Can't use conditional with {condition.GetValueType(st)}");
             }
-            condition.Generate(generator, st);
+            condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
             Label falseBranch = generator.DefineLabel();
             Label exitBranch = generator.DefineLabel();
             generator.Emit(OpCodes.Brfalse, falseBranch);
-            ifTrue.Generate(generator, st);
+            ifTrue.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Br, exitBranch);
             generator.MarkLabel(falseBranch);
-            ifFalse.Generate(generator, st);
+            ifFalse.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.MarkLabel(exitBranch);
         }
     }

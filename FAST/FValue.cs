@@ -9,10 +9,8 @@ namespace FFC.FAST
 {
     public abstract class FValue : FPrimary
     {
-        public override void Generate(ILGenerator generator, SymbolTable st)
-        {
-            throw new NotImplementedException($"{Span} - Generation for {GetType().Name} not implemented");
-        }
+        //long lines are better
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label)) => throw new NotImplementedException($"{Span} - Generation for {GetType().Name} not implemented");
     }
     public class BooleanValue : FValue
     {
@@ -29,7 +27,7 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine($"Boolean value({value})");
         }
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             generator.Emit(value ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0);
             generator.Emit(OpCodes.Newobj, typeof(FBoolean).GetConstructor(new Type[]{typeof(bool)}));
@@ -52,7 +50,7 @@ namespace FFC.FAST
             Console.WriteLine($"Integer value({value})");
         }
 
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             generator.Emit(OpCodes.Ldc_I4_S, value);
             generator.Emit(OpCodes.Newobj, typeof(FInteger).GetConstructor(new Type[]{typeof(int)}));
@@ -74,7 +72,7 @@ namespace FFC.FAST
             Console.WriteLine($"RealVal value({value})");
         }
 
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             generator.Emit(OpCodes.Ldc_R8, value);
             generator.Emit(OpCodes.Newobj, typeof(FReal).GetConstructor(new Type[]{typeof(double)}));
@@ -98,7 +96,7 @@ namespace FFC.FAST
             Console.WriteLine($"Rational value({numerator} / { denominator})");
         }
 
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             generator.Emit(OpCodes.Ldc_I4, this.numerator);
             generator.Emit(OpCodes.Ldc_I4, this.denominator);
@@ -122,7 +120,7 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine($"Complex value({real}i{img})");
         }
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             generator.Emit(OpCodes.Ldc_R8, real);
             generator.Emit(OpCodes.Ldc_R8, img);
@@ -146,7 +144,7 @@ namespace FFC.FAST
             Console.WriteLine($"String value({value})");
         }
 
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             generator.Emit(OpCodes.Ldstr, value);
             generator.Emit(OpCodes.Newobj, typeof(FString).GetConstructor(new Type[]{typeof(string)}));
@@ -167,7 +165,7 @@ namespace FFC.FAST
             Console.WriteLine($"Identifier({name})");
         }
 
-        public override void Generate(ILGenerator generator, SymbolTable st)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             if(st.Contains(name))
                 generator.Emit(OpCodes.Ldloc, st.Find(name).LocBuilder);
