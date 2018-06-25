@@ -43,6 +43,15 @@ namespace FFC.FAST
             foreach(FType t in types)
                 t.Print(tabs + 1);
         }
+        public override string ToString()
+        {
+            string s = "(";
+            foreach(var t in types)
+                s += t.ToString() + ", ";
+            if(s.Length >= 4) s = s.Remove(s.Length - 2);
+            s += ")";
+            return s;
+        }
     }
 
     public abstract class NumericType : FType
@@ -157,7 +166,11 @@ namespace FFC.FAST
         }
         public override Type GetRunTimeType()
         {
-            return Generator.FunctionTypes[this];
+            return Generator.FunctionTypes.ContainsKey(this) ? Generator.FunctionTypes[this] : throw new NotImplementedException($"{Span} - Generator can't find {ToString()} in Function Types");
+        }
+        public override string ToString()
+        {
+            return "FunctionType: " + returnType.ToString() + paramTypes.ToString();
         }
     }
 

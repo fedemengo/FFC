@@ -4,6 +4,8 @@ A compiler for the F language (and it's definition)
 ## TODOs
 
 * Update note section
+* Add proper ToString method to FTypes, and maybe even more nodes
+* Organize FAST code better in files
 * Load external library from another folder
 * Catch exception in wrong.f ?
 * Improve Read() run time function

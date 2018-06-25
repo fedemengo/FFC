@@ -198,13 +198,8 @@ namespace FFC.FAST
                 t = type;
                 (expr as ArrayDefinition).SetEmpty(t);
             }
-            else if(expr is TupleDefinition)
-            {
-                t = expr.GetValueType(st);
-            }
             else
                 t = expr.GetValueType(st);
-            
             if(type != null && type.GetRunTimeType() != t.GetRunTimeType())
                 throw new NotImplementedException($"{Span} - Type {t.GetRunTimeType().Name} doesn't match declaration {type.GetRunTimeType().Name}");
             LocalBuilder var = generator.DeclareLocal(t.GetRunTimeType());

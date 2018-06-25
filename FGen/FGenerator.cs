@@ -60,13 +60,65 @@ namespace FFC.FGen
 
             return true;
         }
-        public static Dictionary<FunctionType, TypeBuilder> FunctionTypes;
+        public static Dictionary<FunctionType, TypeBuilder> FunctionTypes = new Dictionary<FunctionType, TypeBuilder>();
+        //we shall probably split this in many files and abuse of mr partial class
         public static void AddFunctionType(FunctionType f)
         {
-            throw new NotImplementedException($"I don't know how to emit delegate types");
+            TypeBuilder tdelegate = programType.DefineNestedType(GetNextDelName(), TypeAttributes.AutoClass | 
+                                                                          TypeAttributes.AnsiClass |
+                                                                          TypeAttributes.Sealed |
+                                                                          TypeAttributes.NestedPublic, typeof(System.MulticastDelegate));
+
+            ConstructorBuilder delegateConstr = tdelegate.DefineConstructor(MethodAttributes.Public | 
+                                                                        MethodAttributes.HideBySig | 
+                                                                        MethodAttributes.SpecialName | 
+                                                                        MethodAttributes.RTSpecialName,
+                                                                        CallingConventions.Standard, Type.EmptyTypes);
+
+            delegateConstr.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
+
+            Type retType = f.returnType.GetRunTimeType();
+            Type[] paramTypesArray = new Type[f.paramTypes.types.Count];
+            for(int i = 0; i < f.paramTypes.types.Count; i++)
+                paramTypesArray[i] = f.paramTypes.types[i].GetRunTimeType();
+
+            MethodBuilder methodInvoke = tdelegate.DefineMethod("Invoke", MethodAttributes.Public |
+                                                                      MethodAttributes.HideBySig |
+                                                                      MethodAttributes.NewSlot |
+                                                                      MethodAttributes.Virtual, CallingConventions.Standard, 
+                                                                      f.returnType.GetRunTimeType(), paramTypesArray);
+            methodInvoke.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
+
+            Type[] paramTypesArrayBeginInvoke = new Type[paramTypesArray.Length + 2];
+            for(int i = 0; i < paramTypesArray.Length; i++)
+                paramTypesArrayBeginInvoke[i] = paramTypesArray[i];
+            paramTypesArrayBeginInvoke[paramTypesArray.Length] = typeof(AsyncCallback);
+            paramTypesArrayBeginInvoke[paramTypesArray.Length + 1] = typeof(object);
+
+
+            MethodBuilder methodBeginInvoke = tdelegate.DefineMethod("BeginInvoke", MethodAttributes.Public |
+                                                                                    MethodAttributes.HideBySig |
+                                                                                    MethodAttributes.NewSlot |
+                                                                                    MethodAttributes.Virtual,
+                                                                                    typeof(IAsyncResult), 
+                                                                                    paramTypesArrayBeginInvoke);
+
+            methodBeginInvoke.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
+
+            MethodBuilder methodEndInvoke = tdelegate.DefineMethod("EndInvoke", MethodAttributes.Public | 
+                                                                                MethodAttributes.HideBySig | 
+                                                                                MethodAttributes.NewSlot | 
+                                                                                MethodAttributes.Virtual, 
+                                                                                null, new Type[] { typeof(IAsyncResult)});
+            methodEndInvoke.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
+
+
+            //assign the newly created type to the dictionary
+            FunctionTypes[f] = tdelegate;
         }
-        private static int funcCount = 0;
-        private static string GetNextFuncName() => "___f" + funcCount.ToString();
+        private static int funcCount = 0, delCount = 0;
+        private static string GetNextFuncName() => "___f" + (funcCount++).ToString();
+        private static string GetNextDelName() => "___d" + (delCount++).ToString();
         public static TypeBuilder GetFunction(TypeBuilder parentType, FunctionType funcType)
         {
             if(FunctionTypes.ContainsKey(funcType) == false)

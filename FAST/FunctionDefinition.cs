@@ -44,6 +44,7 @@ namespace FFC.FAST
             foreach(var p in parameters.parameters)
                 t.paramTypes.Add(p.GetValueType(st));
             valueType = t;
+            Generator.AddFunctionType(t);
         }
     }
 
