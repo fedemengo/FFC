@@ -339,11 +339,7 @@ namespace FFC.FAST
     public class ElseIfList : FASTNode
     {
         public List<ElseIfStatement> list;
-        public void Add(ElseIfStatement other)
-        {
-            list.Add(other);
-        }
-
+        public void Add(ElseIfStatement other) => list.Add(other);
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
@@ -351,7 +347,6 @@ namespace FFC.FAST
             foreach(var l in list)
                 l.Print(tabs + 1);
         }
-
         public ElseIfList(TextSpan span = null)
         {
             this.Span = span;
@@ -395,7 +390,10 @@ namespace FFC.FAST
             condition.Print(tabs + 1);
             Then.Print(tabs + 1);
         }
-
+        public override void BuildType(SymbolTable st)
+        {
+            valueType = Then.GetValueType(st);
+        }
     }
 
     public class ReturnStatement : FStatement
