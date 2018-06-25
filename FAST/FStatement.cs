@@ -323,15 +323,16 @@ namespace FFC.FAST
             FType e = Else.GetValueType(st);
             valueType = t;
             if(ei != null)
-                if(valueType == null || valueType == ei)
+                if(valueType == null || valueType.GetRunTimeType() == ei.GetRunTimeType())
                     valueType = ei;
                 else
-                    throw new NotImplementedException($"{Span} - Return type mismatch");
+                    throw new NotImplementedException($"{Span} - If type {t.GetType().Name} doesn't match ElseIf type {ei.GetType().Name}");
+            
             if(e != null)
-                if(valueType == null || valueType == ei)
-                    valueType = ei;
+                if(valueType == null || valueType.GetRunTimeType() == e.GetRunTimeType())
+                    valueType = e;
                 else
-                    throw new NotImplementedException($"{Span} - Return type mismatch");
+                    throw new NotImplementedException($"{Span} - If type {t.GetType().Name} doesn't match Else type {e.GetType().Name}");
         }
 
     }
@@ -390,10 +391,7 @@ namespace FFC.FAST
             condition.Print(tabs + 1);
             Then.Print(tabs + 1);
         }
-        public override void BuildType(SymbolTable st)
-        {
-            valueType = Then.GetValueType(st);
-        }
+        public override void BuildType(SymbolTable st) => valueType = Then.GetValueType(st);
     }
 
     public class ReturnStatement : FStatement
