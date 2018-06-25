@@ -274,22 +274,46 @@ namespace FFC.FAST
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             if(condition.GetValueType(st).GetRunTimeType() != typeof(FBoolean))
-            {
-                throw new NotImplementedException($"{Span} - Can't use conditional with {condition.GetValueType(st)}");
-            }
+                throw new NotImplementedException($"{Span} - Can't use {condition.GetValueType(st)} as condition");
+
+            //Branch to the end of IfStatement
+            Label exitBranch = generator.DefineLabel();
+            
+            //Emit if condition
             condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
-            
+            //Skip to next condition
             Label falseBranch = generator.DefineLabel();
-            exitLabel = generator.DefineLabel();
-
-            generator.Emit(OpCodes.Brfalse, falseBranch);
             Then.Generate(generator, currentType, st, exitLabel, conditionLabel);
-            generator.Emit(OpCodes.Br, exitLabel);
+            //After then, skip to end
+            generator.Emit(OpCodes.Br, exitBranch);
+            //Mark next check
             generator.MarkLabel(falseBranch);
-            ElseIfs.Generate(generator, currentType, st, exitLabel, conditionLabel);
+
+            //Generate all of the else ifs
+            foreach(var ei in ElseIfs.list)
+            {
+                //Check if condition is boolean
+                if(ei.condition.GetValueType(st) is BooleanType == false)
+                    throw new NotImplementedException($"{Span} - Can't use {condition.GetValueType(st)} as condition");
+                //Emit ElseIF condition
+                ei.condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
+                generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
+                //Skip to next condition
+                Label nextElse = generator.DefineLabel();
+                ei.Then.Generate(generator, currentType, st, exitLabel, conditionLabel);
+                //Skip to end
+                generator.Emit(OpCodes.Br, exitBranch);
+                //Mark next check
+                generator.MarkLabel(nextElse);
+            }
+
+            //Generate code for else
             Else.Generate(generator, currentType, st, exitLabel, conditionLabel);
-            generator.MarkLabel(exitLabel);
+
+            //End of IfStatement
+            generator.MarkLabel(exitBranch);
+
         }
 
         public override void BuildType(SymbolTable st)
@@ -372,20 +396,6 @@ namespace FFC.FAST
             Then.Print(tabs + 1);
         }
 
-        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
-        {
-            if(condition.GetValueType(st).GetRunTimeType() != typeof(FBoolean))
-                throw new NotImplementedException($"{Span} - Can't use conditional with {condition.GetValueType(st)}");
-
-            condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
-            generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
-            Label falseBranch = generator.DefineLabel();
-
-            generator.Emit(OpCodes.Brfalse, falseBranch);
-            Then.Generate(generator, currentType, st, exitLabel, conditionLabel);
-            generator.Emit(OpCodes.Br, exitLabel);
-            generator.MarkLabel(falseBranch);
-        }
     }
 
     public class ReturnStatement : FStatement
