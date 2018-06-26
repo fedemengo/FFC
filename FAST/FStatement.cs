@@ -12,7 +12,7 @@ namespace FFC.FAST
         /*
             inherited by
             FunctionCallStatement
-            AssignmentStatemt
+            AssignmentStatement
             DeclStm
             IfStm
             LoopStm
@@ -66,7 +66,7 @@ namespace FFC.FAST
                     continue;
                 }
                 //statements that we can safely skip
-                if(stm is AssignmentStatemt || stm is FunctionCallStatement || stm is ContinueStatement || stm is BreakStatement || stm is PrintStatement)
+                if(stm is AssignmentStatement || stm is FunctionCallStatement || stm is ContinueStatement || stm is BreakStatement || stm is PrintStatement)
                     continue;
                 else
                 {
@@ -109,11 +109,11 @@ namespace FFC.FAST
             function.Print(tabs + 1);
         }
     }
-    public class AssignmentStatemt : FStatement
+    public class AssignmentStatement : FStatement
     {
         public FSecondary left;
         public FExpression right;
-        public AssignmentStatemt(FSecondary left, FExpression right, TextSpan span)
+        public AssignmentStatement(FSecondary left, FExpression right, TextSpan span)
         {
             this.Span = span;
             this.left = left;
@@ -122,7 +122,7 @@ namespace FFC.FAST
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
-            Console.WriteLine("Assignement statement");
+            Console.WriteLine("Assignment statement");
             left.Print(tabs + 1);
             right.Print(tabs + 1);
         }
@@ -141,7 +141,7 @@ namespace FFC.FAST
                 if(right.GetValueType(st).GetRunTimeType() != y.Type.GetRunTimeType()) throw new NotImplementedException($"{Span} - Can't assign type {right.GetValueType(st).GetRunTimeType()} to variable of type {x.GetValueType(st).GetRunTimeType()}"); 
                 //Empty array on identifier
                 right.Generate(generator, currentType, st, exitLabel, conditionLabel);
-                Generator.EmitLoad(generator, y.Builder);
+                Generator.EmitStore(generator, y.Builder);
             }
             else if(left is IndexedAccess)      // set
             {
@@ -209,7 +209,7 @@ namespace FFC.FAST
             st = st.Assign(id.name, new NameInfo(var, t));
             
             expr.Generate(generator, currentType, st, exitLabel, conditionLabel);
-            generator.Emit(OpCodes.Stloc, var);
+            Generator.EmitStore(generator, var);
         }
         //Shall declaration have types?
         public override void BuildType(SymbolTable st)
@@ -425,7 +425,10 @@ namespace FFC.FAST
             Console.WriteLine("Break statement");
         }
 
-        public void Generate(ILGenerator generator, Label exitLabel) => generator.Emit(OpCodes.Br, exitLabel);
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel, Label conditionLabel)
+        {
+            generator.Emit(OpCodes.Br, exitLabel);
+        }
     }
     public class ContinueStatement : FStatement
     {
@@ -435,7 +438,10 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("Continue statement");
         }
-        public void Generate(ILGenerator generator, Label conditionLabel) => generator.Emit(OpCodes.Br, conditionLabel);
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel, Label conditionLabel)
+        {
+            generator.Emit(OpCodes.Br, conditionLabel);
+        }
     }
     public class PrintStatement : FStatement
     {

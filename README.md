@@ -4,7 +4,11 @@ A compiler for the F language (and it's definition)
 ## TODOs
 
 * Update note section
+* Fix Type checking in declaration when both are specified
+* Add := FunctionDefinition in grammar
 * Add proper ToString method to FTypes, and maybe even more nodes
+* Support to void functions ?
+* GetValueType in ParameterList / TypeList
 * Organize FAST code better in files
 * Load external library from another folder
 * Catch exception in wrong.f ?

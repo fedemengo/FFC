@@ -10,7 +10,7 @@ namespace FFC.FGen
 {
     public partial class Generator
     {
-        //call reset to have it start compilation of a new file
+        //call reset to have it ready to compile a new file
         public static void Reset() => throw new NotImplementedException("Reset of the generator status is not currently implemented");
         
         //stored globally to emit delegate types for function types

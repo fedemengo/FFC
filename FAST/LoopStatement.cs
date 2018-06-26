@@ -32,13 +32,18 @@ namespace FFC.FAST
 
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
+            //we make two new lebels : now break/continue won't affect previous loops
             conditionLabel = generator.DefineLabel();
             exitLabel = generator.DefineLabel();
-            //loop condition is generated inside FLoopHeader
-            if(header != null)
+
+            //loop condition is generated inside header if possible
+            if(header is WhileHeader)
+                header.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            else if(header is ForHeader)
                 header.Generate(generator, currentType, ref st, exitLabel, conditionLabel);
-            else
+            else if(header is null)
                 generator.MarkLabel(conditionLabel);
+
             body.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Br, conditionLabel);
             generator.MarkLabel(exitLabel);
@@ -78,7 +83,7 @@ namespace FFC.FAST
             collection.Print(tabs + 1);
         }
 
-        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, ref SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             // Generate iterator
             FType collType = collection.GetValueType(st);
@@ -94,7 +99,7 @@ namespace FFC.FAST
             
             // Create lb for iterator
             LocalBuilder it = generator.DeclareLocal(typeof(FIterator<>).MakeGenericType(collValueRTType));
-            generator.Emit(OpCodes.Stloc, it);
+            Generator.EmitStore(generator, it);
             // If header has id, loads it
             if(id != null)
             {
@@ -104,18 +109,18 @@ namespace FFC.FAST
 
             // Advance iterator
             generator.MarkLabel(conditionLabel); // Has to repeat from here
-            generator.Emit(OpCodes.Ldloc, it);
+            Generator.EmitLoad(generator, it);
             generator.Emit(OpCodes.Callvirt, typeof(FIterator<>).MakeGenericType(collValueRTType).GetMethod("MoveNext"));
             //If false (reached it end) exit from loop
             generator.Emit(OpCodes.Brfalse, exitLabel);
             //if id was set, updates it
             if(id != null)
             {
-                generator.Emit(OpCodes.Ldloc, it);
+                Generator.EmitLoad(generator, it);
                 //get value
                 generator.Emit(OpCodes.Callvirt, typeof(FIterator<>).MakeGenericType(collValueRTType).GetMethod("GetCurrent"));
                 //assign it to "iterating" variable
-                Generator.EmitLoad(generator, st.Find(id.name).Builder);
+                Generator.EmitStore(generator, st.Find(id.name).Builder);
             }
         }
     }

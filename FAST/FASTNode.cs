@@ -18,8 +18,8 @@ namespace FFC.FAST
                 System.Console.Write("  ");
         }
 
-        public virtual void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = new Label(), Label conditionLabel = new Label()) => throw new System.NotImplementedException($"{Span} - Code generation (with SymbolTable updates) not implemented for type {GetType().Name}");
-        public virtual void Generate(ILGenerator generator, TypeBuilder currentType, ref SymbolTable st, Label exitLabel = new Label(), Label conditionLabel = new Label()) => throw new System.NotImplementedException($"{Span} - Code generation not implemented for type {GetType().Name}");
+        public virtual void Generate(ILGenerator generator, TypeBuilder currentType, ref SymbolTable st, Label exitLabel = new Label(), Label conditionLabel = new Label()) => throw new System.NotImplementedException($"{Span} - Code generation (with SymbolTable updates) not implemented for type {GetType().Name}");
+public virtual void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = new Label(), Label conditionLabel = new Label()) => throw new System.NotImplementedException($"{Span} - Code generation not implemented for type {GetType().Name}");
         //if not specified, you just skip on using label for jumps
         //public virtual void Generate(ILGenerator generator, TypeBuilder currentType, Label conditionLabel, Label exitLabel, SymbolTable st) => throw new System.NotImplementedException($"{Span} - Code generation (with conditional jumps) not implemented for type {GetType().Name}");
 

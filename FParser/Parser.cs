@@ -801,7 +801,7 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 82: // assignment -> secondary, ASSIGN, expr, SEMICOLON
 #line 182 "FParser/gppg/grammar.y"
-                                        { CurrentSemanticValue = new AssignmentStatemt((FSecondary)ValueStack[ValueStack.Depth-4], (FExpression)ValueStack[ValueStack.Depth-2], new TextSpan(ValueStack[ValueStack.Depth-4].Span, ValueStack[ValueStack.Depth-1].Span)); }
+                                        { CurrentSemanticValue = new AssignmentStatement((FSecondary)ValueStack[ValueStack.Depth-4], (FExpression)ValueStack[ValueStack.Depth-2], new TextSpan(ValueStack[ValueStack.Depth-4].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 83: // if_stm -> IF, math_expr, THEN, stm_list, e_if_list, opt_else

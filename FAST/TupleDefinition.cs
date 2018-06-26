@@ -46,15 +46,15 @@ namespace FFC.FAST
                 // construct a tuple
                 LocalBuilder localTuple = generator.DeclareLocal(typeof(FTuple));
                 generator.Emit(OpCodes.Newobj, typeof(FTuple).GetConstructor(Type.EmptyTypes));
-                generator.Emit(OpCodes.Stloc, localTuple);
+                Generator.EmitStore(generator, localTuple);
                 foreach(TupleElement elem in elements.elements)
                 {
-                    generator.Emit(OpCodes.Ldloc, localTuple);
+                    Generator.EmitLoad(generator, localTuple);
                     elem.Generate(generator, currentType, st, exitLabel, conditionLabel);
                     Type elementType = elem.value.GetValueType(st).GetRunTimeType();
                     generator.Emit(OpCodes.Callvirt, typeof(FTuple).GetMethod("Add", new Type[]{elementType}));
                 }
-                generator.Emit(OpCodes.Ldloc, localTuple);
+                Generator.EmitStore(generator, localTuple);
             }
         }
         public override void BuildType(SymbolTable st)

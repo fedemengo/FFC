@@ -7,6 +7,12 @@ end
 
 /*
 
+easiest is func() : integer do
+    return 1;
+end
+
+arrowStyle is func() => (easiest)
+
 n :integer is 3;
 g is func() do
     return n;

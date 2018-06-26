@@ -179,7 +179,7 @@ expr_list
 	;
 
 assignment
-	: secondary ASSIGN expr SEMICOLON						{ $$ = new AssignmentStatemt((FSecondary)$1, (FExpression)$3, new TextSpan($1.Span, $4.Span)); }
+	: secondary ASSIGN expr SEMICOLON						{ $$ = new AssignmentStatement((FSecondary)$1, (FExpression)$3, new TextSpan($1.Span, $4.Span)); }
 	;
 
 if_stm
