@@ -48,6 +48,18 @@ namespace FFC.FGen
             ILGenerator mainMethGen = mainMeth.GetILGenerator();
             //generates all the statements in main
             stms.Generate(mainMethGen, programType, new SymbolTable());
+
+            //call some function given at compile time
+            
+            //call first function supposing it returns int and no params
+            mainMethGen.Emit(OpCodes.Ldloc_0);
+            var delEnum = FunctionTypes.GetEnumerator();
+            delEnum.MoveNext();
+            var delType = delEnum.Current;
+
+            mainMethGen.Emit(OpCodes.Callvirt,delType.Value.GetMethod("Invoke"));
+            mainMethGen.Emit(OpCodes.Pop);
+            //end of main
             mainMethGen.Emit(OpCodes.Ret);
 
             // set assembly entry point

@@ -1,4 +1,5 @@
 a is func() : integer do
+    print 3;
     return 1;
 end
 
