@@ -82,6 +82,16 @@ namespace FFC.FGen
                 generator.Emit(OpCodes.Ldfld, builder as FieldBuilder);
             else throw new NotImplementedException($"Cannot load {builder.GetType()}");
         }
+        public static void EmitStore(ILGenerator generator, object builder)
+        {
+            if(builder is LocalBuilder)
+                generator.Emit(OpCodes.Stloc, builder as LocalBuilder);
+            else if (builder is ParameterBuilder)
+                generator.Emit(OpCodes.Starg, (builder as ParameterBuilder).Position);
+            else if (builder is FieldBuilder)
+                generator.Emit(OpCodes.Stfld, builder as FieldBuilder);
+            else throw new NotImplementedException($"Cannot load {builder.GetType()}");
+        }
 
         public static Dictionary<FunctionType, TypeBuilder> FunctionTypes = new Dictionary<FunctionType, TypeBuilder>();
         
