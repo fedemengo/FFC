@@ -38,9 +38,25 @@ namespace FFC.FAST
             List<Type> paramTypes = new List<Type>();
             parameters.parameters.ForEach(word => paramTypes.Add(word.type.GetRunTimeType()));
             MethodBuilder funcMeth = function.DefineMethod("Invoke", MethodAttributes.Public, returnType.GetRunTimeType(), paramTypes.ToArray());
+            
             //just generate code inside the method
             var funcGen = funcMeth.GetILGenerator();
             body.Generate(funcGen, function, st, exitLabel, conditionLabel);
+
+            //Function class is now ready to be created
+            function.CreateType();
+
+            //create instance of function
+            generator.Emit(OpCodes.Newobj, function.GetConstructors()[0]);
+
+            //put function on the stack
+            generator.Emit(OpCodes.Ldftn, funcMeth);
+
+            //get delegate type
+            var delegateType = Generator.FunctionTypes[valueType as FunctionType];
+
+            //emits delegate
+            generator.Emit(OpCodes.Newobj, delegateType.GetConstructors()[0]);
         }
         public override void BuildType(SymbolTable st)
         {

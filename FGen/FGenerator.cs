@@ -48,7 +48,6 @@ namespace FFC.FGen
             ILGenerator mainMethGen = mainMeth.GetILGenerator();
             //generates all the statements in main
             stms.Generate(mainMethGen, programType, new SymbolTable());
-
             mainMethGen.Emit(OpCodes.Ret);
 
             // set assembly entry point
@@ -114,6 +113,8 @@ namespace FFC.FGen
                                                                                 null, new Type[] { typeof(IAsyncResult)});
             methodEndInvoke.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
 
+            //Creates the delegate type
+            tdelegate.CreateType();
 
             //assign the newly created type to the dictionary
             FunctionTypes[f] = tdelegate;
@@ -147,7 +148,7 @@ namespace FFC.FGen
             funcClassCtorGen.Emit(OpCodes.Ldarg_0);
             funcClassCtorGen.Emit(OpCodes.Call, typeof(System.Object).GetConstructor(new Type[0]));
             funcClassCtorGen.Emit(OpCodes.Ret);
-
+            
             //Type is now ready to emit everything
             return funcClass;
 

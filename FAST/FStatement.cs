@@ -50,7 +50,7 @@ namespace FFC.FAST
         {
             foreach(FStatement stm in statements)
             {
-                if (stm is DeclarationStatement) (stm as DeclarationStatement).Generate(generator, currentType, ref st, exitLabel, conditionLabel);
+                if (stm is DeclarationStatement) stm.Generate(generator, currentType, ref st, exitLabel, conditionLabel);
                 else stm.Generate(generator, currentType, st, exitLabel, conditionLabel);
             }
         }
