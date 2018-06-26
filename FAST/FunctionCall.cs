@@ -1,5 +1,7 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 using FFC.FParser;
 using FFC.FGen;
 
@@ -27,6 +29,14 @@ namespace FFC.FAST
             var t = toCall.GetValueType(st) as FunctionType;
             if(t == null) throw new NotImplementedException($"{Span} - Can't call function on {toCall.GetValueType(st)}.");
             valueType = t.returnType;
+        }
+
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
+        {
+            if(toCall.GetValueType(st) is FunctionType == false)
+                throw new NotImplementedException($"{Span} - Can't call functoin on {toCall.GetValueType(st)}.");
+            toCall.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            generator.Emit(OpCodes.Callvirt, Generator.FunctionTypes[toCall.GetValueType(st) as FunctionType].GetMethod("Invoke"));
         }
     }
 }

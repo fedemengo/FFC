@@ -9,6 +9,10 @@ g is func() do
     return n;
 end
 
+b is func() do
+    print a();
+end
+
 square is func(n : integer) do
     return n * n;
 end
