@@ -116,14 +116,10 @@ namespace FFC.FGen
 
             Type retType = f.returnType.GetRunTimeType();
             Type[] paramTypesArray = new Type[f.paramTypes.types.Count];
-            Console.WriteLine(name);
-            Console.Write("params: ");
             for(int i = 0; i < f.paramTypes.types.Count; i++)
             {
                 paramTypesArray[i] = f.paramTypes.types[i].GetRunTimeType();
-                Console.WriteLine(paramTypesArray[i] + " ");
             }
-            Console.WriteLine();
             
             MethodBuilder methodInvoke = tdelegate.DefineMethod("Invoke", MethodAttributes.Public |
                                                                       MethodAttributes.HideBySig |

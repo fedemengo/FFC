@@ -1,8 +1,12 @@
 a is func() do
     x: integer is read;
-    square is func(n: integer) do return n * n; end
-    print b(x);
-    return 1;
+    square is func(n: integer) do 
+        return n * n; 
+    end
+    print square(x);
+    z: integer is square(x);
+    print z + 1;
+    return 0;
 end
 
 /*

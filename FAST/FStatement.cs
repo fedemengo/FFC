@@ -215,7 +215,8 @@ namespace FFC.FAST
         public override void BuildType(SymbolTable st)
         {
             valueType = type;
-            if(type == null || expr.GetValueType(st) == type)
+            // is this the right way ??
+            if(type == null || expr.GetValueType(st).GetType() == type.GetType())
                 valueType = expr.GetValueType(st);
             else
                 throw new NotImplementedException($"{Span} - Type mismatch in variable {id.name}, {expr.GetValueType(st)} is not {type}");

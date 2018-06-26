@@ -42,7 +42,8 @@ namespace FFC.FAST
             // define parameter type
             for(int i=0; i<parameters.parameters.Count; ++i)
             {
-                ParameterBuilder paramBuilder = funcMeth.DefineParameter(i, ParameterAttributes.In, parameters.parameters[i].id.name);
+                // add +1 to account for "this" as parameter
+                ParameterBuilder paramBuilder = funcMeth.DefineParameter(i + 1, ParameterAttributes.In, parameters.parameters[i].id.name);
                 st = st.Assign(parameters.parameters[i].id.name, new NameInfo(paramBuilder, parameters.parameters[i].type));
             }
 
