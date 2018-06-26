@@ -33,7 +33,7 @@ namespace FFC.FAST
         {
             FunctionType t = GetValueType(st) as FunctionType;
             TypeBuilder function = Generator.GetFunction(currentType, t);
-            
+
             //we now need to emit proper method
             List<Type> paramTypes = new List<Type>();
             parameters.parameters.ForEach(word => paramTypes.Add(word.type.GetRunTimeType()));
@@ -66,6 +66,10 @@ namespace FFC.FAST
             foreach(var p in parameters.parameters)
                 t.paramTypes.Add(p.GetValueType(st));
             valueType = t;
+            if(returnType == null) returnType = t.returnType;
+            else if(returnType.GetRunTimeType() != t.returnType.GetRunTimeType())
+                throw new NotImplementedException($"{Span} - Returned type {t.returnType} doesn't match declared tpye {returnType}.");
+
             Generator.AddFunctionType(t);
         }
     }

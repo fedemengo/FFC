@@ -1,5 +1,7 @@
-a is func() : integer do
-    print 3;
+a is func() do
+    x: integer is read;
+    square is func(n: integer) do return n * n; end
+    print b(x);
     return 1;
 end
 

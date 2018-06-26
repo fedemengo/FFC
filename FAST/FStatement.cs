@@ -200,10 +200,14 @@ namespace FFC.FAST
             }
             else
                 t = expr.GetValueType(st);
+
             if(type != null && type.GetRunTimeType() != t.GetRunTimeType())
                 throw new NotImplementedException($"{Span} - Type {t.GetRunTimeType().Name} doesn't match declaration {type.GetRunTimeType().Name}");
+            
+            
             LocalBuilder var = generator.DeclareLocal(t.GetRunTimeType());
             st = st.Assign(id.name, new NameInfo(var, t));
+            
             expr.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Stloc, var);
         }
