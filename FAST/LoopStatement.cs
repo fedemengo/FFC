@@ -115,7 +115,7 @@ namespace FFC.FAST
                 //get value
                 generator.Emit(OpCodes.Callvirt, typeof(FIterator<>).MakeGenericType(collValueRTType).GetMethod("GetCurrent"));
                 //assign it to "iterating" variable
-                generator.Emit(OpCodes.Stloc, st.Find(id.name).LocBuilder);
+                Generator.EmitLoad(generator, st.Find(id.name).Builder);
             }
         }
     }

@@ -248,14 +248,17 @@ namespace FFC.FGen
         }
     }
     #endregion 
+
+
+
     //This is just a name proposal, feel free to change / revert back to Data
     public class NameInfo
     {
-        public LocalBuilder LocBuilder {get; set;}
+        public object Builder {get; set;}
         public FType Type {get; set;}
-        public NameInfo(LocalBuilder locBuilder, FType type)
+        public NameInfo(LocalBuilder Builder, FType type)
         {
-            this.LocBuilder = locBuilder;
+            this.Builder = Builder;
             this.Type = type;
         }
     }   

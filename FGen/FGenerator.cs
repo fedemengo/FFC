@@ -71,6 +71,18 @@ namespace FFC.FGen
 
             return true;
         }
+
+        public static void EmitLoad(ILGenerator generator, object builder)
+        {
+            if(builder is LocalBuilder)
+                generator.Emit(OpCodes.Ldloc, builder as LocalBuilder);
+            else if (builder is ParameterBuilder)
+                throw new NotImplementedException($"Can't load ParameterBuilder");
+            else if (builder is FieldBuilder)
+                generator.Emit(OpCodes.Ldfld, builder as FieldBuilder);
+            else throw new NotImplementedException($"Cannot load {builder.GetType()}");
+        }
+
         public static Dictionary<FunctionType, TypeBuilder> FunctionTypes = new Dictionary<FunctionType, TypeBuilder>();
         
         

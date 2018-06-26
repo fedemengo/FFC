@@ -141,7 +141,7 @@ namespace FFC.FAST
                 if(right.GetValueType(st).GetRunTimeType() != y.Type.GetRunTimeType()) throw new NotImplementedException($"{Span} - Can't assign type {right.GetValueType(st).GetRunTimeType()} to variable of type {x.GetValueType(st).GetRunTimeType()}"); 
                 //Empty array on identifier
                 right.Generate(generator, currentType, st, exitLabel, conditionLabel);
-                generator.Emit(OpCodes.Stloc, y.LocBuilder);
+                Generator.EmitLoad(generator, y.Builder);
             }
             else if(left is IndexedAccess)      // set
             {

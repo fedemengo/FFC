@@ -168,7 +168,7 @@ namespace FFC.FAST
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             if(st.Contains(name))
-                generator.Emit(OpCodes.Ldloc, st.Find(name).LocBuilder);
+                Generator.EmitLoad(generator, st.Find(name).Builder);
             else
                 throw new NotImplementedException($"{Span} - Identifier {name} not found");
         }
