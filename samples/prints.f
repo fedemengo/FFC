@@ -73,9 +73,9 @@ main is func() do
 
     loop
         a: integer is read;
-        //if a = 0 then         not working
-        //    break;
-        //end
+        if a = 0 then         
+            break;
+        end
     end
 
     // simple loop
@@ -91,7 +91,7 @@ main is func() do
     print "";
 
     print "return stm (this is the last print)\n";
-    return;
+    return 1;
     print "you will never see this text";
 
 end

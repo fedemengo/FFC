@@ -284,6 +284,9 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
             //Skip to next condition
             Label falseBranch = generator.DefineLabel();
+            generator.Emit(OpCodes.Brfalse, falseBranch);
+
+            //Generate then code
             Then.Generate(generator, currentType, st, exitLabel, conditionLabel);
             //After then, skip to end
             generator.Emit(OpCodes.Br, exitBranch);
@@ -301,6 +304,8 @@ namespace FFC.FAST
                 generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
                 //Skip to next condition
                 Label nextElse = generator.DefineLabel();
+                generator.Emit(OpCodes.Brfalse, nextElse);
+                //Generate ElseIf body
                 ei.Then.Generate(generator, currentType, st, exitLabel, conditionLabel);
                 //Skip to end
                 generator.Emit(OpCodes.Br, exitBranch);
