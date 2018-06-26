@@ -61,6 +61,8 @@ namespace FFC.FGen
             return true;
         }
         public static Dictionary<FunctionType, TypeBuilder> FunctionTypes = new Dictionary<FunctionType, TypeBuilder>();
+        
+        
         //we shall probably split this in many files and abuse of mr partial class
         public static void AddFunctionType(FunctionType f)
         {
@@ -123,7 +125,32 @@ namespace FFC.FGen
         {
             if(FunctionTypes.ContainsKey(funcType) == false)
                 AddFunctionType(funcType);
-            throw new NotImplementedException($"I don't know how to emit function types of some given deleagates");
+
+            //Emit nested function type
+            TypeBuilder funcClass = parentType.DefineNestedType(GetNextFuncName(), TypeAttributes.AutoClass | 
+                                                                            TypeAttributes.AnsiClass |
+                                                                            TypeAttributes.Sealed |
+                                                                            TypeAttributes.NestedPublic, typeof(object));
+
+            //Define a field with pointer to parent - this will probably stop the GC to do bad stuff
+            FieldBuilder funcFField = funcClass.DefineField("outerClass", funcClass.DeclaringType, FieldAttributes.Public);
+            
+            //Define (empty) constructor
+
+            ConstructorBuilder funcClassCtor = funcClass.DefineConstructor(MethodAttributes.Public | 
+                                                                        MethodAttributes.HideBySig | 
+                                                                        MethodAttributes.SpecialName | 
+                                                                        MethodAttributes.RTSpecialName,
+                                                                        CallingConventions.Standard, Type.EmptyTypes);
+            //Emit constructor code
+            ILGenerator funcClassCtorGen = funcClassCtor.GetILGenerator();
+            funcClassCtorGen.Emit(OpCodes.Ldarg_0);
+            funcClassCtorGen.Emit(OpCodes.Call, typeof(System.Object).GetConstructor(new Type[0]));
+            funcClassCtorGen.Emit(OpCodes.Ret);
+
+            //Type is now ready to emit everything
+            return funcClass;
+
         }
     }
 }

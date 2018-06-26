@@ -20,6 +20,7 @@ namespace FFC.FAST
             this.returnType = returnType;
             this.body = body;
         }
+
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
@@ -32,7 +33,12 @@ namespace FFC.FAST
         {
             FunctionType t = GetValueType(st) as FunctionType;
             TypeBuilder function = Generator.GetFunction(currentType, t);
-            MethodBuilder funcMeth = function.DefineMethod("Invoke", MethodAttributes.Public);
+            
+            //we now need to emit proper method
+            List<Type> paramTypes = new List<Type>();
+            parameters.parameters.ForEach(word => paramTypes.Add(word.type.GetRunTimeType()));
+            MethodBuilder funcMeth = function.DefineMethod("Invoke", MethodAttributes.Public, returnType.GetRunTimeType(), paramTypes.ToArray());
+            //just generate code inside the method
             var funcGen = funcMeth.GetILGenerator();
             body.Generate(funcGen, function, st, exitLabel, conditionLabel);
         }
