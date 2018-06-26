@@ -256,7 +256,7 @@ namespace FFC.FGen
     {
         public object Builder {get; set;}
         public FType Type {get; set;}
-        public NameInfo(LocalBuilder Builder, FType type)
+        public NameInfo(object Builder, FType type)
         {
             this.Builder = Builder;
             this.Type = type;

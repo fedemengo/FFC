@@ -39,6 +39,13 @@ namespace FFC.FAST
             parameters.parameters.ForEach(word => paramTypes.Add(word.type.GetRunTimeType()));
             MethodBuilder funcMeth = function.DefineMethod("Invoke", MethodAttributes.Public, returnType.GetRunTimeType(), paramTypes.ToArray());
             
+            // define parameter type
+            for(int i=0; i<parameters.parameters.Count; ++i)
+            {
+                ParameterBuilder paramBuilder = funcMeth.DefineParameter(i, ParameterAttributes.In, parameters.parameters[i].id.name);
+                st = st.Assign(parameters.parameters[i].id.name, new NameInfo(paramBuilder, parameters.parameters[i].type));
+            }
+
             //just generate code inside the method
             var funcGen = funcMeth.GetILGenerator();
             body.Generate(funcGen, function, st, exitLabel, conditionLabel);
@@ -61,10 +68,13 @@ namespace FFC.FAST
         public override void BuildType(SymbolTable st)
         {
             var t = new FunctionType(null, null);
-            t.returnType = body.GetValueType(st);
             t.paramTypes = new TypeList();
             foreach(var p in parameters.parameters)
+            {
+                st = st.Assign(p.id.name, new NameInfo(null, p.type));
                 t.paramTypes.Add(p.GetValueType(st));
+            }
+            t.returnType = body.GetValueType(st);
             valueType = t;
             if(returnType == null) returnType = t.returnType;
             else if(returnType.GetRunTimeType() != t.returnType.GetRunTimeType())
@@ -114,5 +124,7 @@ namespace FFC.FAST
             id.Print(tabs + 1);
             type.Print(tabs + 1);
         }
+
+        public override void BuildType(SymbolTable st) => valueType = type;
     }
 }

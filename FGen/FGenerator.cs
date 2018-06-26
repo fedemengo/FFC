@@ -57,7 +57,7 @@ namespace FFC.FGen
             delEnum.MoveNext();
             var delType = delEnum.Current;
 
-            mainMethGen.Emit(OpCodes.Callvirt,delType.Value.GetMethod("Invoke"));
+            mainMethGen.Emit(OpCodes.Callvirt, delType.Value.GetMethod("Invoke"));
             mainMethGen.Emit(OpCodes.Pop);
             //end of main
             mainMethGen.Emit(OpCodes.Ret);
@@ -77,7 +77,7 @@ namespace FFC.FGen
             if(builder is LocalBuilder)
                 generator.Emit(OpCodes.Ldloc, builder as LocalBuilder);
             else if (builder is ParameterBuilder)
-                throw new NotImplementedException($"Can't load ParameterBuilder");
+                generator.Emit(OpCodes.Ldarg, (builder as ParameterBuilder).Position);
             else if (builder is FieldBuilder)
                 generator.Emit(OpCodes.Ldfld, builder as FieldBuilder);
             else throw new NotImplementedException($"Cannot load {builder.GetType()}");
@@ -106,12 +106,12 @@ namespace FFC.FGen
             Type[] paramTypesArray = new Type[f.paramTypes.types.Count];
             for(int i = 0; i < f.paramTypes.types.Count; i++)
                 paramTypesArray[i] = f.paramTypes.types[i].GetRunTimeType();
-
+                
             MethodBuilder methodInvoke = tdelegate.DefineMethod("Invoke", MethodAttributes.Public |
                                                                       MethodAttributes.HideBySig |
                                                                       MethodAttributes.NewSlot |
                                                                       MethodAttributes.Virtual, CallingConventions.Standard, 
-                                                                      f.returnType.GetRunTimeType(), paramTypesArray);
+                                                                      retType, paramTypesArray);
             methodInvoke.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
 
             Type[] paramTypesArrayBeginInvoke = new Type[paramTypesArray.Length + 2];
