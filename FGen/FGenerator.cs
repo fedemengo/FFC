@@ -55,6 +55,7 @@ namespace FFC.FGen
             mainMethGen.Emit(OpCodes.Ldloc_0);
             var delEnum = FunctionTypes.GetEnumerator();
             delEnum.MoveNext();
+            delEnum.MoveNext();
             var delType = delEnum.Current;
 
             mainMethGen.Emit(OpCodes.Callvirt, delType.Value.GetMethod("Invoke"));
@@ -99,7 +100,8 @@ namespace FFC.FGen
         //we shall probably split this in many files and abuse of mr partial class
         public static void AddFunctionType(FunctionType f)
         {
-            TypeBuilder tdelegate = programType.DefineNestedType(GetNextDelName(), TypeAttributes.AutoClass | 
+            string name = GetNextDelName();
+            TypeBuilder tdelegate = programType.DefineNestedType(name, TypeAttributes.AutoClass | 
                                                                           TypeAttributes.AnsiClass |
                                                                           TypeAttributes.Sealed |
                                                                           TypeAttributes.NestedPublic, typeof(System.MulticastDelegate));
@@ -114,9 +116,15 @@ namespace FFC.FGen
 
             Type retType = f.returnType.GetRunTimeType();
             Type[] paramTypesArray = new Type[f.paramTypes.types.Count];
+            Console.WriteLine(name);
+            Console.Write("params: ");
             for(int i = 0; i < f.paramTypes.types.Count; i++)
+            {
                 paramTypesArray[i] = f.paramTypes.types[i].GetRunTimeType();
-                
+                Console.WriteLine(paramTypesArray[i] + " ");
+            }
+            Console.WriteLine();
+            
             MethodBuilder methodInvoke = tdelegate.DefineMethod("Invoke", MethodAttributes.Public |
                                                                       MethodAttributes.HideBySig |
                                                                       MethodAttributes.NewSlot |

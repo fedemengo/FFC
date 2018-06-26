@@ -36,7 +36,14 @@ namespace FFC.FAST
             if(toCall.GetValueType(st) is FunctionType == false)
                 throw new NotImplementedException($"{Span} - Can't call functoin on {toCall.GetValueType(st)}.");
             toCall.Generate(generator, currentType, st, exitLabel, conditionLabel);
-            generator.Emit(OpCodes.Callvirt, Generator.FunctionTypes[toCall.GetValueType(st) as FunctionType].GetMethod("Invoke"));
+            List<Type> paramTypes = new List<Type>();
+            foreach(FExpression exprs in exprs.expressions)
+            {
+                paramTypes.Add(exprs.GetValueType(st).GetRunTimeType());
+                exprs.Generate(generator, currentType, st);
+            }
+            TypeBuilder funcType = Generator.FunctionTypes[toCall.GetValueType(st) as FunctionType];
+            generator.Emit(OpCodes.Callvirt, funcType.GetMethod("Invoke", paramTypes.ToArray()));
         }
     }
 }
