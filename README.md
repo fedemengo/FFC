@@ -4,6 +4,7 @@ A compiler for the F language (and it's definition)
 ## TODOs
 
 * Update note section
+* Check why current func_declaration.f not working (might have to do with parameters)
 * Fix Type checking in declaration when both are specified
 * Add := FunctionDefinition in grammar
 * Add proper ToString method to FTypes, and maybe even more nodes

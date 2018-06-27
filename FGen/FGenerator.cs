@@ -55,7 +55,6 @@ namespace FFC.FGen
             mainMethGen.Emit(OpCodes.Ldloc_0);
             var delEnum = FunctionTypes.GetEnumerator();
             delEnum.MoveNext();
-            delEnum.MoveNext();
             var delType = delEnum.Current;
 
             mainMethGen.Emit(OpCodes.Callvirt, delType.Value.GetMethod("Invoke"));

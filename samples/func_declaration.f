@@ -1,15 +1,27 @@
-a is func() do
-    x: integer is read;
-    square is func(n: integer) do 
-        return n * n; 
-    end
-    print square(x);
-    z: integer is square(x);
-    print z + 1;
-    return 0;
+
+main is func() do
+    bob is func(a : integer) => (4 * a)
+    print bob(5);
+    return 1;
 end
 
 /*
+a is func() do
+    
+    x: integer is read;
+    
+    square is func(n: integer) do 
+        return n * n; 
+    end
+    
+    print square(x);
+    
+    z: integer is square(x);
+    print z + 1;
+
+    return 0;
+end
+
 
 easiest is func() : integer do
     return 1;

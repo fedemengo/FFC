@@ -92,6 +92,13 @@ namespace FFC.FAST
             expression.Print(tabs + 1);
         }
 
+        public override void BuildType(SymbolTable st) => valueType = expression.GetValueType(st);
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
+        {
+            expression.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            generator.Emit(OpCodes.Ret);
+        }
+
         
     }
     public class FunctionCallStatement : FStatement
