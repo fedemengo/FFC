@@ -1,11 +1,18 @@
+f is func(n : integer) => (if n = 0 then 1 else f(n-1) end)
+
+/*
 
 main is func() do
-    bob is func(a : integer) => (4 * a)
-    print bob(5);
+    print (func()=>(3))();
     return 1;
 end
 
-/*
+main is func() do
+    bob is func(x : integer) => (x + x)
+    print bob(1) + bob(2);
+    return 1;
+end
+
 a is func() do
     
     x: integer is read;

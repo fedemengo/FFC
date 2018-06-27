@@ -93,3 +93,4 @@ A compiler for the F language (and it's definition)
 ## Notes
 
 * No main function, the entry point is specified at compile time `compile source.f entry_point`
+	* Not yet done, currently it just runs the first function if it's a func():integer

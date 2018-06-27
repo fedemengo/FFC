@@ -198,9 +198,7 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("Identifier list");
             foreach(Identifier id in ids)
-            {
                 id.Print(tabs+1);
-            }
         }
     }
 }

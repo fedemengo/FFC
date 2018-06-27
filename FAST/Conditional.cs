@@ -31,7 +31,12 @@ namespace FFC.FAST
 
         public override void BuildType(SymbolTable st) 
         {
-            if(ifTrue.GetValueType(st).GetRunTimeType() == ifFalse.GetValueType(st).GetRunTimeType())
+            var t = ifTrue.GetValueType(st);
+            var f = ifFalse.GetValueType(st);
+            //checks for recursive functions
+            if(t == null) valueType = f;
+            else if (f == null) valueType = t;
+            else if(t.GetRunTimeType() == f.GetRunTimeType())
                 valueType = ifTrue.GetValueType(st);
             else
                 throw new NotImplementedException($"{Span} - Different type in conditional expression");
@@ -39,9 +44,7 @@ namespace FFC.FAST
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             if(condition.GetValueType(st).GetRunTimeType() != typeof(FBoolean))
-            {
                 throw new NotImplementedException($"{Span} - Can't use conditional with {condition.GetValueType(st)}");
-            }
             condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
             Label falseBranch = generator.DefineLabel();

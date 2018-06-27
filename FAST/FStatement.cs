@@ -196,6 +196,16 @@ namespace FFC.FAST
 
         public override void Generate(ILGenerator generator, TypeBuilder currentType, ref SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
+            /*  This is meant to cover recursive functions
+                Shall we use a new FType or is null ok?
+                Main idea is to set id to a null Value.
+                as return expressions, null values are ignored.
+                we just need to ignore them also in operators [TODO] and func call
+                think if it's possible to support this on array[func], func tuples and func maps
+            */
+            st = st.Assign(id.name, new NameInfo(null, null));
+            
+            
             FType t = null;
             //Empty array
             if(expr is ArrayDefinition && (expr as ArrayDefinition).values.expressions.Count == 0)
@@ -211,7 +221,7 @@ namespace FFC.FAST
             if(type != null && type.GetRunTimeType() != t.GetRunTimeType())
                 throw new NotImplementedException($"{Span} - Type {t.GetRunTimeType().Name} doesn't match declaration {type.GetRunTimeType().Name}");
             
-            
+
             LocalBuilder var = generator.DeclareLocal(t.GetRunTimeType());
             st = st.Assign(id.name, new NameInfo(var, t));
             

@@ -22,6 +22,7 @@ namespace FFC.FAST
         }
         public virtual Type GetRunTimeType() => throw new NotImplementedException($"{Span} - RunTimeType not available for {GetType().Name}");
     }
+
     public class TypeList : FType
     {
         public List<FType> types;

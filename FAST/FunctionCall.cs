@@ -26,9 +26,10 @@ namespace FFC.FAST
         }
         public override void BuildType(SymbolTable st)
         {
-            var t = toCall.GetValueType(st) as FunctionType;
-            if(t == null) throw new NotImplementedException($"{Span} - Can't call function on {toCall.GetValueType(st)}.");
-            valueType = t.returnType;
+            var t = toCall.GetValueType(st);
+            if(t is null) return;
+            else if(t is FunctionType) valueType = (t as FunctionType).returnType;
+            else throw new NotImplementedException($"{Span} - Can't call function on {toCall.GetValueType(st)}.");
         }
 
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
