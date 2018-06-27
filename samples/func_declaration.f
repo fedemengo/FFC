@@ -1,17 +1,20 @@
-f is func(n : integer) => (if n = 0 then 1 else f(n-1) end)
+main is func() do
+    bob is func(x : integer) do
+        return x + x;
+    end
+    print bob(1) + bob(2);
+    return 1;
+end
 
 /*
+
+f is func(n : integer) => (if n = 0 then 1 else f(n-1) end)
 
 main is func() do
     print (func()=>(3))();
     return 1;
 end
 
-main is func() do
-    bob is func(x : integer) => (x + x)
-    print bob(1) + bob(2);
-    return 1;
-end
 
 a is func() do
     

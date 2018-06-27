@@ -256,13 +256,22 @@ namespace FFC.FAST
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
+            bool startEmitted = false;
             foreach(var x in statements)
+            {
                 x.Generate(generator, currentType, ref st);
+                if(x.id.name == Generator.StartFunction)
+                {
+                    if(startEmitted) throw new NotImplementedException($"{Span} - Cannot define multiple functions as starting ones");
+                    if(x.expr is FunctionDefinition == false || (x.expr as FunctionDefinition).GetValueType(st) is FunctionType == false)
+                        throw new NotImplementedException($"{x.Span} - Declaration not valid as start function");
+                    Generator.EmitStartFunction(st.Find(x.id.name).Builder, (x.expr as FunctionDefinition).GetValueType(st) as FunctionType);
+                    startEmitted = true;
+                }
+            }
+            if(!startEmitted) throw new NotImplementedException($"Cannot compile a program without a starting function");
         }
-        public void Add(DeclarationStatement stm)
-        {
-            statements.Add(stm);
-        }
+        public void Add(DeclarationStatement stm) => statements.Add(stm);
     }
     public class IfStatement : FStatement
     {

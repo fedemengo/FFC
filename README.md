@@ -4,9 +4,9 @@ A compiler for the F language (and it's definition)
 ## TODOs
 
 * Update note section
-* Check why current func_declaration.f not working (might have to do with parameters)
 * Fix Type checking in declaration when both are specified
 * Add := FunctionDefinition in grammar
+* Add := Read ?
 * Add proper ToString method to FTypes, and maybe even more nodes
 * Support to void functions ?
 * GetValueType in ParameterList / TypeList
@@ -68,7 +68,7 @@ A compiler for the F language (and it's definition)
 		* Same operators as arrays ?
 	- [ ] Maps
 	- [x] Tuples
-		- [ ] Define type for tuple (useful in assignment) 
+		- [ ] Define type for tuple (useful in assignment)
 		- [ ] Consider printing identifiers when present  
 	- [x] Conditional expressions
 	- [x] Conditional statements
@@ -77,8 +77,9 @@ A compiler for the F language (and it's definition)
 		- [x] For loops
 		- [ ] Just loop ?
 	- [x] Ellipsis
-	- [ ] Functions
-		- [ ] Nested functions
+	- [x] Functions
+		- [x] Nested functions
+		- [ ] Capturing used variables
 
 
 - [ ] Debugging and Testing
@@ -91,6 +92,3 @@ A compiler for the F language (and it's definition)
 - [ ] Writing a report
 
 ## Notes
-
-* No main function, the entry point is specified at compile time `compile source.f entry_point`
-	* Not yet done, currently it just runs the first function if it's a func():integer

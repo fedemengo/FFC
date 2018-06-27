@@ -15,13 +15,31 @@ namespace FFC.FGen
         
         //stored globally to emit delegate types for function types
         private static TypeBuilder programType;
+        //The function we need to call if found
+        public static string StartFunction {get ; private set;}
+        private static ILGenerator mainGen;
+
+        public static void EmitStartFunction(object toCall, FunctionType type)
+        {
+            if(type.paramTypes.types.Count > 0)
+                throw new NotImplementedException($"{type.Span} - Cannot start program with a function that takes parameters");
+            //load on stack
+            EmitLoad(mainGen, toCall);
+            //call invoke on the delegate type
+            mainGen.Emit(OpCodes.Callvirt, FunctionTypes[type].GetMethod("Invoke"));
+            //Pop call so to return void
+            mainGen.Emit(OpCodes.Pop);
+            mainGen.Emit(OpCodes.Ret);
+        }
 
         //might we need to store more stuff globally ?
 
-        public static bool Generate(string Path, DeclarationStatementList stms)
+        public static bool Generate(string Path, DeclarationStatementList stms, string start)
         {
-            
             string name = Path.Split('/')[1].Split('.')[0];
+            //name of function to invoke in Program.Main
+            StartFunction = start;
+            
             AppDomain appDomain = System.Threading.Thread.GetDomain();
             AssemblyName asmName = new AssemblyName(name);
 
@@ -42,26 +60,16 @@ namespace FFC.FGen
             progConstrGen.Emit(OpCodes.Call, typeof(System.Object).GetConstructor(new Type[0]));
             progConstrGen.Emit(OpCodes.Ret);
             
-            /* Methods */
+            /* Program.Main method */
             MethodBuilder mainMeth = programType.DefineMethod("Main", MethodAttributes.Public | MethodAttributes.Static, typeof(void), new Type[] { typeof(string[]) });
-
-            ILGenerator mainMethGen = mainMeth.GetILGenerator();
-            //generates all the statements in main
-            stms.Generate(mainMethGen, programType, new SymbolTable());
-
-            //call some function given at compile time
+            //Assign it to static field so that we can emit first call
+            mainGen = mainMeth.GetILGenerator();
             
-            //call first function supposing it returns int and no params
-            mainMethGen.Emit(OpCodes.Ldloc_0);
-            var delEnum = FunctionTypes.GetEnumerator();
-            delEnum.MoveNext();
-            var delType = delEnum.Current;
+            //generates all the statements in main
+            stms.Generate(mainGen, programType, new SymbolTable());
 
-            mainMethGen.Emit(OpCodes.Callvirt, delType.Value.GetMethod("Invoke"));
-            mainMethGen.Emit(OpCodes.Pop);
             //end of main
-            mainMethGen.Emit(OpCodes.Ret);
-
+            
             // set assembly entry point
             asmBuilder.SetEntryPoint(mainMeth);
             // create program type

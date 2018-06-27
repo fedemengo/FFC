@@ -16,6 +16,7 @@ namespace FFC.FParser
             try
             {
                 string Path = args[0];
+                string funcName = args.Length >= 2 ? args[1] : "main";
                 if(Path.Substring(Path.Length-2) != ".f")
                     throw new FormatException("Can't compile non-.f file");
                 Parser p = new Parser(new Scanner(new Tokenizer(), new SourceReader(Path)));
@@ -28,7 +29,7 @@ namespace FFC.FParser
                     stms.Print(0);
                     
                     //Generate PE compiling all statements   
-                    Generator.Generate(Path, (DeclarationStatementList) p.GetAST());
+                    Generator.Generate(Path, (DeclarationStatementList) p.GetAST(), funcName);
 
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("\nCompilation completed successfully!");
