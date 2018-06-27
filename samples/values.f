@@ -22,4 +22,5 @@ main is func() do
     //z :[{(integer, integer) : (integer, integer)}] is [{(0, 10) : (0, -10), (10, 20) : (-10, -20)}, {(100, 1000) : (300, 3000)}];
 
     //e is ([1, 2, 3], {["a", "b"] : (1, 3\4, "hi")}, 1\4, 3.1i4.5);
+    return 1;
 end

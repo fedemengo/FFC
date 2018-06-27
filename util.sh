@@ -1,6 +1,7 @@
 perform_task() {
     arg=1
-    [[ "$1" =~ ^"compile"$|^"run"$|^"crun"$ ]] && arg=2
+    [[ "$1" =~ ^"run"$ ]] && arg=2
+    [[ "$1" =~ ^"compile"$|^"crun"$ ]] && arg=3
     
     if [[ "$#" -lt "$arg" ]]; then
         echo "Too few argument"
@@ -31,7 +32,7 @@ perform_task() {
     "compile")
         echo "Compiling..."
         echo ""
-        mono bin/Release/FFC.exe "$2"
+        mono bin/Release/FFC.exe "$2" "$3"
         echo "";;
     "run")
         echo ""
@@ -39,8 +40,12 @@ perform_task() {
         echo "";;
     "crun")
         echo ""
-        mono bin/Release/FFC.exe "$2"
-        mono "$(echo "$2" | awk '{n=split($0,v,"/"); print v[n]}' | awk '{split($0,v,"."); print v[1]}').exe" 2>/dev/null
+        mono bin/Release/FFC.exe "$2" "$3"
+        if [ "$?" == "0" ]; then
+            mono "$(echo "$2" | awk '{n=split($0,v,"/"); print v[n]}' | awk '{split($0,v,"."); print v[1]}').exe" 2>/dev/null
+        else
+            return 1;
+        fi
         echo "";;
     "lib")
         echo "Generating library..."

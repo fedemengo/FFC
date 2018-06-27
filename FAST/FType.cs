@@ -21,6 +21,14 @@ namespace FFC.FAST
             }
         }
         public virtual Type GetRunTimeType() => throw new NotImplementedException($"{Span} - RunTimeType not available for {GetType().Name}");
+        public override bool Equals(object o)
+        {
+            FType t = o as FType;
+            if (Object.ReferenceEquals(t, null))
+                return false;
+            return this.ToString() == t.ToString();
+        }
+        public override int GetHashCode() => this.ToString().GetHashCode();
     }
 
     public class TypeList : FType
@@ -53,6 +61,14 @@ namespace FFC.FAST
             s += ")";
             return s;
         }
+        public override bool Equals(object o)
+        {
+            TypeList tl = o as TypeList;
+            if (Object.ReferenceEquals(tl, null))
+                return false;
+            return this.ToString() == tl.ToString();
+        }
+        public override int GetHashCode() => types.ToString().GetHashCode();
     }
 
     public abstract class NumericType : FType
@@ -68,8 +84,9 @@ namespace FFC.FAST
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
-            Console.WriteLine("Integer type");
+            Console.WriteLine(this);
         }
+        public override string ToString() => "IntegerType";
         public override Type GetRunTimeType() => typeof(FInteger);
     }
 
@@ -83,8 +100,9 @@ namespace FFC.FAST
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
-            Console.WriteLine("Real type");
+            Console.WriteLine(this);
         }
+        public override string ToString() => "RealType";
         public override Type GetRunTimeType() => typeof(FReal);
     }
 
@@ -98,8 +116,9 @@ namespace FFC.FAST
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
-            Console.WriteLine("Complex type");
+            Console.WriteLine(this);
         }
+        public override string ToString() => "ComplexType";
         public override Type GetRunTimeType() => typeof(FComplex);
     }
 
@@ -113,8 +132,9 @@ namespace FFC.FAST
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
-            Console.WriteLine("Rational type");
+            Console.WriteLine(this);
         }
+        public override string ToString() => "RationalType";
         public override Type GetRunTimeType() => typeof(FRational);
     }
 
@@ -128,8 +148,9 @@ namespace FFC.FAST
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
-            Console.WriteLine("String type");
+            Console.WriteLine(this);
         }
+        public override string ToString() => "StringType";
         public override Type GetRunTimeType() => typeof(FString);
     }
 
@@ -143,8 +164,9 @@ namespace FFC.FAST
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
-            Console.WriteLine("Boolean type");
+            Console.WriteLine(this);
         }
+        public override string ToString() => "BooleanType";
         public override Type GetRunTimeType() => typeof(FBoolean);
     }
     
@@ -173,6 +195,18 @@ namespace FFC.FAST
         {
             return "FunctionType: " + returnType.ToString() + paramTypes.ToString();
         }
+        public override bool Equals(object o)
+        {
+            FunctionType ft = o as FunctionType;
+            if (Object.ReferenceEquals(ft, null))
+                return false;
+            if (this.ToString() != ft.ToString())
+                return false;
+            if(this.returnType.ToString() != ft.returnType.ToString())
+                return false;
+            return this.paramTypes.Equals(ft.paramTypes);
+        }
+        public override int GetHashCode() => paramTypes.ToString().GetHashCode() ^ returnType.ToString().GetHashCode();
     }
 
     public abstract class IterableType : FType
@@ -198,6 +232,7 @@ namespace FFC.FAST
             Console.WriteLine("Array type");
             type.Print(tabs + 1);
         }
+        public override string ToString() => "ArrayType[" + type.ToString() + "]";
         public override Type GetRunTimeType() => typeof(FArray<>).MakeGenericType(type.GetRunTimeType());
     }
     public class MapType : FType
@@ -216,6 +251,7 @@ namespace FFC.FAST
             key.Print(tabs + 1);
             value.Print(tabs + 1);
         }
+        public override string ToString() => "MapType{" + key.ToString() + "," + value.ToString() + "}";
         public override Type GetRunTimeType() => typeof(FMap<,>).MakeGenericType(new Type[]{key.GetRunTimeType(), value.GetRunTimeType()});
     }
     public class TupleType : FType
@@ -235,6 +271,14 @@ namespace FFC.FAST
             types.Print(tabs + 1);
         }
 
+        public override string ToString()
+        {
+            string s = "TupleType(";
+            foreach(FType type in types.types)
+                s += type.ToString() + ",";
+            if(types.types.Count > 0) s = s.Remove(s.Length - 1);
+            return s + ")";
+        }
         public FType GetIndexType(DotIndexer index) => types.types[(index.id != null ? names[index.id.name] : index.index.value) - 1];
 
         public int GetMappedIndex(DotIndexer index) => index.id != null ? names[index.id.name] : index.index.value;
