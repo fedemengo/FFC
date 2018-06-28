@@ -450,7 +450,7 @@ namespace FFC.FAST
             if(value != null) value.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Ret);
         }
-        public override void BuildType(SymbolTable st) => valueType = value.GetValueType(st);
+        public override void BuildType(SymbolTable st) => valueType = (value != null ? value.GetValueType(st) : new VoidType());
     }
     public class BreakStatement : FStatement
     {

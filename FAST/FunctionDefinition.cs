@@ -32,6 +32,8 @@ namespace FFC.FAST
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             FunctionType t = GetValueType(st) as FunctionType;
+            if(t == null) throw new NotImplementedException($"{Span} - Couldn't determine function type");
+
             TypeBuilder function = Generator.GetFunction(currentType, t);
 
             //we now need to emit proper method
@@ -68,18 +70,33 @@ namespace FFC.FAST
         }
         public override void BuildType(SymbolTable st)
         {
+            //we prepare function type
             var t = new FunctionType(null, null);
+            //get type of each param
             t.paramTypes = new TypeList();
             foreach(var p in parameters.parameters)
             {
+                //add params to symbol table
                 st = st.Assign(p.id.name, new NameInfo(null, p.type));
-                t.paramTypes.Add(p.GetValueType(st));
+                //get type of each parameter
+                t.paramTypes.Add(p.type);
             }
+            //return type is body type
             t.returnType = body.GetValueType(st);
-            valueType = t;
+
+            //todo. can it be enough to threat it as void? probably error will be caught later on
+            if(t.returnType == null) throw new NotImplementedException($"{Span} - Couldn't determine function return type");
+
+            //if ret type was not specified
             if(returnType == null) returnType = t.returnType;
-            else if(returnType.GetRunTimeType() != t.returnType.GetRunTimeType())
+
+            //if wrong type was specified
+            if(returnType.GetRunTimeType() != t.returnType.GetRunTimeType())
                 throw new NotImplementedException($"{Span} - Returned type {t.returnType} doesn't match declared tpye {returnType}.");
+            
+            //assign function value type
+            valueType = t;
+
 
             Generator.AddFunctionType(t);
         }

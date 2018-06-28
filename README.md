@@ -4,7 +4,6 @@ A compiler for the F language (and it's definition)
 ## TODOs
 
 * Important functionalities
-	* Support to void functions ?
 	* Fix TupleType checks, for both assignments/declaration
 		* same types different names should work, but different types are to be forbidden
 	* Fix Type checking in declaration when both are specified
@@ -14,6 +13,7 @@ A compiler for the F language (and it's definition)
 	* Catch exception when using a variable that is not declared
 
 * Minor stuff
+	* Add void type keyword to lexical analysis/grammar
 	* Create a proper note section, maybe with known bugs?
 	* Organize FAST code better in files
 	* Move Generate as Generator static method + overload

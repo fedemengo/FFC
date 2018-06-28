@@ -285,4 +285,18 @@ namespace FFC.FAST
         
         public override Type GetRunTimeType() => typeof(FTuple);
     }
+
+    public class VoidType : FType
+    {
+        public override string ToString() => "Void";
+        public override Type GetRunTimeType() => typeof(void);
+        public override void Print(int tabs)
+        {
+            PrintTabs(tabs);
+            Console.WriteLine(this);
+        }
+        //we currently have no support to specify either span or other stuff. todo
+        public VoidType(){}
+    }
+
 }

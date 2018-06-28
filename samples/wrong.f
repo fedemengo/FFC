@@ -1,4 +1,4 @@
-main is func() :integer do
+main is func() do
     print "asd" + "algebra";
-    return 1;
+    return;
 end
