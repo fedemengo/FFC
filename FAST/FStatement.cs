@@ -1,6 +1,7 @@
 using System;
-using System.Collections.Generic;
+using System.Reflection;
 using System.Reflection.Emit;
+using System.Collections.Generic;
 using FFC.FParser;
 using FFC.FRunTime;
 using FFC.FGen;
@@ -221,12 +222,15 @@ namespace FFC.FAST
             if(type != null && type.GetRunTimeType() != t.GetRunTimeType())
                 throw new NotImplementedException($"{Span} - Type {t.GetRunTimeType().Name} doesn't match declaration {type.GetRunTimeType().Name}");
             
-
-            LocalBuilder var = generator.DeclareLocal(t.GetRunTimeType());
-            st = st.Assign(id.name, new NameInfo(var, t));
+            //Field when emitting locals in program type
+            object builder;
+            if(currentType == Generator.programType) builder = currentType.DefineField(id.name, t.GetRunTimeType(), FieldAttributes.Public | FieldAttributes.Static);
+            else builder = generator.DeclareLocal(t.GetRunTimeType());
+            
+            st = st.Assign(id.name, new NameInfo(builder, t));
             
             expr.Generate(generator, currentType, st, exitLabel, conditionLabel);
-            Generator.EmitStore(generator, var);
+            Generator.EmitStore(generator, builder);
         }
         //Shall declaration have types?
         public override void BuildType(SymbolTable st)

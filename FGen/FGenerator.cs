@@ -14,7 +14,7 @@ namespace FFC.FGen
         public static void Reset() => throw new NotImplementedException("Reset of the generator status is not currently implemented");
         
         //stored globally to emit delegate types for function types
-        private static TypeBuilder programType;
+        public static TypeBuilder programType;
         //The function we need to call if found
         public static string StartFunction {get ; private set;}
         private static ILGenerator mainGen;
@@ -87,7 +87,10 @@ namespace FFC.FGen
             else if (builder is ParameterBuilder)
                 generator.Emit(OpCodes.Ldarg, (builder as ParameterBuilder).Position);
             else if (builder is FieldBuilder)
-                generator.Emit(OpCodes.Ldfld, builder as FieldBuilder);
+            {
+                var code = (builder as FieldBuilder).IsStatic ? OpCodes.Ldsfld : OpCodes.Ldfld;
+                generator.Emit(code, builder as FieldBuilder);
+            }
             else throw new NotImplementedException($"Cannot load {builder.GetType()}");
         }
         public static void EmitStore(ILGenerator generator, object builder)
@@ -97,7 +100,10 @@ namespace FFC.FGen
             else if (builder is ParameterBuilder)
                 generator.Emit(OpCodes.Starg, (builder as ParameterBuilder).Position);
             else if (builder is FieldBuilder)
-                generator.Emit(OpCodes.Stfld, builder as FieldBuilder);
+            {
+                var code = (builder as FieldBuilder).IsStatic ? OpCodes.Stsfld : OpCodes.Stfld;
+                generator.Emit(code, builder as FieldBuilder);
+            }
             else throw new NotImplementedException($"Cannot load {builder.GetType()}");
         }
 

@@ -1,8 +1,8 @@
+a is func() => (3)
+n is 5;
+
 main is func() do
-    bob is func(x : integer) do
-        return x + x;
-    end
-    print bob(1) + bob(2);
+    print a() * 5;
     return 1;
 end
 
