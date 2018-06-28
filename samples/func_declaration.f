@@ -1,8 +1,8 @@
-a is func() => (3)
-n is 5;
+fatt is func(n : integer) => (if n = 0 then 1 else fatt(n-1) * n end)
 
 main is func() do
-    print a() * 5;
+    x : integer is read;
+    print fatt(x);
     return 1;
 end
 

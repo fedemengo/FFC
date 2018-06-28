@@ -47,6 +47,9 @@ namespace FFC.FAST
     {
         public override FType GetTarget(FType t1, FType t2)
         {
+            //to handle recursion
+            if(t1 == null || t2 == null) return null;
+
             if(!(t1 is NumericType && t2 is NumericType))
                 throw new NotImplementedException($"{this.Span.Begin} - Can't compare non numeric types");
             if(t1 is ComplexType || t2 is ComplexType)
@@ -115,6 +118,9 @@ namespace FFC.FAST
     {
         public override FType GetTarget(FType t1, FType t2)
         {
+            //to handle recursion
+            if(t1 == null || t2 == null) return null;
+
             if(t1 is BooleanType && t2 is BooleanType)
                 return new BooleanType();
             throw new NotImplementedException($"{this.Span.Begin} - Can't use boolean operator {this.GetType().Name} on non-boolean values");            
@@ -149,6 +155,9 @@ namespace FFC.FAST
     {
         public override FType GetTarget(FType t1, FType t2)
         {
+            //to handle recursion
+            if(t1 == null || t2 == null) return null;
+
             if(!(t1 is NumericType && t2 is NumericType))
                 throw new NotImplementedException($"{this.Span.Begin} - Can't apply operator {this.GetType().Name} to non-numeric type {(t1 is NumericType ? t2.GetType().Name : t1.GetType().Name)}");
             if(t1 is ComplexType || t2 is ComplexType)
@@ -179,6 +188,9 @@ namespace FFC.FAST
 
         public override FType GetTarget(FType t1, FType t2)
         {
+            //to handle recursion
+            if(t1 == null || t2 == null) return null;
+
             if(t1 is StringType && t2 is StringType)
                 return new StringType();
             if(t1 is ArrayType && t2 is ArrayType && ((ArrayType) t1).type.GetType() == ((ArrayType) t2).type.GetType())
@@ -217,6 +229,9 @@ namespace FFC.FAST
 
         public override FType GetTarget(FType t1, FType t2)
         {
+            //to handle recursion
+            if(t1 == null || t2 == null) return null;
+
             if(!(t1 is NumericType && t2 is NumericType))
                 throw new NotImplementedException($"{this.Span.Begin} - Can't use {this.GetType().Name} with non-numeric type {(t1 is NumericType ? t2.GetType().Name : t1.GetType().Name)}");
             if(t1 is ComplexType || t2 is ComplexType)
@@ -243,6 +258,9 @@ namespace FFC.FAST
         public override string GetMethodName() => "op_Modulus";
         public override FType GetTarget(FType t1, FType t2)
         {
+            //to handle recursion
+            if(t1 == null || t2 == null) return null;
+
             if(t1 is IntegerType && t2 is IntegerType)
                 return new IntegerType();
             throw new NotImplementedException($"{this.Span.Begin} - Can't use {this.GetType().Name} with {(t1 is IntegerType ? t2.GetType().Name : t1.GetType().Name)} values");
