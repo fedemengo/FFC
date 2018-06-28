@@ -36,14 +36,25 @@ namespace FFC.FAST
         {
             if(toCall.GetValueType(st) is FunctionType == false)
                 throw new NotImplementedException($"{Span} - Can't call function on {toCall.GetValueType(st)}.");
+
+            TypeBuilder funcType = Generator.FunctionTypes[toCall.GetValueType(st) as FunctionType];
+            ParameterInfo[] pInfo = funcType.GetMethod("Invoke").GetParameters();
+
+            if(pInfo.Length != exprs.expressions.Count)
+                throw new NotImplementedException($"{Span} - Parameter Count Mismatch on {toCall.GetValueType(st)}.");
+
             toCall.Generate(generator, currentType, st, exitLabel, conditionLabel);
             List<Type> paramTypes = new List<Type>();
-            foreach(FExpression exprs in exprs.expressions)
+            for(int i=0; i<exprs.expressions.Count; ++i)
             {
-                paramTypes.Add(exprs.GetValueType(st).GetRunTimeType());
-                exprs.Generate(generator, currentType, st);
+                Type exprRTType = exprs.expressions[i].GetValueType(st).GetRunTimeType();
+                // FIXME - basic type checking (doesn't work on compound types)
+                if(pInfo[i].ParameterType != exprRTType)
+                    throw new NotImplementedException($"{Span} - Parameter {i} should be {pInfo[i].ParameterType} instead of {exprRTType}");
+                paramTypes.Add(exprRTType);
+                exprs.expressions[i].Generate(generator, currentType, st);
             }
-            TypeBuilder funcType = Generator.FunctionTypes[toCall.GetValueType(st) as FunctionType];
+            
             generator.Emit(OpCodes.Callvirt, funcType.GetMethod("Invoke", paramTypes.ToArray()));
         }
     }
