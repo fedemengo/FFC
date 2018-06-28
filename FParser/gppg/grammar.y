@@ -149,7 +149,7 @@ stm_list
 	;
 
 nif_stm	
-	: func_call SEMICOLON									{ $$ = $1; }
+	: func_call SEMICOLON									{ $$ = new FunctionCallStatement($1 as FunctionCall, new TextSpan($1.Span, $2.Span)); }
 	| assignment											{ $$ = $1; }
 	| declaration											{ $$ = $1; }
 	| loop_stm												{ $$ = $1; }

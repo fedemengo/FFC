@@ -3,7 +3,7 @@
 // (see accompanying GPPGcopyright.rtf)
 
 // GPPG version 1.5.2
-// Input file <FParser/gppg/grammar.y - 6/23/2018 2:41:36 PM>
+// Input file <FParser/gppg/grammar.y - 6/29/2018 12:31:47 AM>
 
 using System;
 using System.Collections.Generic;
@@ -726,7 +726,7 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 67: // nif_stm -> func_call, SEMICOLON
 #line 152 "FParser/gppg/grammar.y"
-                               { CurrentSemanticValue = ValueStack[ValueStack.Depth-2]; }
+                               { CurrentSemanticValue = new FunctionCallStatement(ValueStack[ValueStack.Depth-2] as FunctionCall, new TextSpan(ValueStack[ValueStack.Depth-2].Span, ValueStack[ValueStack.Depth-1].Span)); }
 #line default
         break;
       case 68: // nif_stm -> assignment

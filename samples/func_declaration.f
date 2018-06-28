@@ -13,8 +13,8 @@ main is func() do
     print fun(x);
     
     fun := func(n : integer) => (if n <= 1 then 1 else fib(n-1) + fib(n-2) end);
-    
-    return print_int(fun(x));
+    print_int(fun(x));
+    return;
 end
 
 /*

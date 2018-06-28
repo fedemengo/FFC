@@ -116,6 +116,13 @@ namespace FFC.FAST
             Console.WriteLine("FunctionCall statement");
             function.Print(tabs + 1);
         }
+
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
+        {
+            function.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            //pop result if not void
+            if(function.GetValueType(st) is VoidType == false) generator.Emit(OpCodes.Pop);
+        }
     }
     public class AssignmentStatement : FStatement
     {
