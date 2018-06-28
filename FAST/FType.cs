@@ -58,8 +58,7 @@ namespace FFC.FAST
             foreach(var t in types)
                 s += t.ToString() + ", ";
             if(s.Length >= 4) s = s.Remove(s.Length - 2);
-            s += ")";
-            return s;
+            return s + ")";
         }
         public override bool Equals(object o)
         {
@@ -251,7 +250,7 @@ namespace FFC.FAST
             key.Print(tabs + 1);
             value.Print(tabs + 1);
         }
-        public override string ToString() => "MapType{" + key.ToString() + "," + value.ToString() + "}";
+        public override string ToString() => "MapType{" + key.ToString() + ": " + value.ToString() + "}";
         public override Type GetRunTimeType() => typeof(FMap<,>).MakeGenericType(new Type[]{key.GetRunTimeType(), value.GetRunTimeType()});
     }
     public class TupleType : FType
@@ -271,19 +270,31 @@ namespace FFC.FAST
             types.Print(tabs + 1);
         }
 
-        public override string ToString()
-        {
-            string s = "TupleType(";
-            foreach(FType type in types.types)
-                s += type.ToString() + ",";
-            if(types.types.Count > 0) s = s.Remove(s.Length - 1);
-            return s + ")";
-        }
         public FType GetIndexType(DotIndexer index) => types.types[(index.id != null ? names[index.id.name] : index.index.value) - 1];
 
         public int GetMappedIndex(DotIndexer index) => index.id != null ? names[index.id.name] : index.index.value;
         
         public override Type GetRunTimeType() => typeof(FTuple);
+
+        public override string ToString()
+        {
+            string s = "TupleType(";
+            foreach(FType type in types.types)
+                s += type.ToString() + ", ";
+            if(types.types.Count > 0) s = s.Remove(s.Length - 2);
+            return s + ")";
+        }
+
+        public override bool Equals(object o)
+        {
+            TupleType ft = o as TupleType;
+            if (Object.ReferenceEquals(ft, null))
+                return false;
+            if (this.ToString() != ft.ToString())
+                return false;
+            return this.types.ToString() == ft.types.ToString();
+        }
+        public override int GetHashCode() => types.ToString().GetHashCode();
     }
 
     public class VoidType : FType

@@ -155,13 +155,19 @@ namespace FFC.FAST
             }
             if(left is Identifier)      // get
             {
-                Identifier x = left as Identifier;
-                var y = st.Find(x.name);
-                if(y == null) throw new NotImplementedException($"{Span} - Identifier {(left as Identifier).name} is not declared");
-                if(right.GetValueType(st).GetRunTimeType() != y.Type.GetRunTimeType()) throw new NotImplementedException($"{Span} - Can't assign type {right.GetValueType(st).GetRunTimeType()} to variable of type {x.GetValueType(st).GetRunTimeType()}"); 
+                Identifier leftID = left as Identifier;
+                var definedSymbol = st.Find(leftID.name);
+                if(definedSymbol == null) 
+                    throw new NotImplementedException($"{Span} - Identifier {(left as Identifier).name} is not declared");
+                
+                if(definedSymbol.Type is TupleType && !(definedSymbol.Type as TupleType).Equals((right.GetValueType(st) as TupleType)))
+                    throw new NotImplementedException($"{Span} - Can't assign tuple type {(right.GetValueType(st) as TupleType).types} to tuple type {(definedSymbol.Type as TupleType).types}");
+                
+                if(right.GetValueType(st).GetRunTimeType() != definedSymbol.Type.GetRunTimeType()) 
+                    throw new NotImplementedException($"{Span} - Can't assign type {right.GetValueType(st).GetRunTimeType()} to variable of type {leftID.GetValueType(st).GetRunTimeType()}"); 
                 //Empty array on identifier
                 right.Generate(generator, currentType, st, exitLabel, conditionLabel);
-                Generator.EmitStore(generator, y.Builder);
+                Generator.EmitStore(generator, definedSymbol.Builder);
             }
             else if(left is IndexedAccess)      // set
             {
