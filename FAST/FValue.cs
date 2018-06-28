@@ -175,6 +175,8 @@ namespace FFC.FAST
 
         public override void BuildType(SymbolTable st)
         {
+            var entry = st.Find(name);
+            if(entry == null) throw new NotImplementedException($"{Span} - Couldn't resolve name \"{name}\"");
             valueType = st.Find(name).Type;
         }
     }

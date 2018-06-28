@@ -1,4 +1,4 @@
-m is func() do
+main is func() do
     t is (x is 3.1, 2.2);
     print t.1;
     c is (x is 3.1, q is (4.1, x is 9.2));

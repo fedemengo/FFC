@@ -92,6 +92,6 @@ main is func() do
 
     print "return stm (this is the last print)\n";
     return 1;
-    print "you will never see this text";
+    //print "you will never see this text";
 
 end
