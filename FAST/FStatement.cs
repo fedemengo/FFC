@@ -365,6 +365,8 @@ namespace FFC.FAST
 
             //End of IfStatement
             generator.MarkLabel(exitBranch);
+            //to be sure label will get emitted (this is weird!) todo : check for more info why the simple return ain't enough
+            generator.Emit(OpCodes.Nop);
 
         }
 
@@ -419,7 +421,7 @@ namespace FFC.FAST
         public override void BuildType(SymbolTable st)
         {
             foreach(var x in list)
-                if(valueType == null || valueType == x.GetValueType(st))
+                if(valueType == null || valueType.GetRunTimeType() == x.GetValueType(st).GetRunTimeType())
                     valueType = x.GetValueType(st);
                 else throw new NotImplementedException($"{Span} - Return type mismatch");
         }

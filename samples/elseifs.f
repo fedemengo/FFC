@@ -1,4 +1,4 @@
-a is func() do
+main is func() do
     if true then
         return 1;
     else if false then
