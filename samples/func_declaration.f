@@ -1,8 +1,14 @@
 fatt is func(n : integer) => (if n = 0 then 1 else fatt(n-1) * n end)
+fib is func(n : integer) => (if n <= 1 then 1 else fib(n-1) + fib(n-2) end)
 
 main is func() do
     x : integer is read;
-    print fatt(x);
+
+    fun is fatt;
+    print fun(x);
+    
+    fun := func(n : integer) => (if n <= 1 then 1 else fib(n-1) + fib(n-2) end);
+    print fun(x);
     return 1;
 end
 
