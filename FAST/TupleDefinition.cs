@@ -54,7 +54,7 @@ namespace FFC.FAST
                     Type elementType = elem.value.GetValueType(st).GetRunTimeType();
                     generator.Emit(OpCodes.Callvirt, typeof(FTuple).GetMethod("Add", new Type[]{elementType}));
                 }
-                Generator.EmitStore(generator, localTuple);
+                Generator.EmitLoad(generator, localTuple);
             }
         }
         public override void BuildType(SymbolTable st)
