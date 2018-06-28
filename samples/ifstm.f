@@ -1,4 +1,4 @@
-main is func(): integer do
+main is func() do
     if 5 /= 1 then
         print "is 1";
     else if 5 = 2 then

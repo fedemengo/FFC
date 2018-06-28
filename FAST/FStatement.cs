@@ -150,9 +150,8 @@ namespace FFC.FAST
         {
             //Empty array assignment
             if(right is ArrayDefinition && left.GetValueType(st) is ArrayType)
-            {
                 (right as ArrayDefinition).SetEmpty((left.GetValueType(st)));
-            }
+
             if(left is Identifier)      // get
             {
                 Identifier leftID = left as Identifier;
@@ -225,17 +224,7 @@ namespace FFC.FAST
             st = st.Assign(id.name, new NameInfo(null, null));
             
             
-            FType t = null;
-            //Empty array
-            if(expr is ArrayDefinition && (expr as ArrayDefinition).values.expressions.Count == 0)
-            {
-                if(type == null)
-                    throw new NotImplementedException($"{Span} - Can't create empty array without specifying type");
-                t = type;
-                (expr as ArrayDefinition).SetEmpty(t);
-            }
-            else
-                t = expr.GetValueType(st);
+            FType t = expr.GetValueType(st);
 
             if(type != null && type.GetRunTimeType() != t.GetRunTimeType())
                 throw new NotImplementedException($"{Span} - Type {t.GetRunTimeType().Name} doesn't match declaration {type.GetRunTimeType().Name}");
@@ -253,9 +242,19 @@ namespace FFC.FAST
         //Shall declaration have types?
         public override void BuildType(SymbolTable st)
         {
+            //build type for empty arrays (0 elements)
+            if(expr is ArrayDefinition && (expr as ArrayDefinition).values.expressions.Count == 0)
+            {
+                if(type == null)
+                    throw new NotImplementedException($"{Span} - Can't create empty array without specifying type");
+                (expr as ArrayDefinition).SetEmpty(type);
+            }
+            
+            //sets value type
             valueType = type;
-            // is this the right way ??
-            if(type == null || expr.GetValueType(st).GetType() == type.GetType())
+            
+            //If types are matching
+            if(type == null || expr.GetValueType(st).GetRunTimeType() == type.GetRunTimeType())
                 valueType = expr.GetValueType(st);
             else
                 throw new NotImplementedException($"{Span} - Type mismatch in variable {id.name}, {expr.GetValueType(st)} is not {type}");
