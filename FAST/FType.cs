@@ -288,7 +288,7 @@ namespace FFC.FAST
 
     public class VoidType : FType
     {
-        public override string ToString() => "Void";
+        public override string ToString() => "VoidType";
         public override Type GetRunTimeType() => typeof(void);
         public override void Print(int tabs)
         {
@@ -297,6 +297,10 @@ namespace FFC.FAST
         }
         //we currently have no support to specify either span or other stuff. todo
         public VoidType(){}
+    }
+    public class DeducedVoidType : VoidType
+    {
+        public override string ToString() => "VoidType";
     }
 
 }

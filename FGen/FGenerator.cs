@@ -28,7 +28,7 @@ namespace FFC.FGen
             //call invoke on the delegate type
             mainGen.Emit(OpCodes.Callvirt, FunctionTypes[type].GetMethod("Invoke"));
             //Pop call if needed
-            if(type.returnType.GetType() != typeof(VoidType)) mainGen.Emit(OpCodes.Pop);
+            if(type.returnType is VoidType == false) mainGen.Emit(OpCodes.Pop);
             mainGen.Emit(OpCodes.Ret);
         }
 

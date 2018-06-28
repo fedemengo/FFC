@@ -58,8 +58,12 @@ namespace FFC.FAST
 
         public override void BuildType(SymbolTable st)
         {
+            //flag to avoid operations after return
+            bool returned = false;
             foreach(var stm in statements)
             {
+                if(returned) throw new NotImplementedException($"{stm.Span} - Can't have operations after a return");
+                if(stm is ReturnStatement) returned = true;
                 if(stm is DeclarationStatement)
                 {
                     var x = stm as DeclarationStatement;
@@ -73,7 +77,8 @@ namespace FFC.FAST
                 {
                     var x = stm.GetValueType(st);
                     if(valueType == null) valueType = x;
-                    else throw new NotImplementedException($"{Span} - Can't deduce type as {valueType} is not compatible with {x} at {stm.Span}");
+                    else if(x != null && x.GetRunTimeType() != valueType.GetRunTimeType())
+                        throw new NotImplementedException($"{Span} - Can't deduce type as {valueType} is not compatible with {x} at {stm.Span}");
                 }
             }
         }

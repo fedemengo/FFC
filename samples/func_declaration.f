@@ -3,18 +3,24 @@ fib is func(n : integer) => (if n <= 1 then 1 else fib(n-1) + fib(n-2) end)
 
 print_int is func(n : integer) do
     print n;
-    return;
+end
+
+bad_func is func(a : integer) do
+    print a;
+    if a > 0 then return bad_func(a - 2); end
 end
 
 main is func() do
     x : integer is read;
 
+    bad_func(x);
+
     fun is fatt;
     print fun(x);
+
     
     fun := func(n : integer) => (if n <= 1 then 1 else fib(n-1) + fib(n-2) end);
     print_int(fun(x));
-    return;
 end
 
 /*

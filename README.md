@@ -3,7 +3,7 @@ A compiler for the F language (and it's definition)
 
 ## TODOs
 
-* Important functionalities
+* Main features
 	* Fix TupleType checks, for both assignments/declaration
 		* same types different names should work, but different types are to be forbidden
 	* Fix Type checking in declaration when both are specified

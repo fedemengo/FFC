@@ -84,8 +84,16 @@ namespace FFC.FAST
             //return type is body type
             t.returnType = body.GetValueType(st);
 
-            //todo. can it be enough to threat it as void? probably error will be caught later on
-            if(t.returnType == null) throw new NotImplementedException($"{Span} - Couldn't determine function return type");
+            //if there is not a type caught, we either can't resolve it or it's a void function
+            //i think it's ok to tag it as void and let other built in exception find possible problems
+            //TODO: check all cases
+            //also, we append a return at the end of the function
+            if(t.returnType == null)
+            {
+                // throw new NotImplementedException($"{Span} - Couldn't determine function return type");
+                t.returnType = new DeducedVoidType();
+                body.statements.Add(new ReturnStatement(new TextSpan(Span)));
+            }
 
             //if ret type was not specified
             if(returnType == null) returnType = t.returnType;
