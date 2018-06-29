@@ -1,5 +1,5 @@
 fatt is func(n : integer) => (if n = 0 then 1 else fatt(n-1) * n end)
-fib is func(n : integer) => (if n <= 1 then 1 else fib(n-1) + fib(n-2) end)
+fib is func(n : integer) => (if n < 1 then 1 else fib(n-1) + fib(n-2) end)
 
 print_int is func(n : integer) do
     print n;
@@ -18,9 +18,13 @@ main is func() do
     fun is fatt;
     print fun(x);
 
-    
     fun := func(n : integer) => (if n <= 1 then 1 else fib(n-1) + fib(n-2) end);
+    
     print_int(fun(x));
+
+    array is [func(n : integer) => (n * n), func(n : integer) => (n * n * n)];
+    print array[0](x), array[1](x);
+    
 end
 
 /*

@@ -237,7 +237,7 @@ namespace FFC.FAST
             paramTypes.Print(tabs + 1);
             if(returnType != null) returnType.Print(tabs + 1);
         }
-        public override Type GetRunTimeType() => Generator.GetDelegate(this);
+        public override Type GetRunTimeType() => Generator.GetDelegate(this).CreateType();
         public override string ToString() => "FunctionType: " + returnType.ToString() + paramTypes.ToString();
         public override bool Equals(object o)
         {

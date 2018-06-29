@@ -1,10 +1,10 @@
 namespace FFC.FRunTime
 {
-    public interface FIterable<T>  where T : class
+    public interface FIterable<T>
     {
         FIterator<T> GetIterator();
     }
-    public interface FIterator<T> where T : class
+    public interface FIterator<T>
     {
         bool MoveNext();
         T GetCurrent();

@@ -3,26 +3,29 @@ using System.Collections.Generic;
 
 namespace FFC.FRunTime
 {
-    public class FArray<V> : FRTType, FIterable<V> where V: class
+    public class FArray<V> : FRTType, FIterable<V>
     {
         public List<V> Values {get; set;}
-        public FArray() => Values = new List<V>{};
-        public FArray(V v) => Values = new List<V>{v};
-
+        public FArray()
+        {
+            if(typeof(V).IsSubclassOf(typeof(FRTType)) == false && typeof(V).IsSubclassOf(typeof(Delegate)) == false)
+                throw new NotImplementedException($"Cannot create FArray of type {typeof(V).Name}");  
+            Values = new List<V>{};
+        }
+        public FArray(V v) : this() => Values.Add(v);
         //even if we create N FArray to create a (non immutable) FArray of size N,
         //GC should save us from wasted memory
         public FArray(FArray<V> a, V v)
         {
+            //not using this to avoid creating useless list
             if(typeof(V).IsSubclassOf(typeof(FRTType)) == false && typeof(V).IsSubclassOf(typeof(Delegate)) == false)
-                throw new NotImplementedException($"Cannot create FArray of type {typeof(V).Name}");  
+                throw new NotImplementedException($"Cannot create FArray of type {typeof(V).Name}");              
             Values = a.Values;
             Values.Add(v);
         }
         // concatenation
         public FArray(FArray<V> a1, FArray<V> a2)
         {
-            if(typeof(V).IsSubclassOf(typeof(FRTType)) == false && typeof(V).IsSubclassOf(typeof(Delegate)) == false)
-                throw new NotImplementedException($"Cannot create FArray of type {typeof(V).Name}");  
             //not even remotely efficient
             Values = new List<V>();
             foreach(V v in a1.Values)

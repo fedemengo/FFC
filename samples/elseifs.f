@@ -1,5 +1,4 @@
 main is func() do
-    a : [func() : integer] is [];
     if true then
         return 1;
     else if false then
