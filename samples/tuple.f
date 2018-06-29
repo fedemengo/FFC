@@ -1,4 +1,7 @@
 main is func() do
+    fs is (echo is func(s: string) => (s), sum is func(n: integer) => (n + n));
+    print fs.echo("what");
+    print fs.sum(3);
     t is (x is 3.1, 2.2);
     print t.1;
     c is (x is 3.1, q is (4.1, x is 9.2));

@@ -52,7 +52,7 @@ namespace FFC.FAST
                     Generator.EmitLoad(generator, localTuple);
                     elem.Generate(generator, currentType, st, exitLabel, conditionLabel);
                     Type elementType = elem.value.GetValueType(st).GetRunTimeType();
-                    generator.Emit(OpCodes.Callvirt, typeof(FTuple).GetMethod("Add", new Type[]{elementType}));
+                    generator.Emit(OpCodes.Callvirt, typeof(FTuple).GetMethod("Add", new Type[]{typeof(object)}));
                 }
                 Generator.EmitLoad(generator, localTuple);
             }

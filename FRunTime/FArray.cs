@@ -63,10 +63,6 @@ namespace FFC.FRunTime
             public V GetCurrent() => collection.Values[index];
             public bool MoveNext() => ++index < collection.Length;
         }
-
-        public FIterator<V> GetIterator()
-        {
-            return new VIterator(this);
-        }
+        public FIterator<V> GetIterator() => new VIterator(this);
     }
 }
