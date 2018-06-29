@@ -37,25 +37,25 @@ namespace FFC.FAST
             if(toCall.GetValueType(st) is FunctionType == false)
                 throw new NotImplementedException($"{Span} - Can't call function on {toCall.GetValueType(st)}.");
 
-            TypeBuilder funcType = Generator.FunctionTypes[toCall.GetValueType(st) as FunctionType];
-            ParameterInfo[] pInfo = funcType.GetMethod("Invoke").GetParameters();
+            FunctionType funcType = toCall.GetValueType(st) as FunctionType;
+            TypeBuilder funcTypeBuilder = Generator.FunctionTypes[funcType];
 
-            if(pInfo.Length != exprs.expressions.Count)
-                throw new NotImplementedException($"{Span} - Parameter Count Mismatch on {toCall.GetValueType(st)}.");
+            if(funcType.paramTypes.types.Count != exprs.expressions.Count)
+                throw new NotImplementedException($"{Span} - Parameter count mismatch on {toCall.GetValueType(st)}.");
 
             toCall.Generate(generator, currentType, st, exitLabel, conditionLabel);
             List<Type> paramTypes = new List<Type>();
             for(int i=0; i<exprs.expressions.Count; ++i)
             {
-                Type exprRTType = exprs.expressions[i].GetValueType(st).GetRunTimeType();
-                // FIXME - basic type checking (doesn't work on compound types)
-                if(pInfo[i].ParameterType != exprRTType)
-                    throw new NotImplementedException($"{Span} - Parameter {i} should be {pInfo[i].ParameterType} instead of {exprRTType}");
-                paramTypes.Add(exprRTType);
+                FType exprFType = exprs.expressions[i].GetValueType(st);
+
+                if(!FType.SameType(funcType.paramTypes.types[i], exprFType))
+                    throw new NotImplementedException($"{Span} - Parameter {i} should be {funcType.paramTypes.types[i].ToString()} instead of {exprFType.ToString()}.");
+                paramTypes.Add(exprFType.GetRunTimeType());
                 exprs.expressions[i].Generate(generator, currentType, st);
             }
             
-            generator.Emit(OpCodes.Callvirt, funcType.GetMethod("Invoke", paramTypes.ToArray()));
+            generator.Emit(OpCodes.Callvirt, funcTypeBuilder.GetMethod("Invoke", paramTypes.ToArray()));
         }
     }
 }
