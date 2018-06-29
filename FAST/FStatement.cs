@@ -36,10 +36,7 @@ namespace FFC.FAST
             this.Span = span;
             statements = new List<FStatement>();
         }
-        public void Add(FStatement stm)
-        {
-            statements.Add(stm);
-        }
+        public void Add(FStatement stm) => statements.Add(stm);
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
@@ -97,15 +94,12 @@ namespace FFC.FAST
             Console.WriteLine("Expression statement");
             expression.Print(tabs + 1);
         }
-
         public override void BuildType(SymbolTable st) => valueType = expression.GetValueType(st);
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             expression.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Ret);
-        }
-
-        
+        }        
     }
     public class FunctionCallStatement : FStatement
     {
@@ -121,7 +115,6 @@ namespace FFC.FAST
             Console.WriteLine("FunctionCall statement");
             function.Print(tabs + 1);
         }
-
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             function.Generate(generator, currentType, st, exitLabel, conditionLabel);
@@ -209,7 +202,6 @@ namespace FFC.FAST
             if(type != null) type.Print(tabs + 1);
             expr.Print(tabs + 1);
         }
-
         public override void Generate(ILGenerator generator, TypeBuilder currentType, ref SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             /*  This is meant to cover recursive functions
@@ -220,7 +212,6 @@ namespace FFC.FAST
                 think if it's possible to support this on array[func], func tuples and func maps
             */
             st = st.Assign(id.name, new NameInfo(null, null));
-            
             
             FType t = expr.GetValueType(st);
 
@@ -327,7 +318,6 @@ namespace FFC.FAST
             ElseIfs.Print(tabs + 1);
             Else.Print(tabs + 1);
         }
-
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             if(condition.GetValueType(st) is BooleanType == false)
@@ -369,15 +359,12 @@ namespace FFC.FAST
                 //Mark next check
                 generator.MarkLabel(nextElse);
             }
-
             //Generate code for else
             Else.Generate(generator, currentType, st, exitLabel, conditionLabel);
-
             //End of IfStatement
             generator.MarkLabel(exitBranch);
             //to be sure label will get emitted (this is weird!) todo : check for more info why the simple return ain't enough
             generator.Emit(OpCodes.Nop);
-
         }
 
         public override void BuildType(SymbolTable st)
@@ -398,7 +385,6 @@ namespace FFC.FAST
                 else
                     throw new NotImplementedException($"{Span} - If type {t.GetType().Name} doesn't match Else type {e.GetType().Name}");
         }
-
     }
 
     public class ElseIfList : FASTNode
@@ -422,7 +408,6 @@ namespace FFC.FAST
             this.Span = span;
             list = new List<ElseIfStatement>{start};
         }
-
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             foreach(ElseIfStatement elif in list)
@@ -447,7 +432,6 @@ namespace FFC.FAST
             this.condition = condition;
             this.Then = Then;
         }
-
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
@@ -489,7 +473,6 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("Break statement");
         }
-
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel, Label conditionLabel)
         {
             generator.Emit(OpCodes.Br, exitLabel);
@@ -525,13 +508,15 @@ namespace FFC.FAST
 
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            foreach(FExpression expr in toPrint.expressions){
+            for(int i = 0; i < toPrint.expressions.Count - 1; i++)
+            {
+                FExpression expr = toPrint.expressions[i];
                 expr.EmitPrint(generator, currentType, st);
                 //scrive uno spazio come separatore
                 generator.Emit(OpCodes.Ldstr, " ");
                 generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{typeof(string)}));
             }
-            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("WriteLine", new Type[0]));
+            toPrint.expressions[toPrint.expressions.Count - 1].EmitPrint(generator, currentType, st, true);
         }
     }
 }

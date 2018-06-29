@@ -41,7 +41,7 @@ namespace FFC.FAST
             if(a is IntegerType || a is RealType || a is ComplexType || a is RationalType)
                 return true;
             //other basic types
-            if(a is StringType || a is VoidType)
+            if(a is StringType || a is VoidType || a is BooleanType)
                 return true;
             //array type
             if(a is ArrayType)
@@ -210,11 +210,7 @@ namespace FFC.FAST
 
     public class BooleanType : FType
     {
-        public BooleanType(TextSpan span = null)
-        {
-            this.Span = span;
-
-        }
+        public BooleanType(TextSpan span = null) => this.Span = span;
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
@@ -241,14 +237,8 @@ namespace FFC.FAST
             paramTypes.Print(tabs + 1);
             if(returnType != null) returnType.Print(tabs + 1);
         }
-        public override Type GetRunTimeType()
-        {
-            return Generator.GetDelegate(this);
-        }
-        public override string ToString()
-        {
-            return "FunctionType: " + returnType.ToString() + paramTypes.ToString();
-        }
+        public override Type GetRunTimeType() => Generator.GetDelegate(this);
+        public override string ToString() => "FunctionType: " + returnType.ToString() + paramTypes.ToString();
         public override bool Equals(object o)
         {
             FunctionType ft = o as FunctionType;

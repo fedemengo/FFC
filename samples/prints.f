@@ -1,4 +1,6 @@
 main is func() do
+    print "a", "b", "c";
+
     print "basic int";
     print 3;
     print "";
@@ -85,9 +87,9 @@ main is func() do
 
     print "\nassignements and declaration:";
     x is 3;
-    print "x is ", x;
+    print "x is", x;
     x := x * 2;
-    print "x became ", x;
+    print "x became", x;
     print "";
 
     print "return stm (this is the last print)\n";

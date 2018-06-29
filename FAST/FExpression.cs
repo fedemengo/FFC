@@ -16,11 +16,11 @@ namespace FFC.FAST
                 EllipsisExpr
                 FSecondary
         */
-        public virtual void EmitPrint(ILGenerator generator, TypeBuilder currentType, SymbolTable st)
+        public virtual void EmitPrint(ILGenerator generator, TypeBuilder currentType, SymbolTable st, bool newLine = false)
         {
             Generate(generator, currentType, st);
             FType t = this is Identifier ? st.Find((this as Identifier).name).Type : GetValueType(st);
-            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{t.GetType()}));
+            generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod(newLine ? "WriteLine" : "Write", new Type[]{t.GetType()}));
         }
     }
     public class ExpressionList : FASTNode
