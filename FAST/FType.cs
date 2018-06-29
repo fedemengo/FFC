@@ -29,6 +29,61 @@ namespace FFC.FAST
             return this.ToString() == t.ToString();
         }
         public override int GetHashCode() => this.ToString().GetHashCode();
+        public static bool SameType(FType a, FType b)
+        {
+            Type t1 = a.GetType();
+            Type t2 = b.GetType();
+            //to avoid troubles
+            if(t1 == typeof(DeducedVoidType)) t1 = typeof(VoidType);
+            if(t2 == typeof(DeducedVoidType)) t2 = typeof(VoidType);
+            if(t1 != t2) return false;
+            //numeric types
+            if(a is IntegerType || a is RealType || a is ComplexType || a is RationalType)
+                return true;
+            //other basic types
+            if(a is StringType || a is VoidType)
+                return true;
+            //array type
+            if(a is ArrayType)
+                return SameType((a as ArrayType).type, (b as ArrayType).type);
+            //map type
+            if(a is MapType)
+            {
+                MapType ta = a as MapType;
+                MapType tb = b as MapType;
+                return SameType(ta.key, tb.key) && SameType(ta.value, tb.value);
+            }
+            //tuple type
+            if(a is TupleType)
+                return SameType((a as TupleType).types, (b as TupleType).types);
+            //Type list
+            if(a is TypeList)
+            {
+                TypeList ta = a as TypeList;
+                TypeList tb = b as TypeList;
+                //check number of types
+                if(ta.types.Count != tb.types.Count)
+                    return false;
+                //check all types
+                for(int i = 0; i < ta.types.Count; i++)
+                    if(SameType(ta.types[i], tb.types[i]) == false)
+                        return false;
+                return true;
+            }
+            //function type
+            if(a is FunctionType)
+            {
+                FunctionType ta = a as FunctionType;
+                FunctionType tb = b as FunctionType;
+                //check return type
+                if(SameType(ta.returnType, tb.returnType) == false)
+                    return false;
+                //check params
+                return SameType(ta.paramTypes, tb.paramTypes);
+            }
+            throw new NotImplementedException($"FType comparison for {a.GetType().Name} is not implemented");
+        }
+
     }
 
     public class TypeList : FType
@@ -188,7 +243,7 @@ namespace FFC.FAST
         }
         public override Type GetRunTimeType()
         {
-            return Generator.FunctionTypes.ContainsKey(this) ? Generator.FunctionTypes[this] : throw new NotImplementedException($"{Span} - Generator can't find {ToString()} in Function Types");
+            return Generator.GetDelegate(this);
         }
         public override string ToString()
         {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace FFC.FRunTime
 {
-    public class FArray<V> : FRTType, FIterable<V> where V: FRTType
+    public class FArray<V> : FRTType, FIterable<V> where V: class
     {
         public List<V> Values {get; set;}
         public FArray() => Values = new List<V>{};
@@ -13,12 +13,16 @@ namespace FFC.FRunTime
         //GC should save us from wasted memory
         public FArray(FArray<V> a, V v)
         {
+            if(typeof(V).IsSubclassOf(typeof(FRTType)) == false && typeof(V).IsSubclassOf(typeof(Delegate)) == false)
+                throw new NotImplementedException($"Cannot create FArray of type {typeof(V).Name}");  
             Values = a.Values;
             Values.Add(v);
         }
         // concatenation
         public FArray(FArray<V> a1, FArray<V> a2)
         {
+            if(typeof(V).IsSubclassOf(typeof(FRTType)) == false && typeof(V).IsSubclassOf(typeof(Delegate)) == false)
+                throw new NotImplementedException($"Cannot create FArray of type {typeof(V).Name}");  
             //not even remotely efficient
             Values = new List<V>();
             foreach(V v in a1.Values)

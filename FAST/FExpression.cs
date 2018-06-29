@@ -85,11 +85,11 @@ namespace FFC.FAST
                 targetType = new PlusOperator(null).GetTarget(left.GetValueType(st), right.GetValueType(st));
             }
             left.Generate(generator, currentType, st, exitLabel, conditionLabel);
-            if(left.GetValueType(st).GetRunTimeType() != targetType.GetRunTimeType())
+            if(FType.SameType(left.GetValueType(st), targetType) == false)
                 left.GetValueType(st).ConvertTo(targetType, generator);
             
             right.Generate(generator, currentType, st, exitLabel, conditionLabel);
-            if(right.GetValueType(st).GetRunTimeType() != targetType.GetRunTimeType())
+            if(FType.SameType(right.GetValueType(st),targetType) == false)
                 right.GetValueType(st).ConvertTo(targetType, generator);
 
             string op_name = binOperator.GetMethodName();

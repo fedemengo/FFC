@@ -173,6 +173,13 @@ namespace FFC.FGen
         private static int funcCount = 0, delCount = 0;
         private static string GetNextFuncName() => "___f" + (funcCount++).ToString();
         private static string GetNextDelName() => "___d" + (delCount++).ToString();
+
+        public static TypeBuilder GetDelegate(FunctionType funcType)
+        {
+            if(FunctionTypes.ContainsKey(funcType) == false)
+                AddFunctionType(funcType);
+            return FunctionTypes[funcType];
+        }
         public static TypeBuilder GetFunction(TypeBuilder parentType, FunctionType funcType)
         {
             if(FunctionTypes.ContainsKey(funcType) == false)

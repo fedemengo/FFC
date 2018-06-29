@@ -99,7 +99,7 @@ namespace FFC.FAST
             if(returnType == null) returnType = t.returnType;
 
             //if wrong type was specified
-            if(returnType.GetRunTimeType() != t.returnType.GetRunTimeType())
+            if(FType.SameType(returnType, t.returnType) == false)
                 throw new NotImplementedException($"{Span} - Returned type {t.returnType} doesn't match declared tpye {returnType}.");
             
             //assign function value type

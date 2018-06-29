@@ -36,14 +36,14 @@ namespace FFC.FAST
             //checks for recursive functions
             if(t == null) valueType = f;
             else if (f == null) valueType = t;
-            else if(t.GetRunTimeType() == f.GetRunTimeType())
+            else if(FType.SameType(t, f))
                 valueType = ifTrue.GetValueType(st);
             else
                 throw new NotImplementedException($"{Span} - Different type in conditional expression");
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            if(condition.GetValueType(st).GetRunTimeType() != typeof(FBoolean))
+            if(condition.GetValueType(st) is BooleanType == false)
                 throw new NotImplementedException($"{Span} - Can't use conditional with {condition.GetValueType(st)}");
             condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));

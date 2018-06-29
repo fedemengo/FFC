@@ -77,7 +77,7 @@ namespace FFC.FAST
                 {
                     var x = stm.GetValueType(st);
                     if(valueType == null) valueType = x;
-                    else if(x != null && x.GetRunTimeType() != valueType.GetRunTimeType())
+                    else if(x != null && FType.SameType(x, valueType) == false)
                         throw new NotImplementedException($"{Span} - Can't deduce type as {valueType} is not compatible with {x} at {stm.Span}");
                 }
             }
@@ -158,12 +158,10 @@ namespace FFC.FAST
                 var definedSymbol = st.Find(leftID.name);
                 if(definedSymbol == null) 
                     throw new NotImplementedException($"{Span} - Identifier {(left as Identifier).name} is not declared");
+                                
+                if(FType.SameType(right.GetValueType(st), definedSymbol.Type) == false) 
+                    throw new NotImplementedException($"{Span} - Can't assign type {right.GetValueType(st).GetRunTimeType()} to variable of type {definedSymbol.Type.GetRunTimeType()}"); 
                 
-                if(definedSymbol.Type is TupleType && !(definedSymbol.Type as TupleType).Equals((right.GetValueType(st) as TupleType)))
-                    throw new NotImplementedException($"{Span} - Can't assign tuple type {(right.GetValueType(st) as TupleType).types} to tuple type {(definedSymbol.Type as TupleType).types}");
-                
-                if(right.GetValueType(st).GetRunTimeType() != definedSymbol.Type.GetRunTimeType()) 
-                    throw new NotImplementedException($"{Span} - Can't assign type {right.GetValueType(st).GetRunTimeType()} to variable of type {leftID.GetValueType(st).GetRunTimeType()}"); 
                 //Empty array on identifier
                 right.Generate(generator, currentType, st, exitLabel, conditionLabel);
                 Generator.EmitStore(generator, definedSymbol.Builder);
@@ -173,7 +171,7 @@ namespace FFC.FAST
                 IndexedAccess x = left as IndexedAccess;
                 FType collection = x.container.GetValueType(st);
                 //Empty array on index access to something
-                if(collection is ArrayType && (collection as ArrayType).type.GetRunTimeType() != right.GetValueType(st).GetRunTimeType())
+                if(collection is ArrayType && FType.SameType((collection as ArrayType).type, right.GetValueType(st)) == false)
                 {
                     FType element = right.GetValueType(st);
                     throw new NotImplementedException($"{Span} - Can't assign {element.GetRunTimeType().Name} to {collection.GetRunTimeType().Name}[{(collection as ArrayType).type.GetRunTimeType().Name}]");
@@ -226,7 +224,7 @@ namespace FFC.FAST
             
             FType t = expr.GetValueType(st);
 
-            if(type != null && type.GetRunTimeType() != t.GetRunTimeType())
+            if(type != null && FType.SameType(type, t) == false)
                 throw new NotImplementedException($"{Span} - Type {t.GetRunTimeType().Name} doesn't match declaration {type.GetRunTimeType().Name}");
             
             //Field when emitting locals in program type
@@ -254,10 +252,22 @@ namespace FFC.FAST
             valueType = type;
             
             //If types are matching
-            if(type == null || expr.GetValueType(st).GetRunTimeType() == type.GetRunTimeType())
+            var t = expr.GetValueType(st);
+            bool sameType = false;
+            if(type == null || FType.SameType(t, type))
+            {
+                sameType = true;    
                 valueType = expr.GetValueType(st);
-            else
-                throw new NotImplementedException($"{Span} - Type mismatch in variable {id.name}, {expr.GetValueType(st)} is not {type}");
+            }
+            else if(t is FunctionType && type is FunctionType)
+            {
+                //Special case for functions
+                Type d1 = t.GetRunTimeType().BaseType;
+                Type d2 = type.GetRunTimeType().BaseType;
+                sameType = d1 == d2;
+            }
+            if(!sameType)
+                throw new NotImplementedException($"{Span} - Type mismatch in variable {id.name}, {expr.GetValueType(st).GetRunTimeType()} is not {type.GetRunTimeType()}");
         }
     }
     public class DeclarationStatementList : FASTNode
@@ -320,7 +330,7 @@ namespace FFC.FAST
 
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            if(condition.GetValueType(st).GetRunTimeType() != typeof(FBoolean))
+            if(condition.GetValueType(st) is BooleanType == false)
                 throw new NotImplementedException($"{Span} - Can't use {condition.GetValueType(st)} as condition");
 
             //Branch to the end of IfStatement
@@ -377,13 +387,13 @@ namespace FFC.FAST
             FType e = Else.GetValueType(st);
             valueType = t;
             if(ei != null)
-                if(valueType == null || valueType.GetRunTimeType() == ei.GetRunTimeType())
+                if(valueType == null || FType.SameType(valueType, ei))
                     valueType = ei;
                 else
                     throw new NotImplementedException($"{Span} - If type {t.GetType().Name} doesn't match ElseIf type {ei.GetType().Name}");
             
             if(e != null)
-                if(valueType == null || valueType.GetRunTimeType() == e.GetRunTimeType())
+                if(valueType == null || FType.SameType(valueType, e))
                     valueType = e;
                 else
                     throw new NotImplementedException($"{Span} - If type {t.GetType().Name} doesn't match Else type {e.GetType().Name}");
@@ -421,9 +431,9 @@ namespace FFC.FAST
         public override void BuildType(SymbolTable st)
         {
             foreach(var x in list)
-                if(valueType == null || valueType.GetRunTimeType() == x.GetValueType(st).GetRunTimeType())
+                if(valueType == null || FType.SameType(valueType, x.GetValueType(st)))
                     valueType = x.GetValueType(st);
-                else throw new NotImplementedException($"{Span} - Return type mismatch");
+                else throw new NotImplementedException($"{Span} - Return type mismatch {valueType} vs {x.GetValueType(st)}");
         }
     }
 

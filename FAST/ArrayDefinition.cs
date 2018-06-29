@@ -49,7 +49,7 @@ namespace FFC.FAST
                 throw new NotImplementedException($"{Span} - Empty arrays can only be used in declarations/assignments, you pig!");
             valueType = values.expressions[0].GetValueType(st);
             foreach(var z in values.expressions)
-                if(z.GetValueType(st).GetRunTimeType() != valueType.GetRunTimeType())
+                if(FType.SameType(z.GetValueType(st), valueType) == false)
                     throw new NotImplementedException($"{Span} - Can't handle arrays with multiple types {valueType.GetType().Name} - {z.GetValueType(st).GetType().Name}");
             valueType = new ArrayType(valueType);
         }

@@ -143,7 +143,7 @@ namespace FFC.FAST
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             generator.MarkLabel(conditionLabel); //While repeats from condition check
-            if(condition.GetValueType(st).GetRunTimeType() != typeof(FBoolean))
+            if(condition.GetValueType(st) is BooleanType == false)
                 throw new NotImplementedException($"{Span} - Can't use conditional with {condition.GetValueType(st)}");
             condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
