@@ -11,7 +11,7 @@ namespace FFC.FGen
     public partial class Generator
     {
         //call reset to have it ready to compile a new file
-        public static void Reset() => throw new NotImplementedException("Reset of the generator status is not currently implemented");
+        public static void Reset() => throw new FCompilationException("Reset of the generator status is not currently implemented");
         
         //stored globally to emit delegate types for function types
         public static TypeBuilder programType;
@@ -22,7 +22,7 @@ namespace FFC.FGen
         public static void EmitStartFunction(object toCall, FunctionType type)
         {
             if(type.ParamsList.Types.Count > 0)
-                throw new NotImplementedException($"{type.Span} - Cannot start program with a function that takes parameters");
+                throw new FCompilationException($"{type.Span} - Cannot start program with a function that takes parameters");
             //load on stack
             EmitLoad(mainGen, toCall);
             //call invoke on the delegate type
@@ -91,7 +91,7 @@ namespace FFC.FGen
                 var code = (builder as FieldBuilder).IsStatic ? OpCodes.Ldsfld : OpCodes.Ldfld;
                 generator.Emit(code, builder as FieldBuilder);
             }
-            else throw new NotImplementedException($"Cannot load {builder.GetType()}");
+            else throw new FCompilationException($"Cannot load {builder.GetType()}");
         }
         public static void EmitStore(ILGenerator generator, object builder)
         {
@@ -104,7 +104,7 @@ namespace FFC.FGen
                 var code = (builder as FieldBuilder).IsStatic ? OpCodes.Stsfld : OpCodes.Stfld;
                 generator.Emit(code, builder as FieldBuilder);
             }
-            else throw new NotImplementedException($"Cannot load {builder.GetType()}");
+            else throw new FCompilationException($"Cannot load {builder.GetType()}");
         }
 
         public static Dictionary<FunctionType, TypeBuilder> FunctionTypes = new Dictionary<FunctionType, TypeBuilder>();

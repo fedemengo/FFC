@@ -39,12 +39,12 @@ namespace FFC.FAST
             else if(FType.SameType(t, f))
                 ValueType = IfTrue.GetValueType(st);
             else
-                throw new NotImplementedException($"{Span} - Different type in conditional expression");
+                throw new FCompilationException($"{Span} - Different type in conditional expression");
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             if(Condition.GetValueType(st) is BooleanType == false)
-                throw new NotImplementedException($"{Span} - Can't use conditional with {Condition.GetValueType(st)}");
+                throw new FCompilationException($"{Span} - Can't use conditional with {Condition.GetValueType(st)}");
             Condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
             Label falseBranch = generator.DefineLabel();

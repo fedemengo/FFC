@@ -29,19 +29,19 @@ namespace FFC.FAST
             var t = ToCall.GetValueType(st);
             if(t is null) return;
             else if(t is FunctionType) ValueType = (t as FunctionType).ReturnType;
-            else throw new NotImplementedException($"{Span} - Can't call function on {ToCall.GetValueType(st)}.");
+            else throw new FCompilationException($"{Span} - Can't call function on {ToCall.GetValueType(st)}.");
         }
 
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             if(ToCall.GetValueType(st) is FunctionType == false)
-                throw new NotImplementedException($"{Span} - Can't call function on {ToCall.GetValueType(st)}.");
+                throw new FCompilationException($"{Span} - Can't call function on {ToCall.GetValueType(st)}.");
 
             FunctionType funcType = ToCall.GetValueType(st) as FunctionType;
             TypeBuilder funcTypeBuilder = Generator.FunctionTypes[funcType];
 
             if(funcType.ParamsList.Types.Count != ExprsList.Exprs.Count)
-                throw new NotImplementedException($"{Span} - Parameter count mismatch on {ToCall.GetValueType(st)}.");
+                throw new FCompilationException($"{Span} - Parameter count mismatch on {ToCall.GetValueType(st)}.");
 
             ToCall.Generate(generator, currentType, st, exitLabel, conditionLabel);
             List<Type> paramTypes = new List<Type>();
@@ -50,7 +50,7 @@ namespace FFC.FAST
                 FType exprFType = ExprsList.Exprs[i].GetValueType(st);
 
                 if(!FType.SameType(funcType.ParamsList.Types[i], exprFType))
-                    throw new NotImplementedException($"{Span} - Parameter {i} should be {funcType.ParamsList.Types[i].ToString()} instead of {exprFType.ToString()}.");
+                    throw new FCompilationException($"{Span} - Parameter {i} should be {funcType.ParamsList.Types[i].ToString()} instead of {exprFType.ToString()}.");
                 paramTypes.Add(exprFType.GetRunTimeType());
                 ExprsList.Exprs[i].Generate(generator, currentType, st);
             }

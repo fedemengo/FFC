@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FFC.FGen;
 
 namespace FFC.FRunTime
 {
@@ -9,8 +10,8 @@ namespace FFC.FRunTime
         public FArray()
         {
             if(typeof(V).IsSubclassOf(typeof(FRTType)) == false && typeof(V).IsSubclassOf(typeof(Delegate)) == false)
-                throw new NotImplementedException($"Cannot create FArray of type {typeof(V).Name}");  
-            Values = new List<V>{};
+                throw new FCompilationException($"Cannot create FArray of type {typeof(V).Name}");  
+            Values = new List<V>();
         }
         public FArray(V v) : this() => Values.Add(v);
         //even if we create N FArray to create a (non immutable) FArray of size N,
@@ -19,7 +20,7 @@ namespace FFC.FRunTime
         {
             //not using this to avoid creating useless list
             if(typeof(V).IsSubclassOf(typeof(FRTType)) == false && typeof(V).IsSubclassOf(typeof(Delegate)) == false)
-                throw new NotImplementedException($"Cannot create FArray of type {typeof(V).Name}");              
+                throw new FCompilationException($"Cannot create FArray of type {typeof(V).Name}");              
             Values = a.Values;
             Values.Add(v);
         }
@@ -35,13 +36,11 @@ namespace FFC.FRunTime
         }
         public static FArray<V> operator+(FArray<V> a1, FArray<V> a2) => new FArray<V>(a1, a2);
         public static FArray<V> operator+(FArray<V> a, V v) => new FArray<V>(a, new FArray<V>(v));
-       
         public V this[FInteger i]
         {
             get => Values[i.Value];
             set => Values[i.Value] = value;
         }
-        
         public override string ToString()
         {
             string ans = "{";
@@ -52,9 +51,7 @@ namespace FFC.FRunTime
             ans += "}";
             return ans;
         }
-
         public uint Length => (uint)Values.Count;
-
         class VIterator : FIterator<V>
         {
             private FArray<V> collection;

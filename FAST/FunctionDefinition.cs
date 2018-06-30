@@ -32,7 +32,7 @@ namespace FFC.FAST
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             FunctionType t = GetValueType(st) as FunctionType;
-            if(t == null) throw new NotImplementedException($"{Span} - Couldn't determine function type");
+            if(t == null) throw new FCompilationException($"{Span} - Couldn't determine function type");
 
             TypeBuilder function = Generator.GetFunction(currentType, t);
 
@@ -90,7 +90,7 @@ namespace FFC.FAST
             //also, we append a return at the end of the function
             if(t.ReturnType == null)
             {
-                // throw new NotImplementedException($"{Span} - Couldn't determine function return type");
+                // throw new FCompilationException($"{Span} - Couldn't determine function return type");
                 t.ReturnType = new DeducedVoidType();
                 Body.StmsList.Add(new ReturnStatement(new TextSpan(Span)));
             }
@@ -100,7 +100,7 @@ namespace FFC.FAST
 
             //if wrong type was specified
             if(FType.SameType(ReturnType, t.ReturnType) == false)
-                throw new NotImplementedException($"{Span} - Returned type {t.ReturnType} doesn't match declared tpye {ReturnType}.");
+                throw new FCompilationException($"{Span} - Returned type {t.ReturnType} doesn't match declared tpye {ReturnType}.");
             
             //assign function value type
             ValueType = t;

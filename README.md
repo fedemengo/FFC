@@ -6,10 +6,9 @@ A compiler for the F language (and it's definition)
 * Main features
 	* Fix TupleType checks, for both assignments/declaration
 		* same types different names should work, but different types are to be forbidden
+	* Standard library names can't be reused
 	* Fix Type checking in declaration when both are specified
 	* Add support to maps
-	* Improve for / foreach behavior, so that values can be modified
-		* Shall this modification be on the container too, or not?
 	* Catch exception when using a variable that is not declared
 
 * Minor stuff

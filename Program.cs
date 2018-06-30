@@ -35,7 +35,7 @@ namespace FFC.FParser
                     Console.WriteLine("\nCompilation completed successfully!");
                 }
             }
-            catch (NotImplementedException ex)
+            catch (FCompilationException ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\nCOMPILATION FAILED :");

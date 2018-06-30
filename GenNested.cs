@@ -42,7 +42,7 @@ class NotProgram
         MethodBuilder invoke = lambda1.DefineMethod("Invoke", MethodAttributes.Public, typeof(void), Type.EmptyTypes);
         ILGenerator invokeGen = invoke.GetILGenerator();
         invokeGen.Emit(OpCodes.Ldstr, "Maniezzo");
-        invokeGen.Emit(OpCodes.Call, typeof(System.Console).GetMethod("WriteLine", new  Type[]{typeof(string)}));
+        invokeGen.Emit(OpCodes.Call, typeof(Console).GetMethod("WriteLine", new  Type[]{typeof(string)}));
         invokeGen.Emit(OpCodes.Ret);
 
         MethodBuilder mSum = lambda1.DefineMethod("Sum", MethodAttributes.Public | 
@@ -266,13 +266,13 @@ class NotProgram
         mainMethGen.Emit(OpCodes.Ldc_I4, 3);
         mainMethGen.Emit(OpCodes.Ldc_I4, 5);
         mainMethGen.Emit(OpCodes.Callvirt, delegateType.GetMethod("Invoke", new Type[]{typeof(int), typeof(int)}));
-        mainMethGen.Emit(OpCodes.Call,typeof(System.Console).GetMethod("WriteLine", new Type[]{typeof(int)}));
+        mainMethGen.Emit(OpCodes.Call,typeof(Console).GetMethod("WriteLine", new Type[]{typeof(int)}));
         
         mainMethGen.Emit(OpCodes.Ldloc, localDelegate2);
         mainMethGen.Emit(OpCodes.Ldc_I4, 3);
         mainMethGen.Emit(OpCodes.Ldc_I4, 5);
         mainMethGen.Emit(OpCodes.Callvirt, delegateType.GetMethod("Invoke", new Type[]{typeof(int), typeof(int)}));
-        mainMethGen.Emit(OpCodes.Call,typeof(System.Console).GetMethod("WriteLine", new Type[]{typeof(int)}));
+        mainMethGen.Emit(OpCodes.Call,typeof(Console).GetMethod("WriteLine", new Type[]{typeof(int)}));
         
         mainMethGen.Emit(OpCodes.Ldloc, localDelegate2);
         mainMethGen.Emit(OpCodes.Stloc, localDelegate1);
@@ -281,7 +281,7 @@ class NotProgram
         mainMethGen.Emit(OpCodes.Ldc_I4, 3);
         mainMethGen.Emit(OpCodes.Ldc_I4, 5);
         mainMethGen.Emit(OpCodes.Callvirt, delegateType.GetMethod("Invoke", new Type[]{typeof(int), typeof(int)}));
-        mainMethGen.Emit(OpCodes.Call,typeof(System.Console).GetMethod("WriteLine", new Type[]{typeof(int)}));
+        mainMethGen.Emit(OpCodes.Call,typeof(Console).GetMethod("WriteLine", new Type[]{typeof(int)}));
 #endregion
 */        
 
@@ -319,7 +319,7 @@ class NotProgram
         mainMethGen.Emit(OpCodes.Callvirt, delegateType.GetMethod("Invoke", new Type[]{typeof(int), typeof(int)}));
         mainMethGen.Emit(OpCodes.Stloc, aInteger);
         mainMethGen.Emit(OpCodes.Ldloc, aInteger);
-        mainMethGen.Emit(OpCodes.Call,typeof(System.Console).GetMethod("WriteLine", new Type[]{typeof(int)}));
+        mainMethGen.Emit(OpCodes.Call,typeof(Console).GetMethod("WriteLine", new Type[]{typeof(int)}));
 
 
         mainMethGen.Emit(OpCodes.Ret);

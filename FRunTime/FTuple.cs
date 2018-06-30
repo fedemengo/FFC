@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FFC.FGen;
 
 namespace FFC.FRunTime
 {
@@ -14,7 +15,7 @@ namespace FFC.FRunTime
         public void Add(object e)
         {
             if(!(e is FRTType || e is Delegate))
-                throw new NotImplementedException($"Cannot create tuple element of type {e.GetType().Name}");  
+                throw new FCompilationException($"Cannot create tuple element of type {e.GetType().Name}");  
             elements.Add(e);
         }
         public object Get(FInteger index) => elements[index.Value - 1];

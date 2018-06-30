@@ -44,11 +44,11 @@ namespace FFC.FAST
         {
             //empty arrays are already typed by SetEmpty, so we can throw if it happens here
             if(ExprsList == null || ExprsList.Exprs == null || ExprsList.Exprs.Count == 0)
-                throw new NotImplementedException($"{Span} - Empty arrays can only be used in declarations/assignments, you pig!");
+                throw new FCompilationException($"{Span} - Empty arrays can only be used in declarations/assignments, you pig!");
             ValueType = ExprsList.Exprs[0].GetValueType(st);
             foreach(var z in ExprsList.Exprs)
                 if(FType.SameType(z.GetValueType(st), ValueType) == false)
-                    throw new NotImplementedException($"{Span} - Can't handle arrays with multiple types {ValueType.GetType().Name} - {z.GetValueType(st).GetType().Name}");
+                    throw new FCompilationException($"{Span} - Can't handle arrays with multiple types {ValueType.GetType().Name} - {z.GetValueType(st).GetType().Name}");
             ValueType = new ArrayType(ValueType);
         }
     }

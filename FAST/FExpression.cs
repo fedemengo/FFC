@@ -70,9 +70,9 @@ namespace FFC.FAST
         {
             GetValueType(st);
             if(ValueType is MapType)
-                throw new NotImplementedException(this.Span + " - Operations on maps are not yet implemented.");
+                throw new FCompilationException(this.Span + " - Operations on maps are not yet implemented.");
             if(ValueType is TupleType)
-                throw new NotImplementedException(this.Span + " - Operations on tuples are not yet implemented.");
+                throw new FCompilationException(this.Span + " - Operations on tuples are not yet implemented.");
             
             FType targetType = ValueType;
             
@@ -132,7 +132,7 @@ namespace FFC.FAST
         public override void BuildValueType(SymbolTable st)
         {
             if(From.GetValueType(st).GetType() != typeof(IntegerType) || To.GetValueType(st).GetType() != typeof(IntegerType))
-                throw new NotImplementedException($"{Span} - Can't use ellipsis with {From.GetValueType(st)}-{To.GetValueType(st)}");
+                throw new FCompilationException($"{Span} - Can't use ellipsis with {From.GetValueType(st)}-{To.GetValueType(st)}");
             ValueType = new EllipsisType();
         }
         public override void Print(int tabs)
@@ -178,8 +178,8 @@ namespace FFC.FAST
         public FType Type {get; set;}
         public ReadExpression(FType type)
         {
-            if(type == null) throw new NotImplementedException($"{Span} - Can't use read keyword without specifying type");
-            if(type.GetRunTimeType().GetMethod("Read") == null) throw new NotImplementedException($"{Span} - Read does not support {type}");
+            if(type == null) throw new FCompilationException($"{Span} - Can't use read keyword without specifying type");
+            if(type.GetRunTimeType().GetMethod("Read") == null) throw new FCompilationException($"{Span} - Read does not support {type}");
             Type = type;
         }
         public override void Print(int tabs)

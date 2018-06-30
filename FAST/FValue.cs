@@ -9,7 +9,7 @@ namespace FFC.FAST
 {
     public abstract class FValue : FPrimary
     {
-        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label)) => throw new NotImplementedException($"{Span} - Generation for {GetType().Name} not implemented");
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label)) => throw new FCompilationException($"{Span} - Generation for {GetType().Name} not implemented");
     }
     public class BooleanValue : FValue
     {
@@ -168,13 +168,13 @@ namespace FFC.FAST
             if(st.Contains(Name))
                 Generator.EmitLoad(generator, st.Find(Name).Builder);
             else
-                throw new NotImplementedException($"{Span} - Identifier {Name} not found");
+                throw new FCompilationException($"{Span} - Identifier {Name} not found");
         }
 
         public override void BuildValueType(SymbolTable st)
         {
             NameInfo entry = st.Find(Name);
-            if(entry == null) throw new NotImplementedException($"{Span} - Couldn't resolve name \"{Name}\"");
+            if(entry == null) throw new FCompilationException($"{Span} - Couldn't resolve name \"{Name}\"");
             ValueType = st.Find(Name).Type;
         }
     }

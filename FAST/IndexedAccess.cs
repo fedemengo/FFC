@@ -33,11 +33,11 @@ namespace FFC.FAST
             else if(ValueType is TupleType)
             {
                 if(Index is DotIndexer == false)
-                    throw new NotImplementedException($"{Span} - Can't generate not DotIndexer for tuple");
+                    throw new FCompilationException($"{Span} - Can't generate not DotIndexer for tuple");
 
                 ValueType = (ValueType as TupleType).GetIndexType(Index as DotIndexer);
             }
-            else throw new NotImplementedException($"{Span} - Can't use indexers on type {ValueType.GetType().Name}");
+            else throw new FCompilationException($"{Span} - Can't use indexers on type {ValueType.GetType().Name}");
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
@@ -53,7 +53,7 @@ namespace FFC.FAST
                 tupleIndex.Generate(generator, currentType, st, exitLabel, conditionLabel);
                 generator.Emit(OpCodes.Callvirt, Container.GetValueType(st).GetRunTimeType().GetMethod("Get", new Type[]{typeof(FInteger)}));
             }
-            else  throw new NotImplementedException($"{Span} - Generation not supported for {Index.GetType().Name}");
+            else throw new FCompilationException($"{Span} - Generation not supported for {Index.GetType().Name}");
         }
     }
     public abstract class Indexer : FExpression

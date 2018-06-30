@@ -61,7 +61,7 @@ namespace FFC.FAST
             bool returned = false;
             foreach(var stm in StmsList)
             {
-                if(returned) throw new NotImplementedException($"{stm.Span} - Can't have operations after a return");
+                if(returned) throw new FCompilationException($"{stm.Span} - Can't have operations after a return");
                 if(stm is ReturnStatement) returned = true;
                 if(stm is DeclarationStatement)
                 {
@@ -77,7 +77,7 @@ namespace FFC.FAST
                     var x = stm.GetValueType(st);
                     if(ValueType == null) ValueType = x;
                     else if(x != null && FType.SameType(x, ValueType) == false)
-                        throw new NotImplementedException($"{Span} - Can't deduce type as {ValueType} is not compatible with {x} at {stm.Span}");
+                        throw new FCompilationException($"{Span} - Can't deduce type as {ValueType} is not compatible with {x} at {stm.Span}");
                 }
             }
         }
@@ -152,10 +152,10 @@ namespace FFC.FAST
                 Identifier leftID = Left as Identifier;
                 var definedSymbol = st.Find(leftID.Name);
                 if(definedSymbol == null) 
-                    throw new NotImplementedException($"{Span} - Identifier {(Left as Identifier).Name} is not declared");
+                    throw new FCompilationException($"{Span} - Identifier {(Left as Identifier).Name} is not declared");
                                 
                 if(FType.SameType(Right.GetValueType(st), definedSymbol.Type) == false) 
-                    throw new NotImplementedException($"{Span} - Can't assign type {Right.GetValueType(st).GetRunTimeType()} to variable of type {definedSymbol.Type.GetRunTimeType()}"); 
+                    throw new FCompilationException($"{Span} - Can't assign type {Right.GetValueType(st).GetRunTimeType()} to variable of type {definedSymbol.Type.GetRunTimeType()}"); 
                 
                 //Empty array on identifier
                 Right.Generate(generator, currentType, st, exitLabel, conditionLabel);
@@ -169,7 +169,7 @@ namespace FFC.FAST
                 if(collection is ArrayType && FType.SameType((collection as ArrayType).Type, Right.GetValueType(st)) == false)
                 {
                     FType element = Right.GetValueType(st);
-                    throw new NotImplementedException($"{Span} - Can't assign {element.GetRunTimeType().Name} to {collection.GetRunTimeType().Name}[{(collection as ArrayType).Type.GetRunTimeType().Name}]");
+                    throw new FCompilationException($"{Span} - Can't assign {element.GetRunTimeType().Name} to {collection.GetRunTimeType().Name}[{(collection as ArrayType).Type.GetRunTimeType().Name}]");
                 }
                 x.Container.Generate(generator, currentType, st, exitLabel, conditionLabel);
                 x.Index.Generate(generator, currentType, st, exitLabel, conditionLabel);
@@ -179,9 +179,9 @@ namespace FFC.FAST
                 if(x.Index is SquaresIndexer)
                     generator.Emit(OpCodes.Callvirt, x.Container.GetValueType(st).GetRunTimeType().GetMethod("set_Item", new Type[]{x.Index.GetValueType(st).GetRunTimeType(), Right.GetValueType(st).GetRunTimeType()}));
                 else
-                    throw new NotImplementedException($"{Span} - Generation not supported for {x.Index.GetType().Name}");
+                    throw new FCompilationException($"{Span} - Generation not supported for {x.Index.GetType().Name}");
             }
-            else throw new NotImplementedException($"{Span} - Assignments to {Left.GetType().Name} are not implemented");
+            else throw new FCompilationException($"{Span} - Assignments to {Left.GetType().Name} are not implemented");
         }
     }
     public class DeclarationStatement : FStatement
@@ -218,7 +218,7 @@ namespace FFC.FAST
             FType t = Expr.GetValueType(st);
 
             if(Type != null && FType.SameType(Type, t) == false)
-                throw new NotImplementedException($"{Span} - Type {t.GetRunTimeType().Name} doesn't match declaration {Type.GetRunTimeType().Name}");
+                throw new FCompilationException($"{Span} - Type {t.GetRunTimeType().Name} doesn't match declaration {Type.GetRunTimeType().Name}");
             
             //Field when emitting locals in program type
             object builder;
@@ -237,7 +237,7 @@ namespace FFC.FAST
             if(Expr is ArrayDefinition && (Expr as ArrayDefinition).ExprsList.Exprs.Count == 0)
             {
                 if(Type == null)
-                    throw new NotImplementedException($"{Span} - Can't create empty array without specifying type");
+                    throw new FCompilationException($"{Span} - Can't create empty array without specifying type");
                 (Expr as ArrayDefinition).SetEmpty(Type);
             }
             
@@ -260,7 +260,7 @@ namespace FFC.FAST
                 sameType = d1 == d2;
             }
             if(!sameType)
-                throw new NotImplementedException($"{Span} - Type mismatch in variable {Id.Name}, {Expr.GetValueType(st).GetRunTimeType()} is not {Type.GetRunTimeType()}");
+                throw new FCompilationException($"{Span} - Type mismatch in variable {Id.Name}, {Expr.GetValueType(st).GetRunTimeType()} is not {Type.GetRunTimeType()}");
         }
     }
     public class DeclarationStatementList : FASTNode
@@ -286,14 +286,14 @@ namespace FFC.FAST
                 x.Generate(generator, currentType, ref st);
                 if(x.Id.Name == Generator.StartFunction)
                 {
-                    if(startEmitted) throw new NotImplementedException($"{Span} - Cannot define multiple functions as starting ones");
+                    if(startEmitted) throw new FCompilationException($"{Span} - Cannot define multiple functions as starting ones");
                     if(x.Expr is FunctionDefinition == false || (x.Expr as FunctionDefinition).GetValueType(st) is FunctionType == false)
-                        throw new NotImplementedException($"{x.Span} - Declaration not valid as start function");
+                        throw new FCompilationException($"{x.Span} - Declaration not valid as start function");
                     Generator.EmitStartFunction(st.Find(x.Id.Name).Builder, (x.Expr as FunctionDefinition).GetValueType(st) as FunctionType);
                     startEmitted = true;
                 }
             }
-            if(!startEmitted) throw new NotImplementedException($"Cannot compile a program without a starting function");
+            if(!startEmitted) throw new FCompilationException($"Cannot compile a program without a starting function");
         }
         public void Add(DeclarationStatement stm) => DeclStmsList.Add(stm);
     }
@@ -323,7 +323,7 @@ namespace FFC.FAST
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             if(Condition.GetValueType(st) is BooleanType == false)
-                throw new NotImplementedException($"{Span} - Can't use {Condition.GetValueType(st)} as condition");
+                throw new FCompilationException($"{Span} - Can't use {Condition.GetValueType(st)} as condition");
 
             //Branch to the end of IfStatement
             Label exitBranch = generator.DefineLabel();
@@ -347,7 +347,7 @@ namespace FFC.FAST
             {
                 //Check if condition is boolean
                 if(ei.Condition.GetValueType(st) is BooleanType == false)
-                    throw new NotImplementedException($"{Span} - Can't use {Condition.GetValueType(st)} as condition");
+                    throw new FCompilationException($"{Span} - Can't use {Condition.GetValueType(st)} as condition");
                 //Emit ElseIF condition
                 ei.Condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
                 generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
@@ -379,13 +379,13 @@ namespace FFC.FAST
                 if(ValueType == null || FType.SameType(ValueType, ei))
                     ValueType = ei;
                 else
-                    throw new NotImplementedException($"{Span} - If type {t.GetType().Name} doesn't match ElseIf type {ei.GetType().Name}");
+                    throw new FCompilationException($"{Span} - If type {t.GetType().Name} doesn't match ElseIf type {ei.GetType().Name}");
             
             if(e != null)
                 if(ValueType == null || FType.SameType(ValueType, e))
                     ValueType = e;
                 else
-                    throw new NotImplementedException($"{Span} - If type {t.GetType().Name} doesn't match Else type {e.GetType().Name}");
+                    throw new FCompilationException($"{Span} - If type {t.GetType().Name} doesn't match Else type {e.GetType().Name}");
         }
     }
 
@@ -420,7 +420,7 @@ namespace FFC.FAST
             foreach(var x in ElseIfStmsList)
                 if(ValueType == null || FType.SameType(ValueType, x.GetValueType(st)))
                     ValueType = x.GetValueType(st);
-                else throw new NotImplementedException($"{Span} - Return type mismatch {ValueType} vs {x.GetValueType(st)}");
+                else throw new FCompilationException($"{Span} - Return type mismatch {ValueType} vs {x.GetValueType(st)}");
         }
     }
 
@@ -516,7 +516,7 @@ namespace FFC.FAST
                 expr.EmitPrint(generator, currentType, st);
                 //scrive uno spazio come separatore
                 generator.Emit(OpCodes.Ldstr, " ");
-                generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{typeof(string)}));
+                generator.Emit(OpCodes.Call, typeof(Console).GetMethod("Write", new Type[]{typeof(string)}));
             }
             ToPrint.Exprs[ToPrint.Exprs.Count - 1].EmitPrint(generator, currentType, st, true);
         }

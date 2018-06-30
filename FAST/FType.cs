@@ -17,11 +17,11 @@ namespace FFC.FAST
             }
             catch (Exception)
             {
-                throw new NotImplementedException($"{Span} - No conversion from {this.GetType().Name} to {target.GetType().Name}");
+                throw new FCompilationException($"{Span} - No conversion from {this.GetType().Name} to {target.GetType().Name}");
             }
         }
         
-        public virtual Type GetRunTimeType() => throw new NotImplementedException($"{Span} - RunTimeType not available for {GetType().Name}");
+        public virtual Type GetRunTimeType() => throw new FCompilationException($"{Span} - RunTimeType not available for {GetType().Name}");
         
         public override bool Equals(object o)
         {
@@ -85,7 +85,7 @@ namespace FFC.FAST
                 //check params
                 return SameType(ta.ParamsList, tb.ParamsList);
             }
-            throw new NotImplementedException($"FType comparison for {a.GetType().Name} is not implemented");
+            throw new FCompilationException($"FType comparison for {a.GetType().Name} is not implemented");
         }
     }
 

@@ -90,10 +90,10 @@ namespace FFC.FAST
             Type collValueRTType = iterableType.Type.GetRunTimeType();
             
             if(iterableType == null)
-                throw new NotImplementedException($"{Span} - Can't iterate on {collType}");
+                throw new FCompilationException($"{Span} - Can't iterate on {collType}");
             Collection.Generate(generator, currentType, st, exitLabel, conditionLabel);
             if(!collType.GetRunTimeType().GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(FIterable<>)))
-                throw new NotImplementedException($"{Span} - {collType.GetRunTimeType().Name} is not FIterable {iterableType.Type.GetRunTimeType().Name}");
+                throw new FCompilationException($"{Span} - {collType.GetRunTimeType().Name} is not FIterable {iterableType.Type.GetRunTimeType().Name}");
             generator.Emit(OpCodes.Callvirt, collType.GetRunTimeType().GetMethod("GetIterator"));
             
             // Create lb for iterator
@@ -143,7 +143,7 @@ namespace FFC.FAST
         {
             generator.MarkLabel(conditionLabel); //While repeats from condition check
             if(Condition.GetValueType(st) is BooleanType == false)
-                throw new NotImplementedException($"{Span} - Can't use conditional with {Condition.GetValueType(st)}");
+                throw new FCompilationException($"{Span} - Can't use conditional with {Condition.GetValueType(st)}");
             Condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
             generator.Emit(OpCodes.Brfalse, exitLabel);
