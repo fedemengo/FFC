@@ -5,8 +5,8 @@ namespace FFC.FRunTime
 {
     public class FPair<K, V> : FRTType
     {
-        public K Key {get; set;}
-        public V Value {get; set;}
+        public K Key;
+        public V Value;
         public FPair(KeyValuePair<K,V> p)
         {
             Key = p.Key;
@@ -17,20 +17,17 @@ namespace FFC.FRunTime
     {
         public Dictionary<K, V> Values;
         public FMap() => Values = new Dictionary<K, V>();
-
         //chain constructor approach
         public FMap(FMap<K, V> a, FPair<K,V> p)
         {
             Values = a.Values;
             Values.Add(p.Key, p.Value);
         }
-
         public V this[K key]
         {
             get => Values[key];
             set => Values[key] = value;
         }
-        
         public override string ToString()
         {
             string ans = "{";
@@ -41,21 +38,14 @@ namespace FFC.FRunTime
             ans += "}";
             return ans;
         }
-
         public uint Length => (uint)Values.Count;
-
         class KVIterator : FIterator<FPair<K, V>>
         {
             private Dictionary<K, V>.Enumerator iterator;
             public KVIterator(FMap<K, V> collection) => iterator =  collection.Values.GetEnumerator();
             public bool MoveNext() => iterator.MoveNext();
-
             public FPair<K, V> GetCurrent() => new FPair<K, V>(iterator.Current);
         }
-
-        public FIterator<FPair<K, V>> GetIterator()
-        {
-            return new KVIterator(this);
-        }
+        public FIterator<FPair<K, V>> GetIterator() => new KVIterator(this);
     }
 }

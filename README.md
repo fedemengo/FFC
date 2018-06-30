@@ -3,7 +3,7 @@ A compiler for the F language (and it's definition)
 
 ## TODOs
 
-* Main features
+* Core features
 	* Fix TupleType checks, for both assignments/declaration
 		* same types different names should work, but different types are to be forbidden
 	* Standard library names can't be reused
@@ -93,7 +93,7 @@ A compiler for the F language (and it's definition)
 	- [ ] Lexer error handling support
 	- [ ] Parsing error handling support
 	- [x] Compilation error handling support
-		- [ ] Custom Exception type
+		- [x] Custom Exception type
 	- [ ] ~~Runtime error handling support~~
 
 - [ ] Writing a report

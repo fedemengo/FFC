@@ -4,7 +4,7 @@ namespace FFC.FRunTime
 {
     public class FReal : FRTType
     {
-        public double Value {get; set;}
+        public double Value;
 
         public FReal(double val) => Value = val;
         public FReal(FInteger i) => Value = i.Value;

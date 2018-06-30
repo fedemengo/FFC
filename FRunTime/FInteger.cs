@@ -4,7 +4,7 @@ namespace FFC.FRunTime
 {
     public class FInteger : FRTType
     {
-        public int Value {get; set;}
+        public int Value;
         public FInteger(int val) => Value = val;
 
         public static FInteger operator+(FInteger i1, FInteger i2) => new FInteger(i1.Value + i2.Value);

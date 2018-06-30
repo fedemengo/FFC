@@ -10,8 +10,8 @@ namespace FFC.FRunTime
         }
         public FComplex(FReal r) : this(r.Value, 0){}
         public FComplex(FInteger i) : this(i.Value, 0){}
-        public double Real {get; set;}
-        public double Imaginary {get; set;}
+        public double Real;
+        public double Imaginary;
         public FComplex Conjugate() => new FComplex(Real, -Imaginary);
 
         public static FComplex operator +(FComplex c1, FComplex c2) => new FComplex(c1.Real + c2.Real, c1.Imaginary + c2.Imaginary);
@@ -49,11 +49,11 @@ namespace FFC.FRunTime
         {
             string l = Console.ReadLine();
             var p = l.Split('i');
-            if(p.Length != 2) throw new Exception();
+            if(p.Length != 2) throw new FormatException("Input is not long enough to be a complex value");
             if(p[0].Length == 0 || p[0][p[0].Length-1] == '.' || p[0][0] == '.')
-                throw new Exception("Wrong complex format");
+                throw new FormatException("Wrong complex format, should be NUMiNUM");
             if(p[1].Length == 0 || p[1][p[1].Length-1] == '.' || p[1][0] == '.')
-                throw new Exception("Wrong complex format");
+                throw new FormatException("Wrong complex format, should be NUMiNUM");
             return new FComplex(double.Parse(p[0]), double.Parse(p[1]));
         }
     }

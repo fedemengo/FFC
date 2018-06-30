@@ -13,18 +13,10 @@ namespace FFC.FRunTime
         public FRational(FInteger i) : this(i.Value, 1){}
         public int Numerator {get; set;}
         public int Denominator {get; set;}
-
-        private static int GCD(int a, int b)
-        {
-            if(b == 0) return a;
-            return GCD(b, a % b);
-        }
-        
+        private static int GCD(int a, int b) => b == 0 ? a : GCD(b, a % b);
         private static FRational Inverse(FRational r1) => new FRational(r1.Denominator, r1.Numerator);
-
         private FReal Value() => new FReal(Numerator / (double)Denominator);
 
-        
         public static FRational operator +(FRational r1, FRational r2)
         {
             int gcd = GCD(r1.Denominator, r2.Denominator);
@@ -66,7 +58,7 @@ namespace FFC.FRunTime
         {
             string l = Console.ReadLine();
             var p = l.Split('\\');
-            if(p.Length != 2) throw new Exception();
+            if(p.Length != 2) throw new FormatException("Input is not long enough to be a rational value");
             return new FRational(int.Parse(p[0]), int.Parse(p[1]));
         }
     }

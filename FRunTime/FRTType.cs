@@ -1,7 +1,4 @@
 namespace FFC.FRunTime
 {
-    public class FRTType
-    {
-
-    }
+    public class FRTType{}
 }

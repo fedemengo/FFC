@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
-using FFC.FGen;
 
 namespace FFC.FRunTime
 {
     public class FArray<V> : FRTType, FIterable<V>
     {
-        public List<V> Values {get; set;}
+        public List<V> Values;
         public FArray()
         {
             if(typeof(V).IsSubclassOf(typeof(FRTType)) == false && typeof(V).IsSubclassOf(typeof(Delegate)) == false)
-                throw new FCompilationException($"Cannot create FArray of type {typeof(V).Name}");  
+                throw new ArrayTypeMismatchException($"Cannot create FArray of type {typeof(V).Name}");  
             Values = new List<V>();
         }
         public FArray(V v) : this() => Values.Add(v);
@@ -20,7 +19,7 @@ namespace FFC.FRunTime
         {
             //not using this to avoid creating useless list
             if(typeof(V).IsSubclassOf(typeof(FRTType)) == false && typeof(V).IsSubclassOf(typeof(Delegate)) == false)
-                throw new FCompilationException($"Cannot create FArray of type {typeof(V).Name}");              
+                throw new ArrayTypeMismatchException($"Cannot create FArray of type {typeof(V).Name}");              
             Values = a.Values;
             Values.Add(v);
         }
