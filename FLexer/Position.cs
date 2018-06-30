@@ -7,22 +7,17 @@ namespace FFC.FLexer
     {
         public int Row {get; set;}
         public int Column{get; set;}
-        public void NextChar()
-        {
-            Column++;
-        }
+        public void NextChar() => Column++;
         public void NextLine()
         {
             Row++;
             Column = 0;
         }
-        public Tuple<int, int> GetPair()
-        {
-            return Tuple.Create(Row, Column);
-        }
+        public Tuple<int, int> GetPair() => Tuple.Create(Row, Column);
         public Position()
         {
-            Row = Column = 0;
+            Row = 0;
+            Column = 0;
         }
         public Position(Position copy)
         {
@@ -34,9 +29,6 @@ namespace FFC.FLexer
             Row = r;
             Column = c;
         }
-        public override string ToString()
-        {
-            return "[" + Row + ", " + Column + "]";
-        }
+        public override string ToString() =>  "[" + Row + ", " + Column + "]";
     }
 }

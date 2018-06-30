@@ -68,7 +68,7 @@ namespace FFC.FAST
     {
         public LessOperator(TextSpan span)
         {
-            this.Span = span;
+            Span = span;
         }
         public override string GetMethodName() => "op_LessThan";
     }
@@ -76,7 +76,7 @@ namespace FFC.FAST
     {
         public LessEqualOperator(TextSpan span)
         {
-            this.Span = span;
+            Span = span;
         }
         public override string GetMethodName() => "op_LessThanOrEqual";
     }
@@ -84,7 +84,7 @@ namespace FFC.FAST
     {
         public GreaterOperator(TextSpan span)
         {
-            this.Span = span;
+            Span = span;
         }
         public override string GetMethodName() => "op_GreaterThan";
     }
@@ -92,7 +92,7 @@ namespace FFC.FAST
     {
         public GreaterEqualOperator(TextSpan span)
         {
-            this.Span = span;
+            Span = span;
         }
         public override string GetMethodName() => "op_GreaterThanOrEqual";
     }
@@ -100,7 +100,7 @@ namespace FFC.FAST
     {
         public EqualOperator(TextSpan span)
         {
-            this.Span = span;
+            Span = span;
         }
         public override string GetMethodName() => "op_Equality";
     }
@@ -108,7 +108,7 @@ namespace FFC.FAST
     {
         public NotEqualOperator(TextSpan span)
         {
-            this.Span = span;
+            Span = span;
         }
 
         public override string GetMethodName() => "op_Inequality";
@@ -130,7 +130,7 @@ namespace FFC.FAST
     {
         public AndOperator(TextSpan span)
         {
-            this.Span = span;
+            Span = span;
         }
         public override string GetMethodName() => "op_BitwiseAnd";
     }
@@ -138,7 +138,7 @@ namespace FFC.FAST
     {
         public OrOperator(TextSpan span)
         {
-            this.Span = span;
+            Span = span;
         }
         public override string GetMethodName() => "op_BitwiseOr";
     }
@@ -146,7 +146,7 @@ namespace FFC.FAST
     {
         public XorOperator(TextSpan span)
         {
-            this.Span = span;
+            Span = span;
         }
         public override string GetMethodName() => "op_ExclusiveOr";
     }
@@ -181,9 +181,8 @@ namespace FFC.FAST
     {
         public PlusOperator(TextSpan span)
         {
-            this.Span = span;
+            Span = span;
         }
-
         public override string GetMethodName() => "op_Addition";
 
         public override FType GetTarget(FType t1, FType t2)
@@ -193,10 +192,10 @@ namespace FFC.FAST
 
             if(t1 is StringType && t2 is StringType)
                 return new StringType();
-            if(t1 is ArrayType && t2 is ArrayType && ((ArrayType) t1).type.GetType() == ((ArrayType) t2).type.GetType())
-                return new ArrayType(((ArrayType) t1).type);
-            if(t1 is ArrayType && t2.GetType() == ((ArrayType) t1).type.GetType())
-                return new ArrayType(((ArrayType) t1).type);
+            if(t1 is ArrayType && t2 is ArrayType && ((ArrayType) t1).Type.GetType() == ((ArrayType) t2).Type.GetType())
+                return new ArrayType(((ArrayType) t1).Type);
+            if(t1 is ArrayType && t2.GetType() == ((ArrayType) t1).Type.GetType())
+                return new ArrayType(((ArrayType) t1).Type);
             return base.GetTarget(t1, t2);
         }
     }
@@ -204,7 +203,7 @@ namespace FFC.FAST
     {
         public MinusOperator(TextSpan span)
         {
-            this.Span = span;
+            Span = span;
         }
 
         public override string GetMethodName() => "op_Subtraction";
@@ -213,7 +212,7 @@ namespace FFC.FAST
     {
         public StarOperator(TextSpan span)
         {
-            this.Span = span;
+            Span = span;
         }
 
         public override string GetMethodName() => "op_Multiply";
@@ -222,7 +221,7 @@ namespace FFC.FAST
     {
         public SlashOperator(TextSpan span)
         {
-            this.Span = span;
+            Span = span;
         }
 
         public override string GetMethodName() => "op_Division";
@@ -253,7 +252,7 @@ namespace FFC.FAST
     {
         public ModuloOperator(TextSpan span)
         {
-            this.Span = span;
+            Span = span;
         }
         public override string GetMethodName() => "op_Modulus";
         public override FType GetTarget(FType t1, FType t2)

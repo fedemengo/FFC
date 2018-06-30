@@ -18,19 +18,10 @@ namespace FFC.FLexer
                 default: return false;
             }
         }
-        static bool IsIdentifierChar(char c)
-        {
-            return Char.IsLetterOrDigit(c) || c == '_';
-        }
+        static bool IsIdentifierChar(char c) => Char.IsLetterOrDigit(c) || c == '_';
 
-        static double GetDouble(string before, string after)
-        {
-            return double.Parse(before + "." + after);
-        }
-        static int GetInt(string num)
-        {
-            return int.Parse(num);
-        }
+        static double GetDouble(string before, string after) => double.Parse(before + "." + after);
+        static int GetInt(string num) => int.Parse(num);
         static string GetDigits(SourceReader sr)
         {
             string tmp = "";
@@ -72,35 +63,35 @@ namespace FFC.FLexer
                 blank = false;
             return t;
         }
-        private Token ParseComplex(string num, string frac, SourceReader sr, Position begin)
+        private Token ParseComplex(string num1, string frac1, SourceReader sr, Position begin)
         {
             sr.Advance(); //skips the i
-            string tmp3 = "";
+            string num2 = "";
             if(sr.GetChar() == '-')
             {
-                tmp3 = "-";
+                num2 = "-";
                 sr.Advance();
             }
-            tmp3 += GetDigits(sr);
+            num2 += GetDigits(sr);
             if(Char.IsLetter(sr.GetChar()))
                 return new Token(ETokens.ERROR, new List<object>{"Letter after number - identifier can't begin with numbers."}, begin, sr.GetPosition());
 
-            if(tmp3.Length == 0 || tmp3.Length == 1 && tmp3[0] == '-')
+            if(num2.Length == 0 || num2.Length == 1 && num2[0] == '-')
                 return new Token(ETokens.ERROR, new List<object>{"Imaginary part is missing."}, begin, sr.GetPosition());
 
-            string tmp4 = "0";
+            string frac2 = "0";
             if(sr.GetChar() == '.')
             {
                 sr.Advance(); //skip .
-                tmp4 = GetDigits(sr);
-                if(tmp4.Length == 0)
+                frac2 = GetDigits(sr);
+                if(frac2.Length == 0)
                     return new Token(ETokens.ERROR, new List<object>{"Mantissa is missing."}, begin, sr.GetPosition());
             }
             if(Char.IsLetter(sr.GetChar()))
                 return new Token(ETokens.ERROR, new List<object>{"Letter after number - identifier can't begin with numbers."}, begin, sr.GetPosition());
 
-            double real = GetDouble(num, frac);
-            double img = GetDouble(tmp3, tmp4);
+            double real = GetDouble(num1, frac1);
+            double img = GetDouble(num2, frac2);
             return new Token(ETokens.COMPLEX_VALUE, new List<object>{real, img}, begin, sr.GetPosition());
         }
         private Token _NextToken(SourceReader sr)
@@ -332,7 +323,6 @@ namespace FFC.FLexer
                     {
                         throw new System.Exception("Not valid character " + sr.GetChar());
                     }
-
             }
         }
     }

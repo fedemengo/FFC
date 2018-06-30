@@ -19,80 +19,77 @@ namespace FFC.FAST
         public virtual void EmitPrint(ILGenerator generator, TypeBuilder currentType, SymbolTable st, bool newLine = false)
         {
             Generate(generator, currentType, st);
-            FType t = this is Identifier ? st.Find((this as Identifier).name).Type : GetValueType(st);
+            FType t = this is Identifier ? st.Find((this as Identifier).Name).Type : GetValueType(st);
             generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod(newLine ? "WriteLine" : "Write", new Type[]{t.GetType()}));
         }
     }
     public class ExpressionList : FASTNode
     {
-        public List<FExpression> expressions;
+        public List<FExpression> Exprs {get; set;}
         public ExpressionList(FExpression expr, TextSpan span)
         {
-            this.Span = span;
-            expressions = new List<FExpression>{expr};
+            Exprs = new List<FExpression>{expr};
+            Span = span;
         }
         public ExpressionList(TextSpan span = null)
         {
-            this.Span = span;
-            expressions = new List<FExpression>();
+            Exprs = new List<FExpression>();
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Expression list");
-            foreach(FExpression e in expressions)
+            foreach(FExpression e in Exprs)
                 e.Print(tabs + 1);
         }
     }
     public class BinaryOperatorExpression : FExpression
     {
-        public FExpression left;
-        public FOperator binOperator;
-        public FExpression right;
+        public FExpression Left {get; set;}
+        public FOperator BinOperator {get; set;}
+        public FExpression Right {get; set;}
         public BinaryOperatorExpression(FExpression left, FOperator binOperator, FExpression right, TextSpan span)
         {
-            this.Span = span;
-            this.left = left;
-            this.binOperator = binOperator;
-            this.right = right;
+            Left = left;
+            BinOperator = binOperator;
+            Right = right;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Binary operator");
-            left.Print(tabs+1);
-            binOperator.Print(tabs+1);
-            right.Print(tabs+1);
+            Left.Print(tabs+1);
+            BinOperator.Print(tabs+1);
+            Right.Print(tabs+1);
         }
-        public override void BuildType(SymbolTable st)
-        {
-            valueType = binOperator.GetTarget(left.GetValueType(st), right.GetValueType(st));
-        }
+        public override void BuildValueType(SymbolTable st) => ValueType = BinOperator.GetTarget(Left.GetValueType(st), Right.GetValueType(st));
 
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             GetValueType(st);
-            if(valueType is MapType)
+            if(ValueType is MapType)
                 throw new NotImplementedException(this.Span + " - Operations on maps are not yet implemented.");
-            if(valueType is TupleType)
+            if(ValueType is TupleType)
                 throw new NotImplementedException(this.Span + " - Operations on tuples are not yet implemented.");
             
-            FType targetType = valueType;
+            FType targetType = ValueType;
             
-            if(binOperator is RelationalOperator)
+            if(BinOperator is RelationalOperator)
             {
                 //we need to cast to the 2same type they would get summed to
-                targetType = new PlusOperator(null).GetTarget(left.GetValueType(st), right.GetValueType(st));
+                targetType = new PlusOperator(null).GetTarget(Left.GetValueType(st), Right.GetValueType(st));
             }
-            left.Generate(generator, currentType, st, exitLabel, conditionLabel);
-            if(FType.SameType(left.GetValueType(st), targetType) == false)
-                left.GetValueType(st).ConvertTo(targetType, generator);
+            Left.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            if(FType.SameType(Left.GetValueType(st), targetType) == false)
+                Left.GetValueType(st).ConvertTo(targetType, generator);
             
-            right.Generate(generator, currentType, st, exitLabel, conditionLabel);
-            if(FType.SameType(right.GetValueType(st),targetType) == false)
-                right.GetValueType(st).ConvertTo(targetType, generator);
+            Right.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            if(FType.SameType(Right.GetValueType(st),targetType) == false)
+                Right.GetValueType(st).ConvertTo(targetType, generator);
 
-            string op_name = binOperator.GetMethodName();
+            string op_name = BinOperator.GetMethodName();
             Type rtt = targetType.GetRunTimeType();
             //this goes for binOperator.Generate();
             generator.Emit(OpCodes.Call, rtt.GetMethod(op_name, new Type[]{rtt, rtt}));
@@ -100,106 +97,102 @@ namespace FFC.FAST
     }
     public class NegativeExpression : FExpression
     {
-        public FSecondary value;
+        public FSecondary Value {get; set;}
         public NegativeExpression(FSecondary value, TextSpan span)
         {
-            this.Span = span;
-            this.value = value;
+            Value = value;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Negative expression");
-            value.Print(tabs + 1);
+            Value.Print(tabs + 1);
         }
 
-        public override void BuildType(SymbolTable st)
-        {
-            valueType = value.GetValueType(st);
-        }
+        public override void BuildValueType(SymbolTable st) => ValueType = Value.GetValueType(st);
+
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            value.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            Value.Generate(generator, currentType, st, exitLabel, conditionLabel);
             //we call -(obj) for ValueType
-            generator.Emit(OpCodes.Call, value.GetValueType(st).GetRunTimeType().GetMethod("op_UnaryNegation", new Type[]{valueType.GetRunTimeType()}));
+            generator.Emit(OpCodes.Call, Value.GetValueType(st).GetRunTimeType().GetMethod("op_UnaryNegation", new Type[]{ValueType.GetRunTimeType()}));
         }
     }
     public class EllipsisExpression : FExpression
     {
-        public FSecondary from;
-        public FSecondary to;
+        public FSecondary From {get; set;}
+        public FSecondary To {get; set;}
         public EllipsisExpression(FSecondary from, FSecondary to, TextSpan span)
         {
-            this.Span = span;
-            this.from = from;
-            this.to = to;
+            From = from;
+            To = to;
+            Span = span;
         }
-        public override void BuildType(SymbolTable st)
+        public override void BuildValueType(SymbolTable st)
         {
-            if(from.GetValueType(st).GetType() != typeof(IntegerType) || to.GetValueType(st).GetType() != typeof(IntegerType))
-                throw new NotImplementedException($"{Span} - Can't use ellipsis with {from.GetValueType(st)}-{to.GetValueType(st)}");
-            valueType = new EllipsisType();
+            if(From.GetValueType(st).GetType() != typeof(IntegerType) || To.GetValueType(st).GetType() != typeof(IntegerType))
+                throw new NotImplementedException($"{Span} - Can't use ellipsis with {From.GetValueType(st)}-{To.GetValueType(st)}");
+            ValueType = new EllipsisType();
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Ellipsis expression");
-            from.Print(tabs + 1);
-            to.Print(tabs + 1);
+            From.Print(tabs + 1);
+            To.Print(tabs + 1);
         }
 
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            from.Generate(generator, currentType, st, exitLabel, conditionLabel);
-            to.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            From.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            To.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Newobj, typeof(FEllipsis).GetConstructor(new Type[]{typeof(FInteger), typeof(FInteger)}));
         }
     }
     public class NotExpression : FExpression
     {
-        public FExpression expr;
+        public FExpression Expr {get; set;}
         public NotExpression(FExpression expr, TextSpan span)
         {
-            this.Span = span;
-            this.expr = expr;
+            Span = span;
+            Expr = expr;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Not expression");
-            expr.Print(tabs + 1);
+            Expr.Print(tabs + 1);
         }
-        public override void BuildType(SymbolTable st)
-        {
-            valueType = expr.GetValueType(st);
-        }
+        public override void BuildValueType(SymbolTable st) => ValueType = Expr.GetValueType(st);
+
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            expr.Generate(generator, currentType, st, exitLabel, conditionLabel);
-            generator.Emit(OpCodes.Call, expr.GetValueType(st).GetRunTimeType().GetMethod("op_LogicalNot", new Type[]{expr.GetValueType(st).GetRunTimeType()}));
+            Expr.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            generator.Emit(OpCodes.Call, Expr.GetValueType(st).GetRunTimeType().GetMethod("op_LogicalNot", new Type[]{Expr.GetValueType(st).GetRunTimeType()}));
         }
     }
 
     public class ReadExpression : FExpression
     {
-        public FType type;
+        public FType Type {get; set;}
         public ReadExpression(FType type)
         {
             if(type == null) throw new NotImplementedException($"{Span} - Can't use read keyword without specifying type");
             if(type.GetRunTimeType().GetMethod("Read") == null) throw new NotImplementedException($"{Span} - Read does not support {type}");
-            this.type = type;
+            Type = type;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine($"Read Expression");
-            type.Print(tabs + 1);
+            Type.Print(tabs + 1);
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             //Idea is to use runtime function Read(), so that everything depends on library implementation of types
-            generator.Emit(OpCodes.Call, type.GetRunTimeType().GetMethod("Read"));
+            generator.Emit(OpCodes.Call, Type.GetRunTimeType().GetMethod("Read"));
         }
-        public override void BuildType(SymbolTable st) => valueType = type;
+        public override void BuildValueType(SymbolTable st) => ValueType = Type;
     }
 }

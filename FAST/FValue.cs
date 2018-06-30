@@ -9,197 +9,192 @@ namespace FFC.FAST
 {
     public abstract class FValue : FPrimary
     {
-        //long lines are better
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label)) => throw new NotImplementedException($"{Span} - Generation for {GetType().Name} not implemented");
     }
     public class BooleanValue : FValue
     {
-        public bool value;
+        public bool Value {get; set;}
 
         public BooleanValue(bool value, TextSpan span)
         {
-            this.Span = span;
-            this.value = value;
-            valueType = new BooleanType();
+            ValueType = new BooleanType();
+            Value = value;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
-            Console.WriteLine($"Boolean value({value})");
+            Console.WriteLine($"Boolean value({Value})");
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            generator.Emit(value ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0);
+            generator.Emit(Value ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0);
             generator.Emit(OpCodes.Newobj, typeof(FBoolean).GetConstructor(new Type[]{typeof(bool)}));
         }
-
     }
     public class IntegerValue : FValue
     {
-        public int value;
+        public int Value {get; set;}
 
         public IntegerValue(int value, TextSpan span)
         {
-            this.Span = span;
-            this.value = value;
-            valueType = new IntegerType();
+            ValueType = new IntegerType();
+            Value = value;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
-            Console.WriteLine($"Integer value({value})");
+            Console.WriteLine($"Integer value({Value})");
         }
 
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            generator.Emit(OpCodes.Ldc_I4_S, value);
+            generator.Emit(OpCodes.Ldc_I4_S, Value);
             generator.Emit(OpCodes.Newobj, typeof(FInteger).GetConstructor(new Type[]{typeof(int)}));
         }
     }
     public class RealValue : FValue
     {
-        public double value;
+        public double Value {get; set;}
 
         public RealValue(double value, TextSpan span)
         {
-            this.Span = span;
-            this.value = value;
-            valueType = new RealType();
+            ValueType = new RealType();
+            Value = value;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
-            Console.WriteLine($"RealVal value({value})");
+            Console.WriteLine($"RealVal value({Value})");
         }
 
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            generator.Emit(OpCodes.Ldc_R8, value);
+            generator.Emit(OpCodes.Ldc_R8, Value);
             generator.Emit(OpCodes.Newobj, typeof(FReal).GetConstructor(new Type[]{typeof(double)}));
         }
     }
     public class RationalValue : FValue
     {
-        public int numerator;
-        public int denominator;
+        public int Num {get; set;}
+        public int Den {get; set;}
 
         public RationalValue(int numerator, int denominator, TextSpan span)
         {
-            this.Span = span;
-            this.numerator = numerator;
-            this.denominator = denominator;
-            valueType = new RationalType();
+            ValueType = new RationalType();
+            Num = numerator;
+            Den = denominator;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
-            Console.WriteLine($"Rational value({numerator} / { denominator})");
+            Console.WriteLine($"Rational value({Num} / { Den})");
         }
 
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            generator.Emit(OpCodes.Ldc_I4, this.numerator);
-            generator.Emit(OpCodes.Ldc_I4, this.denominator);
+            generator.Emit(OpCodes.Ldc_I4, this.Num);
+            generator.Emit(OpCodes.Ldc_I4, this.Den);
             generator.Emit(OpCodes.Newobj, typeof(FRational).GetConstructor(new Type[]{typeof(int), typeof(int)}));
         }
     }
     public class ComplexValue : FValue
     {
-        public double real;
-        public double img;
+        public double Real {get; set;}
+        public double Img {get; set;}
 
         public ComplexValue(double real, double img, TextSpan span)
         {
-            this.Span = span;
-            this.real = real;
-            this.img = img;
-            valueType = new ComplexType();
+            ValueType = new ComplexType();
+            Real = real;
+            Img = img;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
-            Console.WriteLine($"Complex value({real}i{img})");
+            Console.WriteLine($"Complex value({Real}i{Img})");
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            generator.Emit(OpCodes.Ldc_R8, real);
-            generator.Emit(OpCodes.Ldc_R8, img);
+            generator.Emit(OpCodes.Ldc_R8, Real);
+            generator.Emit(OpCodes.Ldc_R8, Img);
             generator.Emit(OpCodes.Newobj, typeof(FComplex).GetConstructor(new Type[]{typeof(double), typeof(double)}));
         }
 
     }
     public class StringValue : FValue
     {
-        public string value;
+        public string Value {get; set;}
 
         public StringValue(string value, TextSpan span)
         {
-            this.Span = span;
-            this.value = value;
-            valueType = new StringType();
+            ValueType = new StringType();
+            Value = value;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
-            Console.WriteLine($"String value({value})");
+            Console.WriteLine($"String value({Value})");
         }
 
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            generator.Emit(OpCodes.Ldstr, value);
+            generator.Emit(OpCodes.Ldstr, Value);
             generator.Emit(OpCodes.Newobj, typeof(FString).GetConstructor(new Type[]{typeof(string)}));
         }
     }
     public class Identifier : FValue
     {
-        public string name;
+        public string Name {get; set;}
 
         public Identifier(string name, TextSpan span)
         {
+            this.Name = name;
             this.Span = span;
-            this.name = name;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
-            Console.WriteLine($"Identifier({name})");
+            Console.WriteLine($"Identifier({Name})");
         }
 
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            if(st.Contains(name))
-                Generator.EmitLoad(generator, st.Find(name).Builder);
+            if(st.Contains(Name))
+                Generator.EmitLoad(generator, st.Find(Name).Builder);
             else
-                throw new NotImplementedException($"{Span} - Identifier {name} not found");
+                throw new NotImplementedException($"{Span} - Identifier {Name} not found");
         }
 
-        public override void BuildType(SymbolTable st)
+        public override void BuildValueType(SymbolTable st)
         {
-            var entry = st.Find(name);
-            if(entry == null) throw new NotImplementedException($"{Span} - Couldn't resolve name \"{name}\"");
-            valueType = st.Find(name).Type;
+            NameInfo entry = st.Find(Name);
+            if(entry == null) throw new NotImplementedException($"{Span} - Couldn't resolve name \"{Name}\"");
+            ValueType = st.Find(Name).Type;
         }
     }
 
     public class IdentifierList : FValue
     {
-        public List<Identifier> ids;
+        public List<Identifier> IdList {get; set;}
 
         public IdentifierList(Identifier id, TextSpan span)
         {
-            this.Span = span;
-            this.ids = new List<Identifier>{id};
+            IdList = new List<Identifier>{id};
+            Span = span;
         }
 
-        public void Add(Identifier id)
-        {
-            this.ids.Add(id);
-        }
+        public void Add(Identifier id) => IdList.Add(id);
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Identifier list");
-            foreach(Identifier id in ids)
+            foreach(Identifier id in IdList)
                 id.Print(tabs+1);
         }
     }

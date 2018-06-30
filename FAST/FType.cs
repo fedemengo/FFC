@@ -20,15 +20,19 @@ namespace FFC.FAST
                 throw new NotImplementedException($"{Span} - No conversion from {this.GetType().Name} to {target.GetType().Name}");
             }
         }
+        
         public virtual Type GetRunTimeType() => throw new NotImplementedException($"{Span} - RunTimeType not available for {GetType().Name}");
+        
         public override bool Equals(object o)
         {
-            FType t = o as FType;
-            if (Object.ReferenceEquals(t, null))
+            FType type = o as FType;
+            if (Object.ReferenceEquals(type, null))
                 return false;
-            return this.ToString() == t.ToString();
+            return this.ToString() == type.ToString();
         }
+        
         public override int GetHashCode() => this.ToString().GetHashCode();
+        
         public static bool SameType(FType a, FType b)
         {
             Type t1 = a.GetType();
@@ -45,28 +49,28 @@ namespace FFC.FAST
                 return true;
             //array type
             if(a is ArrayType)
-                return SameType((a as ArrayType).type, (b as ArrayType).type);
+                return SameType((a as ArrayType).Type, (b as ArrayType).Type);
             //map type
             if(a is MapType)
             {
                 MapType ta = a as MapType;
                 MapType tb = b as MapType;
-                return SameType(ta.key, tb.key) && SameType(ta.value, tb.value);
+                return SameType(ta.Key, tb.Key) && SameType(ta.Value, tb.Value);
             }
             //tuple type
             if(a is TupleType)
-                return SameType((a as TupleType).types, (b as TupleType).types);
+                return SameType((a as TupleType).TypesList, (b as TupleType).TypesList);
             //Type list
             if(a is TypeList)
             {
                 TypeList ta = a as TypeList;
                 TypeList tb = b as TypeList;
                 //check number of types
-                if(ta.types.Count != tb.types.Count)
+                if(ta.Types.Count != tb.Types.Count)
                     return false;
                 //check all types
-                for(int i = 0; i < ta.types.Count; i++)
-                    if(SameType(ta.types[i], tb.types[i]) == false)
+                for(int i = 0; i < ta.Types.Count; i++)
+                    if(SameType(ta.Types[i], tb.Types[i]) == false)
                         return false;
                 return true;
             }
@@ -76,53 +80,52 @@ namespace FFC.FAST
                 FunctionType ta = a as FunctionType;
                 FunctionType tb = b as FunctionType;
                 //check return type
-                if(SameType(ta.returnType, tb.returnType) == false)
+                if(SameType(ta.ReturnType, tb.ReturnType) == false)
                     return false;
                 //check params
-                return SameType(ta.paramTypes, tb.paramTypes);
+                return SameType(ta.ParamsList, tb.ParamsList);
             }
             throw new NotImplementedException($"FType comparison for {a.GetType().Name} is not implemented");
         }
-
     }
 
     public class TypeList : FType
     {
-        public List<FType> types;
+        public List<FType> Types {get; set;}
         public TypeList(TextSpan span = null)
         {
-            this.Span = span;
-            types = new List<FType>();
+            Types = new List<FType>();
+            Span = span;
         }
         public TypeList(FType type, TextSpan span = null)
         {
-            this.Span = span;
-            types = new List<FType>{type};
+            Types = new List<FType>{type};
+            Span = span;
         }
-        public void Add(FType type) => types.Add(type);
+        public void Add(FType type) => Types.Add(type);
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Type list");
-            foreach(FType t in types)
+            foreach(FType t in Types)
                 t.Print(tabs + 1);
         }
         public override string ToString()
         {
             string s = "(";
-            foreach(var t in types)
+            foreach(var t in Types)
                 s += t.ToString() + ", ";
             if(s.Length >= 4) s = s.Remove(s.Length - 2);
             return s + ")";
         }
         public override bool Equals(object o)
         {
-            TypeList tl = o as TypeList;
-            if (Object.ReferenceEquals(tl, null))
+            TypeList typeList = o as TypeList;
+            if (Object.ReferenceEquals(typeList, null))
                 return false;
-            return this.ToString() == tl.ToString();
+            return this.ToString() == typeList.ToString();
         }
-        public override int GetHashCode() => types.ToString().GetHashCode();
+        public override int GetHashCode() => Types.ToString().GetHashCode();
     }
 
     public abstract class NumericType : FType
@@ -132,8 +135,7 @@ namespace FFC.FAST
     {
         public IntegerType(TextSpan span = null)
         {
-            this.Span = span;
-
+            Span = span;
         }
         public override void Print(int tabs)
         {
@@ -148,8 +150,7 @@ namespace FFC.FAST
     {
         public RealType(TextSpan span = null)
         {
-            this.Span = span;
-
+            Span = span;
         }
         public override void Print(int tabs)
         {
@@ -164,8 +165,7 @@ namespace FFC.FAST
     {
         public ComplexType(TextSpan span = null)
         {
-            this.Span = span;
-
+            Span = span;
         }
         public override void Print(int tabs)
         {
@@ -180,8 +180,7 @@ namespace FFC.FAST
     {
         public RationalType(TextSpan span = null)
         {
-            this.Span = span;
-
+            Span = span;
         }
         public override void Print(int tabs)
         {
@@ -196,8 +195,7 @@ namespace FFC.FAST
     {
         public StringType(TextSpan span = null)
         {
-            this.Span = span;
-
+            Span = span;
         }
         public override void Print(int tabs)
         {
@@ -222,23 +220,24 @@ namespace FFC.FAST
     
     public class FunctionType : FType
     {
-        public TypeList paramTypes;
-        public FType returnType;
+        public TypeList ParamsList {get; set;}
+        public FType ReturnType {get; set;}
         public FunctionType(TypeList paramTypes, FType returnType, TextSpan span = null)
         {
-            this.Span = span;
-            this.paramTypes = paramTypes;
-            this.returnType = returnType;
+            ParamsList = paramTypes;
+            ReturnType = returnType;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Function type");
-            paramTypes.Print(tabs + 1);
-            if(returnType != null) returnType.Print(tabs + 1);
+            ParamsList.Print(tabs + 1);
+            if(ReturnType != null) ReturnType.Print(tabs + 1);
         }
         public override Type GetRunTimeType() => Generator.GetDelegate(this).CreateType();
-        public override string ToString() => "FunctionType: " + returnType.ToString() + paramTypes.ToString();
+        public override string ToString() => "FunctionType: " + ReturnType.ToString() + ParamsList.ToString();
+        
         public override bool Equals(object o)
         {
             FunctionType ft = o as FunctionType;
@@ -246,87 +245,87 @@ namespace FFC.FAST
                 return false;
             if (this.ToString() != ft.ToString())
                 return false;
-            if(this.returnType.ToString() != ft.returnType.ToString())
+            if(this.ReturnType.ToString() != ft.ReturnType.ToString())
                 return false;
-            return this.paramTypes.Equals(ft.paramTypes);
+            return this.ParamsList.Equals(ft.ParamsList);
         }
-        public override int GetHashCode() => paramTypes.ToString().GetHashCode() ^ returnType.ToString().GetHashCode();
+        public override int GetHashCode() => ParamsList.ToString().GetHashCode() ^ ReturnType.ToString().GetHashCode();
     }
 
     public abstract class IterableType : FType
     {
-        public FType type;
+        public FType Type {get; set;}
     }
 
     public class EllipsisType : IterableType
     {
-        public EllipsisType() => type = new IntegerType();
+        public EllipsisType() => Type = new IntegerType();
         public override Type GetRunTimeType() => typeof(FEllipsis);
     }
     public class ArrayType : IterableType
     {
         public ArrayType(FType type, TextSpan span = null)
         {
-            this.Span = span;
-            this.type = type;
+            Type = type;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Array type");
-            type.Print(tabs + 1);
+            Type.Print(tabs + 1);
         }
-        public override string ToString() => "ArrayType[" + type.ToString() + "]";
-        public override Type GetRunTimeType() => typeof(FArray<>).MakeGenericType(type.GetRunTimeType());
+        public override string ToString() => "ArrayType[" + Type.ToString() + "]";
+        public override Type GetRunTimeType() => typeof(FArray<>).MakeGenericType(Type.GetRunTimeType());
     }
     public class MapType : FType
     {
-        public FType key;
-        public FType value;
+        public FType Key {get; set;}
+        public FType Value {get; set;}
         public MapType(FType key, FType value, TextSpan span = null)
         {
-            this.key = key;
-            this.value = value;
+            Key = key;
+            Value = value;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Map type");
-            key.Print(tabs + 1);
-            value.Print(tabs + 1);
+            Key.Print(tabs + 1);
+            Value.Print(tabs + 1);
         }
-        public override string ToString() => "MapType{" + key.ToString() + ": " + value.ToString() + "}";
-        public override Type GetRunTimeType() => typeof(FMap<,>).MakeGenericType(new Type[]{key.GetRunTimeType(), value.GetRunTimeType()});
+        public override string ToString() => "MapType{" + Key.ToString() + ": " + Value.ToString() + "}";
+        public override Type GetRunTimeType() => typeof(FMap<,>).MakeGenericType(new Type[]{Key.GetRunTimeType(), Value.GetRunTimeType()});
     }
     public class TupleType : FType
     {
-        public TypeList types;
-        public Dictionary<string, int> names;
+        public TypeList TypesList {get; set;}
+        public Dictionary<string, int> Names {get; set;}
         public TupleType(TypeList types, TextSpan span = null)
         {
-            this.Span = span;
-            this.types = types;
-            names = new Dictionary<string, int>();
+            Names = new Dictionary<string, int>();
+            TypesList = types;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Tuple type");
-            types.Print(tabs + 1);
+            TypesList.Print(tabs + 1);
         }
 
-        public FType GetIndexType(DotIndexer index) => types.types[(index.id != null ? names[index.id.name] : index.index.value) - 1];
+        public FType GetIndexType(DotIndexer index) => TypesList.Types[(index.Id != null ? Names[index.Id.Name] : index.Index.Value) - 1];
 
-        public int GetMappedIndex(DotIndexer index) => index.id != null ? names[index.id.name] : index.index.value;
+        public int GetMappedIndex(DotIndexer index) => index.Id != null ? Names[index.Id.Name] : index.Index.Value;
         
         public override Type GetRunTimeType() => typeof(FTuple);
 
         public override string ToString()
         {
             string s = "TupleType(";
-            foreach(FType type in types.types)
+            foreach(FType type in TypesList.Types)
                 s += type.ToString() + ", ";
-            if(types.types.Count > 0) s = s.Remove(s.Length - 2);
+            if(TypesList.Types.Count > 0) s = s.Remove(s.Length - 2);
             return s + ")";
         }
 
@@ -337,9 +336,9 @@ namespace FFC.FAST
                 return false;
             if (this.ToString() != ft.ToString())
                 return false;
-            return this.types.ToString() == ft.types.ToString();
+            return this.TypesList.ToString() == ft.TypesList.ToString();
         }
-        public override int GetHashCode() => types.ToString().GetHashCode();
+        public override int GetHashCode() => TypesList.ToString().GetHashCode();
     }
 
     public class VoidType : FType
@@ -358,5 +357,4 @@ namespace FFC.FAST
     {
         public override string ToString() => "VoidType";
     }
-
 }

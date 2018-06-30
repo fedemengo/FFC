@@ -9,50 +9,50 @@ namespace FFC.FAST
 {
     public class FunctionCall : FSecondary
     {
-        public FSecondary toCall;
-        public ExpressionList exprs;
+        public FSecondary ToCall {get; set;}
+        public ExpressionList ExprsList {get; set;}
         public FunctionCall(FSecondary toCall, ExpressionList exprs, TextSpan span)
         {
-            this.Span = span;
-            this.toCall = toCall;
-            this.exprs = exprs;
+            ToCall = toCall;
+            ExprsList = exprs;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Function call");
-            toCall.Print(tabs + 1);
-            exprs.Print(tabs + 1);
+            ToCall.Print(tabs + 1);
+            ExprsList.Print(tabs + 1);
         }
-        public override void BuildType(SymbolTable st)
+        public override void BuildValueType(SymbolTable st)
         {
-            var t = toCall.GetValueType(st);
+            var t = ToCall.GetValueType(st);
             if(t is null) return;
-            else if(t is FunctionType) valueType = (t as FunctionType).returnType;
-            else throw new NotImplementedException($"{Span} - Can't call function on {toCall.GetValueType(st)}.");
+            else if(t is FunctionType) ValueType = (t as FunctionType).ReturnType;
+            else throw new NotImplementedException($"{Span} - Can't call function on {ToCall.GetValueType(st)}.");
         }
 
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            if(toCall.GetValueType(st) is FunctionType == false)
-                throw new NotImplementedException($"{Span} - Can't call function on {toCall.GetValueType(st)}.");
+            if(ToCall.GetValueType(st) is FunctionType == false)
+                throw new NotImplementedException($"{Span} - Can't call function on {ToCall.GetValueType(st)}.");
 
-            FunctionType funcType = toCall.GetValueType(st) as FunctionType;
+            FunctionType funcType = ToCall.GetValueType(st) as FunctionType;
             TypeBuilder funcTypeBuilder = Generator.FunctionTypes[funcType];
 
-            if(funcType.paramTypes.types.Count != exprs.expressions.Count)
-                throw new NotImplementedException($"{Span} - Parameter count mismatch on {toCall.GetValueType(st)}.");
+            if(funcType.ParamsList.Types.Count != ExprsList.Exprs.Count)
+                throw new NotImplementedException($"{Span} - Parameter count mismatch on {ToCall.GetValueType(st)}.");
 
-            toCall.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            ToCall.Generate(generator, currentType, st, exitLabel, conditionLabel);
             List<Type> paramTypes = new List<Type>();
-            for(int i=0; i<exprs.expressions.Count; ++i)
+            for(int i=0; i<ExprsList.Exprs.Count; ++i)
             {
-                FType exprFType = exprs.expressions[i].GetValueType(st);
+                FType exprFType = ExprsList.Exprs[i].GetValueType(st);
 
-                if(!FType.SameType(funcType.paramTypes.types[i], exprFType))
-                    throw new NotImplementedException($"{Span} - Parameter {i} should be {funcType.paramTypes.types[i].ToString()} instead of {exprFType.ToString()}.");
+                if(!FType.SameType(funcType.ParamsList.Types[i], exprFType))
+                    throw new NotImplementedException($"{Span} - Parameter {i} should be {funcType.ParamsList.Types[i].ToString()} instead of {exprFType.ToString()}.");
                 paramTypes.Add(exprFType.GetRunTimeType());
-                exprs.expressions[i].Generate(generator, currentType, st);
+                ExprsList.Exprs[i].Generate(generator, currentType, st);
             }
             
             generator.Emit(OpCodes.Callvirt, funcTypeBuilder.GetMethod("Invoke", paramTypes.ToArray()));

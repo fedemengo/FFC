@@ -23,11 +23,11 @@ public virtual void Generate(ILGenerator generator, TypeBuilder currentType, Sym
         //if not specified, you just skip on using label for jumps
         //public virtual void Generate(ILGenerator generator, TypeBuilder currentType, Label conditionLabel, Label exitLabel, SymbolTable st) => throw new System.NotImplementedException($"{Span} - Code generation (with conditional jumps) not implemented for type {GetType().Name}");
 
-        protected FType valueType = null;
+        protected FType ValueType {get; set;} = null;
         public FType GetValueType(SymbolTable st)
         {
-            if(valueType == null) BuildType(st);
-            return valueType;
+            if(ValueType == null) BuildValueType(st);
+            return ValueType;
         }
-        public virtual void BuildType(SymbolTable st) => throw new NotImplementedException($"{Span} - BuildType not implemented for {this.GetType().Name}");    }
+        public virtual void BuildValueType(SymbolTable st) => throw new NotImplementedException($"{Span} - BuildType not implemented for {this.GetType().Name}");    }
 }

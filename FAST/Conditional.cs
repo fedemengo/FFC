@@ -10,50 +10,50 @@ namespace FFC.FAST
 {
     public class Conditional : FPrimary
     {
-        public FExpression condition;
-        public FExpression ifTrue;
-        public FExpression ifFalse;
+        public FExpression Condition {get; set;}
+        public FExpression IfTrue {get; set;}
+        public FExpression IfFalse {get; set;}
         public Conditional(FExpression condition, FExpression ifTrue, FExpression ifFalse, TextSpan span)
         {
-            this.condition = condition;
-            this.ifTrue = ifTrue;
-            this.ifFalse = ifFalse;
-            this.Span = span;
+            Condition = condition;
+            IfTrue = ifTrue;
+            IfFalse = ifFalse;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Conditional expression");
-            condition.Print(tabs + 1);
-            ifTrue.Print(tabs + 1);
-            ifFalse.Print(tabs + 1);
+            Condition.Print(tabs + 1);
+            IfTrue.Print(tabs + 1);
+            IfFalse.Print(tabs + 1);
         }
 
-        public override void BuildType(SymbolTable st) 
+        public override void BuildValueType(SymbolTable st) 
         {
-            var t = ifTrue.GetValueType(st);
-            var f = ifFalse.GetValueType(st);
+            var t = IfTrue.GetValueType(st);
+            var f = IfFalse.GetValueType(st);
             //checks for recursive functions
-            if(t == null) valueType = f;
-            else if (f == null) valueType = t;
+            if(t == null) ValueType = f;
+            else if (f == null) ValueType = t;
             else if(FType.SameType(t, f))
-                valueType = ifTrue.GetValueType(st);
+                ValueType = IfTrue.GetValueType(st);
             else
                 throw new NotImplementedException($"{Span} - Different type in conditional expression");
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            if(condition.GetValueType(st) is BooleanType == false)
-                throw new NotImplementedException($"{Span} - Can't use conditional with {condition.GetValueType(st)}");
-            condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            if(Condition.GetValueType(st) is BooleanType == false)
+                throw new NotImplementedException($"{Span} - Can't use conditional with {Condition.GetValueType(st)}");
+            Condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
             Label falseBranch = generator.DefineLabel();
             Label exitBranch = generator.DefineLabel();
             generator.Emit(OpCodes.Brfalse, falseBranch);
-            ifTrue.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            IfTrue.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Br, exitBranch);
             generator.MarkLabel(falseBranch);
-            ifFalse.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            IfFalse.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.MarkLabel(exitBranch);
         }
     }

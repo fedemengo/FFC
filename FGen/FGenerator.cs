@@ -21,22 +21,22 @@ namespace FFC.FGen
 
         public static void EmitStartFunction(object toCall, FunctionType type)
         {
-            if(type.paramTypes.types.Count > 0)
+            if(type.ParamsList.Types.Count > 0)
                 throw new NotImplementedException($"{type.Span} - Cannot start program with a function that takes parameters");
             //load on stack
             EmitLoad(mainGen, toCall);
             //call invoke on the delegate type
             mainGen.Emit(OpCodes.Callvirt, FunctionTypes[type].GetMethod("Invoke"));
             //Pop call if needed
-            if(type.returnType is VoidType == false) mainGen.Emit(OpCodes.Pop);
+            if(type.ReturnType is VoidType == false) mainGen.Emit(OpCodes.Pop);
             mainGen.Emit(OpCodes.Ret);
         }
 
         //might we need to store more stuff globally ?
 
-        public static bool Generate(string Path, DeclarationStatementList stms, string start)
+        public static bool Generate(string filePath, DeclarationStatementList stms, string start)
         {
-            string name = Path.Split('/')[1].Split('.')[0];
+            string name = filePath.Split('/')[1].Split('.')[0];
             //name of function to invoke in Program.Main
             StartFunction = start;
             
@@ -109,7 +109,6 @@ namespace FFC.FGen
 
         public static Dictionary<FunctionType, TypeBuilder> FunctionTypes = new Dictionary<FunctionType, TypeBuilder>();
         
-        
         //we shall probably split this in many files and abuse of mr partial class
         public static void AddFunctionType(FunctionType f)
         {
@@ -127,11 +126,11 @@ namespace FFC.FGen
 
             delegateConstr.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
 
-            Type retType = f.returnType.GetRunTimeType();
-            Type[] paramTypesArray = new Type[f.paramTypes.types.Count];
-            for(int i = 0; i < f.paramTypes.types.Count; i++)
+            Type retType = f.ReturnType.GetRunTimeType();
+            Type[] paramTypesArray = new Type[f.ParamsList.Types.Count];
+            for(int i = 0; i < f.ParamsList.Types.Count; i++)
             {
-                paramTypesArray[i] = f.paramTypes.types[i].GetRunTimeType();
+                paramTypesArray[i] = f.ParamsList.Types[i].GetRunTimeType();
             }
             
             MethodBuilder methodInvoke = tdelegate.DefineMethod("Invoke", MethodAttributes.Public |

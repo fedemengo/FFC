@@ -8,12 +8,8 @@ namespace FFC.FLexer
 {
     class TokenValue : TValue
     {
-        //wraps around list
         private List<object> values = new List<object>();
-        public void Add(object o)
-        {
-            values.Add(o);
-        }
+        public void Add(object o) => values.Add(o);
         public int Count
         {
             get => values.Count;
@@ -67,8 +63,7 @@ namespace FFC.FLexer
                 if(i == values.Count - 1)
                     ans += ")";
             }
-            ans += $"[{begin.ToString()}, {end.ToString()}";
-            return ans;
+            return ans + $"[{begin.ToString()}, {end.ToString()}";
         }
     }
 }

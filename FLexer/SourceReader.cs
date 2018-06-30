@@ -9,10 +9,7 @@ namespace FFC.FLexer
         private string[] buffer;
         private bool isFinished;
         private Position position;
-        public Position GetPosition()
-        {
-            return new Position(position);
-        }
+        public Position GetPosition() => new Position(position);
         public SourceReader(string filePath)
         {
             this.buffer = File.ReadAllLines(filePath);
@@ -34,10 +31,7 @@ namespace FFC.FLexer
             }
         }
 
-        public bool Empty()
-        {
-            return isFinished;
-        }
+        public bool Empty() => isFinished;
         public void SkipBlank()
         {
             char x = GetChar();

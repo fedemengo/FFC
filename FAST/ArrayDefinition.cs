@@ -13,46 +13,43 @@ namespace FFC.FAST
     {
         public void SetEmpty(FType t)
         {
-            valueType = t;
+            ValueType = t;
         }
-        public ExpressionList values;
+        public ExpressionList ExprsList;
         public ArrayDefinition(ExpressionList values, TextSpan span = null)
         {
-            this.values = values;
-            this.Span = span;
+            ExprsList = values;
+            Span = span;
         }
 
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Array definition");
-            values.Print(tabs + 1);
+            ExprsList.Print(tabs + 1);
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            generator.Emit(OpCodes.Newobj, typeof(FArray<>).MakeGenericType((GetValueType(st) as ArrayType).type.GetRunTimeType()).GetConstructor(new Type[0]));
-            foreach(var z in values.expressions)
+            generator.Emit(OpCodes.Newobj, typeof(FArray<>).MakeGenericType((GetValueType(st) as ArrayType).Type.GetRunTimeType()).GetConstructor(new Type[0]));
+            foreach(var expr in ExprsList.Exprs)
             {
-                z.Generate(generator, currentType, st, exitLabel, conditionLabel);
-                //I heard you liked long lines
-                //generator.Emit(OpCodes.Newobj, typeof(FArray<>).MakeGenericType(z.ValueType(st).GetRunTimeType()).GetConstructor(new Type[]{typeof(FArray<>).MakeGenericType(z.ValueType(st).GetRunTimeType()), z.ValueType(st).GetRunTimeType()}));
-                Type t = z.GetValueType(st).GetRunTimeType();
-                Type a = typeof(FArray<>).MakeGenericType(t);
-                generator.Emit(OpCodes.Newobj, a.GetConstructor(new Type[]{a, t}));
+                expr.Generate(generator, currentType, st, exitLabel, conditionLabel);
+                Type exprType = expr.GetValueType(st).GetRunTimeType();
+                Type exprGenType = typeof(FArray<>).MakeGenericType(exprType);
+                generator.Emit(OpCodes.Newobj, exprGenType.GetConstructor(new Type[]{exprGenType, exprType}));
             }
         }
 
-        public override void BuildType(SymbolTable st)
+        public override void BuildValueType(SymbolTable st)
         {
             //empty arrays are already typed by SetEmpty, so we can throw if it happens here
-            if(values == null || values.expressions == null || values.expressions.Count == 0)
+            if(ExprsList == null || ExprsList.Exprs == null || ExprsList.Exprs.Count == 0)
                 throw new NotImplementedException($"{Span} - Empty arrays can only be used in declarations/assignments, you pig!");
-            valueType = values.expressions[0].GetValueType(st);
-            foreach(var z in values.expressions)
-                if(FType.SameType(z.GetValueType(st), valueType) == false)
-                    throw new NotImplementedException($"{Span} - Can't handle arrays with multiple types {valueType.GetType().Name} - {z.GetValueType(st).GetType().Name}");
-            valueType = new ArrayType(valueType);
+            ValueType = ExprsList.Exprs[0].GetValueType(st);
+            foreach(var z in ExprsList.Exprs)
+                if(FType.SameType(z.GetValueType(st), ValueType) == false)
+                    throw new NotImplementedException($"{Span} - Can't handle arrays with multiple types {ValueType.GetType().Name} - {z.GetValueType(st).GetType().Name}");
+            ValueType = new ArrayType(ValueType);
         }
-        
     }
 }

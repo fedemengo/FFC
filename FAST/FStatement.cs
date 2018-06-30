@@ -25,46 +25,48 @@ namespace FFC.FAST
     }
     public class StatementList : FASTNode
     {
-        public List<FStatement> statements;
+        public List<FStatement> StmsList {get; set;}
         public StatementList(FStatement statement, TextSpan span)
         {
-            this.Span = span;
-            statements = new List<FStatement>{statement};
+            StmsList = new List<FStatement>{statement};
+            Span = span;
         }
         public StatementList(TextSpan span)
         {
-            this.Span = span;
-            statements = new List<FStatement>();
+            StmsList = new List<FStatement>();
+            Span = span;
         }
-        public void Add(FStatement stm) => statements.Add(stm);
+        public void Add(FStatement stm) => StmsList.Add(stm);
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Statement list");
-            foreach(FStatement fs in statements)
+            foreach(FStatement fs in StmsList)
                 fs.Print(tabs + 1);
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            foreach(FStatement stm in statements)
+            foreach(FStatement stm in StmsList)
             {
-                if (stm is DeclarationStatement) stm.Generate(generator, currentType, ref st, exitLabel, conditionLabel);
-                else stm.Generate(generator, currentType, st, exitLabel, conditionLabel);
+                if (stm is DeclarationStatement) 
+                    stm.Generate(generator, currentType, ref st, exitLabel, conditionLabel);
+                else 
+                    stm.Generate(generator, currentType, st, exitLabel, conditionLabel);
             }
         }
 
-        public override void BuildType(SymbolTable st)
+        public override void BuildValueType(SymbolTable st)
         {
             //flag to avoid operations after return
             bool returned = false;
-            foreach(var stm in statements)
+            foreach(var stm in StmsList)
             {
                 if(returned) throw new NotImplementedException($"{stm.Span} - Can't have operations after a return");
                 if(stm is ReturnStatement) returned = true;
                 if(stm is DeclarationStatement)
                 {
                     var x = stm as DeclarationStatement;
-                    st = st.Assign(x.id.name, new NameInfo(null, x.GetValueType(st)));
+                    st = st.Assign(x.Id.Name, new NameInfo(null, x.GetValueType(st)));
                     continue;
                 }
                 //statements that we can safely skip
@@ -73,134 +75,134 @@ namespace FFC.FAST
                 else
                 {
                     var x = stm.GetValueType(st);
-                    if(valueType == null) valueType = x;
-                    else if(x != null && FType.SameType(x, valueType) == false)
-                        throw new NotImplementedException($"{Span} - Can't deduce type as {valueType} is not compatible with {x} at {stm.Span}");
+                    if(ValueType == null) ValueType = x;
+                    else if(x != null && FType.SameType(x, ValueType) == false)
+                        throw new NotImplementedException($"{Span} - Can't deduce type as {ValueType} is not compatible with {x} at {stm.Span}");
                 }
             }
         }
     }
     public class ExpressionStatement : FStatement
     {
-        public FExpression expression;
+        public FExpression Expr {get; set;}
         public ExpressionStatement(FExpression expression, TextSpan span)
         {
-            this.Span = span;
-            this.expression = expression;
+            Expr = expression;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Expression statement");
-            expression.Print(tabs + 1);
+            Expr.Print(tabs + 1);
         }
-        public override void BuildType(SymbolTable st) => valueType = expression.GetValueType(st);
+        public override void BuildValueType(SymbolTable st) => ValueType = Expr.GetValueType(st);
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            expression.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            Expr.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Ret);
         }        
     }
     public class FunctionCallStatement : FStatement
     {
-        public FunctionCall function;
+        public FunctionCall Func {get; set;}
         public FunctionCallStatement(FunctionCall function, TextSpan span)
         {
-            this.Span = span;
-            this.function = function;
+            Func = function;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("FunctionCall statement");
-            function.Print(tabs + 1);
+            Func.Print(tabs + 1);
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            function.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            Func.Generate(generator, currentType, st, exitLabel, conditionLabel);
             //pop result if not void
-            if(function.GetValueType(st) is VoidType == false) generator.Emit(OpCodes.Pop);
+            if(Func.GetValueType(st) is VoidType == false) generator.Emit(OpCodes.Pop);
         }
     }
     public class AssignmentStatement : FStatement
     {
-        public FSecondary left;
-        public FExpression right;
+        public FSecondary Left {get; set;}
+        public FExpression Right {get; set;}
         public AssignmentStatement(FSecondary left, FExpression right, TextSpan span)
         {
-            this.Span = span;
-            this.left = left;
-            this.right = right;
+            Left = left;
+            Right = right;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Assignment statement");
-            left.Print(tabs + 1);
-            right.Print(tabs + 1);
+            Left.Print(tabs + 1);
+            Right.Print(tabs + 1);
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             //Empty array assignment
-            if(right is ArrayDefinition && left.GetValueType(st) is ArrayType)
-                (right as ArrayDefinition).SetEmpty((left.GetValueType(st)));
+            if(Right is ArrayDefinition && Left.GetValueType(st) is ArrayType)
+                (Right as ArrayDefinition).SetEmpty((Left.GetValueType(st)));
 
-            if(left is Identifier)      // get
+            if(Left is Identifier)      // get
             {
-                Identifier leftID = left as Identifier;
-                var definedSymbol = st.Find(leftID.name);
+                Identifier leftID = Left as Identifier;
+                var definedSymbol = st.Find(leftID.Name);
                 if(definedSymbol == null) 
-                    throw new NotImplementedException($"{Span} - Identifier {(left as Identifier).name} is not declared");
+                    throw new NotImplementedException($"{Span} - Identifier {(Left as Identifier).Name} is not declared");
                                 
-                if(FType.SameType(right.GetValueType(st), definedSymbol.Type) == false) 
-                    throw new NotImplementedException($"{Span} - Can't assign type {right.GetValueType(st).GetRunTimeType()} to variable of type {definedSymbol.Type.GetRunTimeType()}"); 
+                if(FType.SameType(Right.GetValueType(st), definedSymbol.Type) == false) 
+                    throw new NotImplementedException($"{Span} - Can't assign type {Right.GetValueType(st).GetRunTimeType()} to variable of type {definedSymbol.Type.GetRunTimeType()}"); 
                 
                 //Empty array on identifier
-                right.Generate(generator, currentType, st, exitLabel, conditionLabel);
+                Right.Generate(generator, currentType, st, exitLabel, conditionLabel);
                 Generator.EmitStore(generator, definedSymbol.Builder);
             }
-            else if(left is IndexedAccess)      // set
+            else if(Left is IndexedAccess)      // set
             {
-                IndexedAccess x = left as IndexedAccess;
-                FType collection = x.container.GetValueType(st);
+                IndexedAccess x = Left as IndexedAccess;
+                FType collection = x.Container.GetValueType(st);
                 //Empty array on index access to something
-                if(collection is ArrayType && FType.SameType((collection as ArrayType).type, right.GetValueType(st)) == false)
+                if(collection is ArrayType && FType.SameType((collection as ArrayType).Type, Right.GetValueType(st)) == false)
                 {
-                    FType element = right.GetValueType(st);
-                    throw new NotImplementedException($"{Span} - Can't assign {element.GetRunTimeType().Name} to {collection.GetRunTimeType().Name}[{(collection as ArrayType).type.GetRunTimeType().Name}]");
+                    FType element = Right.GetValueType(st);
+                    throw new NotImplementedException($"{Span} - Can't assign {element.GetRunTimeType().Name} to {collection.GetRunTimeType().Name}[{(collection as ArrayType).Type.GetRunTimeType().Name}]");
                 }
-                x.container.Generate(generator, currentType, st, exitLabel, conditionLabel);
-                x.index.Generate(generator, currentType, st, exitLabel, conditionLabel);
+                x.Container.Generate(generator, currentType, st, exitLabel, conditionLabel);
+                x.Index.Generate(generator, currentType, st, exitLabel, conditionLabel);
                 //generate expression to load
-                right.Generate(generator, currentType, st, exitLabel, conditionLabel);
+                Right.Generate(generator, currentType, st, exitLabel, conditionLabel);
                 //ckeck types - currently too sleepy!
-                if(x.index is SquaresIndexer)
-                    generator.Emit(OpCodes.Callvirt, x.container.GetValueType(st).GetRunTimeType().GetMethod("set_Item", new Type[]{x.index.GetValueType(st).GetRunTimeType(), right.GetValueType(st).GetRunTimeType()}));
+                if(x.Index is SquaresIndexer)
+                    generator.Emit(OpCodes.Callvirt, x.Container.GetValueType(st).GetRunTimeType().GetMethod("set_Item", new Type[]{x.Index.GetValueType(st).GetRunTimeType(), Right.GetValueType(st).GetRunTimeType()}));
                 else
-                    throw new NotImplementedException($"{Span} - Generation not supported for {x.index.GetType().Name}");
+                    throw new NotImplementedException($"{Span} - Generation not supported for {x.Index.GetType().Name}");
             }
-            else throw new NotImplementedException($"{Span} - Assignments to {left.GetType().Name} are not implemented");
+            else throw new NotImplementedException($"{Span} - Assignments to {Left.GetType().Name} are not implemented");
         }
     }
     public class DeclarationStatement : FStatement
     {
-        public Identifier id;
-        public FType type;
-        public FExpression expr;
+        public Identifier Id {get; set;}
+        public FType Type {get; set;}
+        public FExpression Expr {get; set;}
         public DeclarationStatement(Identifier id, FType type, FExpression expr, TextSpan span)
         {
-            this.Span = span;
-            this.id = id;
-            this.type = type;
-            this.expr = expr;
+            Id = id;
+            Type = type;
+            Expr = expr;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Declaration statement");
-            id.Print(tabs + 1);
-            if(type != null) type.Print(tabs + 1);
-            expr.Print(tabs + 1);
+            Id.Print(tabs + 1);
+            if(Type != null) Type.Print(tabs + 1);
+            Expr.Print(tabs + 1);
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, ref SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
@@ -211,123 +213,123 @@ namespace FFC.FAST
                 we just need to ignore them also in operators [TODO] and func call
                 think if it's possible to support this on array[func], func tuples and func maps
             */
-            st = st.Assign(id.name, new NameInfo(null, null));
+            st = st.Assign(Id.Name, new NameInfo(null, null));
             
-            FType t = expr.GetValueType(st);
+            FType t = Expr.GetValueType(st);
 
-            if(type != null && FType.SameType(type, t) == false)
-                throw new NotImplementedException($"{Span} - Type {t.GetRunTimeType().Name} doesn't match declaration {type.GetRunTimeType().Name}");
+            if(Type != null && FType.SameType(Type, t) == false)
+                throw new NotImplementedException($"{Span} - Type {t.GetRunTimeType().Name} doesn't match declaration {Type.GetRunTimeType().Name}");
             
             //Field when emitting locals in program type
             object builder;
-            if(currentType == Generator.programType) builder = currentType.DefineField(id.name, t.GetRunTimeType(), FieldAttributes.Public | FieldAttributes.Static);
+            if(currentType == Generator.programType) builder = currentType.DefineField(Id.Name, t.GetRunTimeType(), FieldAttributes.Public | FieldAttributes.Static);
             else builder = generator.DeclareLocal(t.GetRunTimeType());
             
-            st = st.Assign(id.name, new NameInfo(builder, t));
+            st = st.Assign(Id.Name, new NameInfo(builder, t));
             
-            expr.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            Expr.Generate(generator, currentType, st, exitLabel, conditionLabel);
             Generator.EmitStore(generator, builder);
         }
         //Shall declaration have types?
-        public override void BuildType(SymbolTable st)
+        public override void BuildValueType(SymbolTable st)
         {
             //build type for empty arrays (0 elements)
-            if(expr is ArrayDefinition && (expr as ArrayDefinition).values.expressions.Count == 0)
+            if(Expr is ArrayDefinition && (Expr as ArrayDefinition).ExprsList.Exprs.Count == 0)
             {
-                if(type == null)
+                if(Type == null)
                     throw new NotImplementedException($"{Span} - Can't create empty array without specifying type");
-                (expr as ArrayDefinition).SetEmpty(type);
+                (Expr as ArrayDefinition).SetEmpty(Type);
             }
             
             //sets value type
-            valueType = type;
+            ValueType = Type;
             
             //If types are matching
-            var t = expr.GetValueType(st);
+            var t = Expr.GetValueType(st);
             bool sameType = false;
-            if(type == null || FType.SameType(t, type))
+            if(Type == null || FType.SameType(t, Type))
             {
                 sameType = true;    
-                valueType = expr.GetValueType(st);
+                ValueType = Expr.GetValueType(st);
             }
-            else if(t is FunctionType && type is FunctionType)
+            else if(t is FunctionType && Type is FunctionType)
             {
                 //Special case for functions
                 Type d1 = t.GetRunTimeType().BaseType;
-                Type d2 = type.GetRunTimeType().BaseType;
+                Type d2 = Type.GetRunTimeType().BaseType;
                 sameType = d1 == d2;
             }
             if(!sameType)
-                throw new NotImplementedException($"{Span} - Type mismatch in variable {id.name}, {expr.GetValueType(st).GetRunTimeType()} is not {type.GetRunTimeType()}");
+                throw new NotImplementedException($"{Span} - Type mismatch in variable {Id.Name}, {Expr.GetValueType(st).GetRunTimeType()} is not {Type.GetRunTimeType()}");
         }
     }
     public class DeclarationStatementList : FASTNode
     {
-        public List<DeclarationStatement> statements;
+        public List<DeclarationStatement> DeclStmsList {get; set;}
         public DeclarationStatementList(DeclarationStatement stm, TextSpan span)
         {
-            this.Span = span;
-            statements = new List<DeclarationStatement>{stm};
+            DeclStmsList = new List<DeclarationStatement>{stm};
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Declaration statement list");
-            foreach(DeclarationStatement stm in statements)
+            foreach(DeclarationStatement stm in DeclStmsList)
                 stm.Print(tabs + 1);
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
             bool startEmitted = false;
-            foreach(var x in statements)
+            foreach(var x in DeclStmsList)
             {
                 x.Generate(generator, currentType, ref st);
-                if(x.id.name == Generator.StartFunction)
+                if(x.Id.Name == Generator.StartFunction)
                 {
                     if(startEmitted) throw new NotImplementedException($"{Span} - Cannot define multiple functions as starting ones");
-                    if(x.expr is FunctionDefinition == false || (x.expr as FunctionDefinition).GetValueType(st) is FunctionType == false)
+                    if(x.Expr is FunctionDefinition == false || (x.Expr as FunctionDefinition).GetValueType(st) is FunctionType == false)
                         throw new NotImplementedException($"{x.Span} - Declaration not valid as start function");
-                    Generator.EmitStartFunction(st.Find(x.id.name).Builder, (x.expr as FunctionDefinition).GetValueType(st) as FunctionType);
+                    Generator.EmitStartFunction(st.Find(x.Id.Name).Builder, (x.Expr as FunctionDefinition).GetValueType(st) as FunctionType);
                     startEmitted = true;
                 }
             }
             if(!startEmitted) throw new NotImplementedException($"Cannot compile a program without a starting function");
         }
-        public void Add(DeclarationStatement stm) => statements.Add(stm);
+        public void Add(DeclarationStatement stm) => DeclStmsList.Add(stm);
     }
     public class IfStatement : FStatement
     {
-        public FExpression condition;
-        public StatementList Then;
-        public ElseIfList ElseIfs;
-        public StatementList Else;
-        public IfStatement(FExpression condition, StatementList Then, ElseIfList ElseIfs, StatementList Else, TextSpan span)
+        public FExpression Condition {get; set;}
+        public StatementList Then {get; set;}
+        public ElseIfList ElseIfs {get; set;}
+        public StatementList Else {get; set;}
+        public IfStatement(FExpression condition, StatementList thenStm, ElseIfList elseIfs, StatementList elseStm, TextSpan span)
         {
-            this.Span = span;
-            this.condition = condition;
-            this.Then = Then;
-            this.ElseIfs = ElseIfs;
-            this.Else = Else;
+            Condition = condition;
+            Then = thenStm;
+            ElseIfs = elseIfs;
+            Else = elseStm;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("If statement");
-            condition.Print(tabs + 1);
+            Condition.Print(tabs + 1);
             Then.Print(tabs + 1);
             ElseIfs.Print(tabs + 1);
             Else.Print(tabs + 1);
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            if(condition.GetValueType(st) is BooleanType == false)
-                throw new NotImplementedException($"{Span} - Can't use {condition.GetValueType(st)} as condition");
+            if(Condition.GetValueType(st) is BooleanType == false)
+                throw new NotImplementedException($"{Span} - Can't use {Condition.GetValueType(st)} as condition");
 
             //Branch to the end of IfStatement
             Label exitBranch = generator.DefineLabel();
             
             //Emit if condition
-            condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            Condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
             //Skip to next condition
             Label falseBranch = generator.DefineLabel();
@@ -341,13 +343,13 @@ namespace FFC.FAST
             generator.MarkLabel(falseBranch);
 
             //Generate all of the else ifs
-            foreach(var ei in ElseIfs.list)
+            foreach(var ei in ElseIfs.ElseIfStmsList)
             {
                 //Check if condition is boolean
-                if(ei.condition.GetValueType(st) is BooleanType == false)
-                    throw new NotImplementedException($"{Span} - Can't use {condition.GetValueType(st)} as condition");
+                if(ei.Condition.GetValueType(st) is BooleanType == false)
+                    throw new NotImplementedException($"{Span} - Can't use {Condition.GetValueType(st)} as condition");
                 //Emit ElseIF condition
-                ei.condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
+                ei.Condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
                 generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
                 //Skip to next condition
                 Label nextElse = generator.DefineLabel();
@@ -367,21 +369,21 @@ namespace FFC.FAST
             generator.Emit(OpCodes.Nop);
         }
 
-        public override void BuildType(SymbolTable st)
+        public override void BuildValueType(SymbolTable st)
         {
             FType t = Then.GetValueType(st);
             FType ei = ElseIfs.GetValueType(st);
             FType e = Else.GetValueType(st);
-            valueType = t;
+            ValueType = t;
             if(ei != null)
-                if(valueType == null || FType.SameType(valueType, ei))
-                    valueType = ei;
+                if(ValueType == null || FType.SameType(ValueType, ei))
+                    ValueType = ei;
                 else
                     throw new NotImplementedException($"{Span} - If type {t.GetType().Name} doesn't match ElseIf type {ei.GetType().Name}");
             
             if(e != null)
-                if(valueType == null || FType.SameType(valueType, e))
-                    valueType = e;
+                if(ValueType == null || FType.SameType(ValueType, e))
+                    ValueType = e;
                 else
                     throw new NotImplementedException($"{Span} - If type {t.GetType().Name} doesn't match Else type {e.GetType().Name}");
         }
@@ -389,81 +391,81 @@ namespace FFC.FAST
 
     public class ElseIfList : FASTNode
     {
-        public List<ElseIfStatement> list;
-        public void Add(ElseIfStatement other) => list.Add(other);
+        public List<ElseIfStatement> ElseIfStmsList {get; set;}
+        public void Add(ElseIfStatement other) => ElseIfStmsList.Add(other);
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Else if list");
-            foreach(var l in list)
+            foreach(var l in ElseIfStmsList)
                 l.Print(tabs + 1);
         }
         public ElseIfList(TextSpan span = null)
         {
-            this.Span = span;
-            list = new List<ElseIfStatement>();
+            ElseIfStmsList = new List<ElseIfStatement>();
+            Span = span;
         }
         public ElseIfList(ElseIfStatement start, TextSpan span)
         {
-            this.Span = span;
-            list = new List<ElseIfStatement>{start};
+            ElseIfStmsList = new List<ElseIfStatement>{start};
+            Span = span;
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            foreach(ElseIfStatement elif in list)
+            foreach(ElseIfStatement elif in ElseIfStmsList)
                 elif.Generate(generator, currentType, st, exitLabel, conditionLabel);
         }
-        public override void BuildType(SymbolTable st)
+        public override void BuildValueType(SymbolTable st)
         {
-            foreach(var x in list)
-                if(valueType == null || FType.SameType(valueType, x.GetValueType(st)))
-                    valueType = x.GetValueType(st);
-                else throw new NotImplementedException($"{Span} - Return type mismatch {valueType} vs {x.GetValueType(st)}");
+            foreach(var x in ElseIfStmsList)
+                if(ValueType == null || FType.SameType(ValueType, x.GetValueType(st)))
+                    ValueType = x.GetValueType(st);
+                else throw new NotImplementedException($"{Span} - Return type mismatch {ValueType} vs {x.GetValueType(st)}");
         }
     }
 
     public class ElseIfStatement : FASTNode
     {
-        public FExpression condition;
-        public StatementList Then;
-        public ElseIfStatement(FExpression condition, StatementList Then, TextSpan span)
+        public FExpression Condition {get; set;}
+        public StatementList Then {get; set;}
+        public ElseIfStatement(FExpression condition, StatementList then, TextSpan span)
         {
-            this.Span = span;
-            this.condition = condition;
-            this.Then = Then;
+            Condition = condition;
+            Then = then;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Else if");
-            condition.Print(tabs + 1);
+            Condition.Print(tabs + 1);
             Then.Print(tabs + 1);
         }
-        public override void BuildType(SymbolTable st) => valueType = Then.GetValueType(st);
+        public override void BuildValueType(SymbolTable st) => ValueType = Then.GetValueType(st);
     }
 
     public class ReturnStatement : FStatement
     {
-        public FExpression value = null;
+        public FExpression Value {get; set;}
         public ReturnStatement(FExpression value, TextSpan span)
         {
-            this.Span = span;
-            this.value = value;
+            Value = value;
+            Span = span;
         }
         public ReturnStatement(TextSpan span) => this.Span = span;
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Return statement");
-            if(value != null)
-                value.Print(tabs + 1);
+            if(Value != null)
+                Value.Print(tabs + 1);
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            if(value != null) value.Generate(generator, currentType, st, exitLabel, conditionLabel);
+            if(Value != null) Value.Generate(generator, currentType, st, exitLabel, conditionLabel);
             generator.Emit(OpCodes.Ret);
         }
-        public override void BuildType(SymbolTable st) => valueType = (value != null ? value.GetValueType(st) : new VoidType());
+        public override void BuildValueType(SymbolTable st) => ValueType = (Value != null ? Value.GetValueType(st) : new VoidType());
     }
     public class BreakStatement : FStatement
     {
@@ -493,30 +495,30 @@ namespace FFC.FAST
     }
     public class PrintStatement : FStatement
     {
-        public ExpressionList toPrint;
+        public ExpressionList ToPrint {get; set;}
         public PrintStatement(ExpressionList toPrint, TextSpan span)
         {
-            this.Span = span;
-            this.toPrint = toPrint;
+            ToPrint = toPrint;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Print statement");
-            toPrint.Print(tabs + 1);
+            ToPrint.Print(tabs + 1);
         }
 
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            for(int i = 0; i < toPrint.expressions.Count - 1; i++)
+            for(int i = 0; i < ToPrint.Exprs.Count - 1; i++)
             {
-                FExpression expr = toPrint.expressions[i];
+                FExpression expr = ToPrint.Exprs[i];
                 expr.EmitPrint(generator, currentType, st);
                 //scrive uno spazio come separatore
                 generator.Emit(OpCodes.Ldstr, " ");
                 generator.Emit(OpCodes.Call, typeof(System.Console).GetMethod("Write", new Type[]{typeof(string)}));
             }
-            toPrint.expressions[toPrint.expressions.Count - 1].EmitPrint(generator, currentType, st, true);
+            ToPrint.Exprs[ToPrint.Exprs.Count - 1].EmitPrint(generator, currentType, st, true);
         }
     }
 }

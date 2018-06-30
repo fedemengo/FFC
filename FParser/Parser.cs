@@ -696,7 +696,7 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 61: // param_list -> param_list, COMMA, param
 #line 134 "FParser/gppg/grammar.y"
-                                 { ((ParameterList)ValueStack[ValueStack.Depth-3]).parameters.Add((Parameter)ValueStack[ValueStack.Depth-1]); ValueStack[ValueStack.Depth-3].Span = ValueStack[ValueStack.Depth-3].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
+                                 { ((ParameterList)ValueStack[ValueStack.Depth-3]).Params.Add((Parameter)ValueStack[ValueStack.Depth-1]); ValueStack[ValueStack.Depth-3].Span = ValueStack[ValueStack.Depth-3].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
 #line default
         break;
       case 62: // param -> identifier, COLON, type
@@ -721,7 +721,7 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 66: // stm_list -> stm_list, statement
 #line 148 "FParser/gppg/grammar.y"
-                              { ((StatementList)ValueStack[ValueStack.Depth-2]).statements.Add((FStatement)ValueStack[ValueStack.Depth-1]); ValueStack[ValueStack.Depth-2].Span = ValueStack[ValueStack.Depth-2].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-2]; }
+                              { ((StatementList)ValueStack[ValueStack.Depth-2]).StmsList.Add((FStatement)ValueStack[ValueStack.Depth-1]); ValueStack[ValueStack.Depth-2].Span = ValueStack[ValueStack.Depth-2].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-2]; }
 #line default
         break;
       case 67: // nif_stm -> func_call, SEMICOLON
@@ -796,7 +796,7 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 81: // expr_list -> expr_list, COMMA, expr
 #line 178 "FParser/gppg/grammar.y"
-                                { ((ExpressionList)ValueStack[ValueStack.Depth-3]).expressions.Add((FExpression)ValueStack[ValueStack.Depth-1]); ValueStack[ValueStack.Depth-3].Span = ValueStack[ValueStack.Depth-3].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
+                                { ((ExpressionList)ValueStack[ValueStack.Depth-3]).Exprs.Add((FExpression)ValueStack[ValueStack.Depth-1]); ValueStack[ValueStack.Depth-3].Span = ValueStack[ValueStack.Depth-3].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
 #line default
         break;
       case 82: // assignment -> secondary, ASSIGN, expr, SEMICOLON
@@ -981,7 +981,7 @@ internal partial class Parser: ShiftReduceParser<TValue, LexLocation>
         break;
       case 118: // type_list -> type_list, COMMA, type
 #line 278 "FParser/gppg/grammar.y"
-                                { ((TypeList)ValueStack[ValueStack.Depth-3]).types.Add((FType)ValueStack[ValueStack.Depth-1]); ValueStack[ValueStack.Depth-3].Span = ValueStack[ValueStack.Depth-3].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
+                                { ((TypeList)ValueStack[ValueStack.Depth-3]).Types.Add((FType)ValueStack[ValueStack.Depth-1]); ValueStack[ValueStack.Depth-3].Span = ValueStack[ValueStack.Depth-3].Span.MergeTo(ValueStack[ValueStack.Depth-1].Span); CurrentSemanticValue = ValueStack[ValueStack.Depth-3]; }
 #line default
         break;
       case 119: // array_type -> LSQUARE, type, RSQUARE
