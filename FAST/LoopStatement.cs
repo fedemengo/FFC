@@ -145,7 +145,7 @@ namespace FFC.FAST
             if(Condition.GetValueType(st) is BooleanType == false)
                 throw new FCompilationException($"{Span} - Can't use conditional with {Condition.GetValueType(st)}");
             Condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
-            generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
+            generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("GetBool"));
             generator.Emit(OpCodes.Brfalse, exitLabel);
         }
     }

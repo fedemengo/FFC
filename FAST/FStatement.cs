@@ -330,7 +330,7 @@ namespace FFC.FAST
             
             //Emit if condition
             Condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
-            generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
+            generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("GetBool"));
             //Skip to next condition
             Label falseBranch = generator.DefineLabel();
             generator.Emit(OpCodes.Brfalse, falseBranch);
@@ -350,7 +350,7 @@ namespace FFC.FAST
                     throw new FCompilationException($"{Span} - Can't use {Condition.GetValueType(st)} as condition");
                 //Emit ElseIF condition
                 ei.Condition.Generate(generator, currentType, st, exitLabel, conditionLabel);
-                generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("get_Value"));
+                generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("GetBool"));
                 //Skip to next condition
                 Label nextElse = generator.DefineLabel();
                 generator.Emit(OpCodes.Brfalse, nextElse);

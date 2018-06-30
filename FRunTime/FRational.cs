@@ -11,8 +11,8 @@ namespace FFC.FRunTime
             Denominator = d / gcd;
         }
         public FRational(FInteger i) : this(i.Value, 1){}
-        public int Numerator {get; set;}
-        public int Denominator {get; set;}
+        public int Numerator;
+        public int Denominator;
         private static int GCD(int a, int b) => b == 0 ? a : GCD(b, a % b);
         private static FRational Inverse(FRational r1) => new FRational(r1.Denominator, r1.Numerator);
         private FReal Value() => new FReal(Numerator / (double)Denominator);
