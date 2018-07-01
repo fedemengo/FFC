@@ -155,7 +155,7 @@ namespace FFC.FAST
                     throw new FCompilationException($"{Span} - Identifier {(Left as Identifier).Name} is not declared");
                                 
                 if(FType.SameType(Right.GetValueType(st), definedSymbol.Type) == false) 
-                    throw new FCompilationException($"{Span} - Can't assign type {Right.GetValueType(st).GetRunTimeType()} to variable of type {definedSymbol.Type.GetRunTimeType()}"); 
+                    throw new FCompilationException($"{Span} - Can't assign type {Right.GetValueType(st)} to variable of type {definedSymbol.Type}"); 
                 
                 //Empty array on identifier
                 Right.Generate(generator, currentType, st, exitLabel, conditionLabel);
@@ -169,7 +169,7 @@ namespace FFC.FAST
                 if(collection is ArrayType && FType.SameType((collection as ArrayType).Type, Right.GetValueType(st)) == false)
                 {
                     FType element = Right.GetValueType(st);
-                    throw new FCompilationException($"{Span} - Can't assign {element.GetRunTimeType().Name} to {collection.GetRunTimeType().Name}[{(collection as ArrayType).Type.GetRunTimeType().Name}]");
+                    throw new FCompilationException($"{Span} - Can't assign {element} to {collection}[{(collection as ArrayType).Type}]");
                 }
                 x.Container.Generate(generator, currentType, st, exitLabel, conditionLabel);
                 x.Index.Generate(generator, currentType, st, exitLabel, conditionLabel);
@@ -260,7 +260,7 @@ namespace FFC.FAST
                 sameType = d1 == d2;
             }
             if(!sameType)
-                throw new FCompilationException($"{Span} - Type mismatch in variable {Id.Name}, {Expr.GetValueType(st).GetRunTimeType()} is not {Type.GetRunTimeType()}");
+                throw new FCompilationException($"{Span} - Type mismatch in variable {Id.Name}, {Expr.GetValueType(st).GetRunTimeType().Name} is not {Type.GetRunTimeType().Name}");
         }
     }
     public class DeclarationStatementList : FASTNode

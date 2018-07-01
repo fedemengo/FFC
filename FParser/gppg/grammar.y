@@ -131,7 +131,7 @@ opt_params
 
 param_list	
 	: param 												{ $$ = new ParameterList((Parameter)$1, new TextSpan($1.Span)); }
-	| param_list COMMA param								{ ((ParameterList)$1).parameters.Add((Parameter)$3); $1.Span = $1.Span.MergeTo($3.Span); $$ = $1; }
+	| param_list COMMA param								{ ((ParameterList)$1).Params.Add((Parameter)$3); $1.Span = $1.Span.MergeTo($3.Span); $$ = $1; }
 	;
 
 param		
@@ -145,7 +145,7 @@ func_body
 
 stm_list
 	: statement												{ $$ = new StatementList((FStatement)$1, new TextSpan($1.Span)); }
-	| stm_list statement									{ ((StatementList)$1).statements.Add((FStatement)$2); $1.Span = $1.Span.MergeTo($2.Span); $$ = $1; }
+	| stm_list statement									{ ((StatementList)$1).StmsList.Add((FStatement)$2); $1.Span = $1.Span.MergeTo($2.Span); $$ = $1; }
 	;
 
 nif_stm	
@@ -175,7 +175,7 @@ opt_exprs
 
 expr_list
 	: expr													{ $$ = new ExpressionList((FExpression)$1, new TextSpan($1.Span)); }
-	| expr_list COMMA expr									{ ((ExpressionList)$1).expressions.Add((FExpression)$3); $1.Span = $1.Span.MergeTo($3.Span); $$ = $1; }
+	| expr_list COMMA expr									{ ((ExpressionList)$1).Exprs.Add((FExpression)$3); $1.Span = $1.Span.MergeTo($3.Span); $$ = $1; }
 	;
 
 assignment
@@ -275,7 +275,7 @@ func_type
 type_list
 	: /* empty */											{ $$ = new TypeList(); }
 	| type													{ $$ = new TypeList((FType)$1, new TextSpan($1.Span)); }
-	| type_list COMMA type									{ ((TypeList)$1).types.Add((FType)$3); $1.Span = $1.Span.MergeTo($3.Span); $$ = $1; }
+	| type_list COMMA type									{ ((TypeList)$1).Types.Add((FType)$3); $1.Span = $1.Span.MergeTo($3.Span); $$ = $1; }
 	;
 
 array_type

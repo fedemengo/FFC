@@ -50,7 +50,7 @@ namespace FFC.FAST
 
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            generator.Emit(OpCodes.Ldc_I4_S, Value);
+            generator.Emit(OpCodes.Ldc_I4, Value);
             generator.Emit(OpCodes.Newobj, typeof(FInteger).GetConstructor(new Type[]{typeof(int)}));
         }
     }

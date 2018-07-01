@@ -316,7 +316,15 @@ namespace FFC.FAST
 
         public FType GetIndexType(DotIndexer index) => TypesList.Types[(index.Id != null ? Names[index.Id.Name] : index.Index.Value) - 1];
 
-        public int GetMappedIndex(DotIndexer index) => index.Id != null ? Names[index.Id.Name] : index.Index.Value;
+        public int GetMappedIndex(DotIndexer index)
+        {
+            if(index.Index != null)
+                return index.Index.Value;
+            else if(Names.ContainsKey(index.Id.Name))
+                return Names[index.Id.Name];
+
+            throw new FCompilationException($"{Span} - Tuple doesn't contain value with identifier '{index.Id.Name}'");
+        }
         
         public override Type GetRunTimeType() => typeof(FTuple);
 

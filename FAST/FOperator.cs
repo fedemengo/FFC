@@ -194,8 +194,10 @@ namespace FFC.FAST
                 return new StringType();
             if(t1 is ArrayType && t2 is ArrayType && ((ArrayType) t1).Type.GetType() == ((ArrayType) t2).Type.GetType())
                 return new ArrayType(((ArrayType) t1).Type);
-            if(t1 is ArrayType && t2.GetType() == ((ArrayType) t1).Type.GetType())
+            if(t1 is ArrayType && FType.SameType((t1 as ArrayType).Type, t2))
                 return new ArrayType(((ArrayType) t1).Type);
+            if(t1 is ArrayType && !FType.SameType((t1 as ArrayType).Type, t2))
+                throw new FCompilationException($"{this.Span.Begin} - Can't append type {t2} to Array of type {(t1 as ArrayType).Type}");
             return base.GetTarget(t1, t2);
         }
     }
