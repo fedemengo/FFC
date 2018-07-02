@@ -14,6 +14,7 @@ namespace FFC.FRunTime
             Elements.Add(e);
         }
         public object Get(FInteger index) => Elements[index.Value - 1];
+        public void Set(FInteger index, object obj) => Elements[index.Value - 1] = obj;
         public override string ToString()
         {
             string ans = "{";

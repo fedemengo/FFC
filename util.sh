@@ -72,7 +72,7 @@ perform_task() {
         # finishes the file
         echo "}" >> FLexer/ETokens.cs
         # remove tokens Parser.cs
-        sed -i '' -e "6,8d;10,11d;/\(\($PATT1\)\)/d;/\($PATT2\)/d" FParser/Parser.cs 2>/dev/null
+        sed -i '' -e "6,11d;/\(\($PATT1\)\)/d;/\($PATT2\)/d" FParser/Parser.cs 2>/dev/null
         echo "";;
     *)
         echo "Unkwon argument"

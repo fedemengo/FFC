@@ -4,8 +4,6 @@ A compiler for the F language (and it's definition)
 ## TODOs
 
 * Core features
-	* Fix TupleType checks, for both assignments/declaration
-		* same types different names should work, but different types are to be forbidden
 	* Standard library names can't be reused
 	* Fix Type checking in declaration when both are specified
 	* Add support to maps

@@ -10,4 +10,5 @@ main is func(): integer do
     print f;
     f := [1];
     print f;
+    return 0;
 end

@@ -147,7 +147,7 @@ namespace FFC.FAST
             if(Right is ArrayDefinition && Left.GetValueType(st) is ArrayType)
                 (Right as ArrayDefinition).SetEmpty((Left.GetValueType(st)));
 
-            if(Left is Identifier)      // get
+            if(Left is Identifier)
             {
                 Identifier leftID = Left as Identifier;
                 var definedSymbol = st.Find(leftID.Name);
@@ -161,25 +161,34 @@ namespace FFC.FAST
                 Right.Generate(generator, currentType, st, exitLabel, conditionLabel);
                 Generator.EmitStore(generator, definedSymbol.Builder);
             }
-            else if(Left is IndexedAccess)      // set
+            else if(Left is IndexedAccess)
             {
-                IndexedAccess x = Left as IndexedAccess;
-                FType collection = x.Container.GetValueType(st);
+                FSecondary collection = (Left as IndexedAccess).Container;
+                Indexer indexer = (Left as IndexedAccess).Index;
                 //Empty array on index access to something
-                if(collection is ArrayType && FType.SameType((collection as ArrayType).Type, Right.GetValueType(st)) == false)
-                {
-                    FType element = Right.GetValueType(st);
-                    throw new FCompilationException($"{Span} - Can't assign {element} to {collection}[{(collection as ArrayType).Type}]");
+                if(collection.GetValueType(st) is ArrayType && FType.SameType((collection.GetValueType(st) as ArrayType).Type, Right.GetValueType(st)) == false)
+                    throw new FCompilationException($"{Span} - Can't assign {Right.GetValueType(st)} to {collection}[{(collection.GetValueType(st) as ArrayType).Type}]");
+
+                if(indexer is SquaresIndexer)
+                { 
+                    collection.Generate(generator, currentType, st, exitLabel, conditionLabel);
+                    indexer.Generate(generator, currentType, st, exitLabel, conditionLabel);
+                    Right.Generate(generator, currentType, st, exitLabel, conditionLabel);
+                    generator.Emit(OpCodes.Callvirt, collection.GetValueType(st).GetRunTimeType().GetMethod("set_Item", new Type[]{indexer.GetValueType(st).GetRunTimeType(), Right.GetValueType(st).GetRunTimeType()}));
                 }
-                x.Container.Generate(generator, currentType, st, exitLabel, conditionLabel);
-                x.Index.Generate(generator, currentType, st, exitLabel, conditionLabel);
-                //generate expression to load
-                Right.Generate(generator, currentType, st, exitLabel, conditionLabel);
-                //ckeck types - currently too sleepy!
-                if(x.Index is SquaresIndexer)
-                    generator.Emit(OpCodes.Callvirt, x.Container.GetValueType(st).GetRunTimeType().GetMethod("set_Item", new Type[]{x.Index.GetValueType(st).GetRunTimeType(), Right.GetValueType(st).GetRunTimeType()}));
+                else if(indexer is DotIndexer)
+                {
+                    IntegerValue tupleIndex = new IntegerValue((collection.GetValueType(st) as TupleType).GetMappedIndex(indexer as DotIndexer), Span);
+                    if(collection.GetValueType(st) is TupleType && FType.SameType((collection.GetValueType(st) as TupleType).TypesList.Types[tupleIndex.Value - 1], Right.GetValueType(st)) == false)
+                        throw new FCompilationException($"{Span} - Can't assign {Right.GetValueType(st)} to {(collection.GetValueType(st) as TupleType).TypesList.Types[tupleIndex.Value - 1]}");
+
+                    collection.Generate(generator, currentType, st, exitLabel, conditionLabel);
+                    tupleIndex.Generate(generator, currentType, st, exitLabel, conditionLabel);
+                    Right.Generate(generator, currentType, st, exitLabel, conditionLabel);
+                    generator.Emit(OpCodes.Callvirt, collection.GetValueType(st).GetRunTimeType().GetMethod("Set", new Type[]{typeof(FInteger), Right.GetValueType(st).GetRunTimeType()}));
+                }
                 else
-                    throw new FCompilationException($"{Span} - Generation not supported for {x.Index.GetType().Name}");
+                    throw new FCompilationException($"{Span} - Assignments generation not supported for {indexer.GetType().Name}");
             }
             else throw new FCompilationException($"{Span} - Assignments to {Left.GetType().Name} are not implemented");
         }

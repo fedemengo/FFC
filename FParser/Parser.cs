@@ -3,7 +3,6 @@
 // (see accompanying GPPGcopyright.rtf)
 
 // GPPG version 1.5.2
-// Input file <FParser/gppg/grammar.y - 7/1/2018 1:25:27 PM>
 
 using System;
 using System.Collections.Generic;

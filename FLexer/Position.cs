@@ -29,6 +29,6 @@ namespace FFC.FLexer
             Row = r;
             Column = c;
         }
-        public override string ToString() =>  "[" + Row + ", " + Column + "]";
+        public override string ToString() =>  "[" + (Row + 1) + ", " + (Column + 1) + "]";
     }
 }
