@@ -51,6 +51,16 @@ namespace FFC.FRunTime
     
         public static FRational operator-(FRational r1) => new FRational(-r1.Numerator, r1.Denominator);
 
+        public override bool Equals(object obj)
+        {
+            FRational fr = obj as FRational;
+            if (Object.ReferenceEquals(fr, null))
+                return false;
+            return Math.Abs(Numerator / Denominator - fr.Numerator / fr.Denominator) < Double.Epsilon;
+        }
+
+        public override int GetHashCode() => (Numerator / Denominator).GetHashCode();
+
         public override string ToString() => Numerator.ToString() + "/" + Denominator.ToString();
         
         //Refer to FInteger Read function

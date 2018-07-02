@@ -22,6 +22,16 @@ namespace FFC.FRunTime
 
         public static FInteger operator-(FInteger i1) => new FInteger(- i1.Value);
         
+        public override bool Equals(object obj)
+        {
+            FInteger fi = obj as FInteger;
+            if (Object.ReferenceEquals(fi, null))
+                return false;
+            return Value == fi.Value;
+        }
+
+        public override int GetHashCode() => Value.GetHashCode();
+    
         public override string ToString() => Value.ToString();
 
         //Right now, just take whole line and try to parse it.

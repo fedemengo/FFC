@@ -16,6 +16,16 @@ namespace FFC.FRunTime
 
         public static FBoolean operator!(FBoolean b1) => new FBoolean(!b1.Value);
         
+        public override bool Equals(object obj)
+        {
+            FBoolean fb = obj as FBoolean;
+            if (Object.ReferenceEquals(fb, null))
+                return false;
+            return Value == fb.Value;
+        }
+
+        public override int GetHashCode() => Value.GetHashCode();
+
         public override string ToString() => Value == true ? "true" : "false";
         public bool GetBool() => Value;
 

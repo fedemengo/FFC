@@ -3,6 +3,8 @@ namespace FFC.FRunTime
 {
     public class FComplex : FRTType
     {
+        private static int PRIME1 = 1019;
+        private static int PRIME2 = 2050918644;
         public FComplex(double r, double i)
         {
             Real = r;
@@ -42,6 +44,16 @@ namespace FFC.FRunTime
         public static FComplex operator -(FComplex c1) => new FComplex(-c1.Real, c1.Imaginary);
 
         public override string ToString() => Real.ToString() + "i" + Imaginary.ToString();
+
+        public override bool Equals(object obj)
+        {
+            FComplex fc = obj as FComplex;
+            if (Object.ReferenceEquals(fc, null))
+                return false;
+            return Real == fc.Real && Imaginary == fc.Imaginary;
+        }
+
+        public override int GetHashCode() => ((PRIME1 * Real.GetHashCode() + Imaginary.GetHashCode()) % PRIME2);
         
         //Refer to FInteger Read function
         //I no longer like that we need to have REAL i REAL, I think we should also support INT i INT
