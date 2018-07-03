@@ -23,6 +23,7 @@ perform_task() {
         echo "run EXE       Run the executable EXEC"
 		echo "crun FILE     Compile and run the source FILE"
         echo "clear         Remove all .exe files"
+        echo "all           Compile and Run all source in 'samples/'"
 		return 1;;
     "build")
         echo "Building the project..."
@@ -37,6 +38,10 @@ perform_task() {
     "run")
         echo ""
         mono "$2"
+        echo "";;
+    "all")
+        echo ""
+        for file in samples/*; do ./util.sh crun $file main; read _; done
         echo "";;
     "crun")
         echo ""

@@ -79,7 +79,10 @@ namespace FFC.FAST
             if(BinOperator is RelationalOperator)
             {
                 //we need to cast to the 2same type they would get summed to
-                targetType = new PlusOperator(null).GetTarget(Left.GetValueType(st), Right.GetValueType(st));
+                if(Left.GetValueType(st) is BooleanType || Right.GetValueType(st) is BooleanType)
+                    targetType = new EqualOperator(null).GetTarget(Left.GetValueType(st), Right.GetValueType(st));
+                else
+                    targetType = new PlusOperator(null).GetTarget(Left.GetValueType(st), Right.GetValueType(st));
             }
             Left.Generate(generator, currentType, st, exitLabel, conditionLabel);
             if(FType.SameType(Left.GetValueType(st), targetType) == false)

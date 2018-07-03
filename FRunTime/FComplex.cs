@@ -34,12 +34,12 @@ namespace FFC.FRunTime
         }
         public double Modulo() => Math.Sqrt(Real * Real + Imaginary * Imaginary);
 
-        public static bool operator == (FComplex c1, FComplex c2) => c1.Real == c2.Real && c1.Imaginary == c2.Imaginary; 
-        public static bool operator != (FComplex c1, FComplex c2) => c1.Real != c2.Real || c1.Imaginary != c2.Imaginary; 
-        public static bool operator < (FComplex c1, FComplex c2) => c1.Modulo() < c2.Modulo();
-        public static bool operator <= (FComplex c1, FComplex c2) => c1.Modulo() <= c2.Modulo();
-        public static bool operator > (FComplex c1, FComplex c2) => c1.Modulo() > c2.Modulo();
-        public static bool operator >= (FComplex c1, FComplex c2) => c1.Modulo() >= c2.Modulo();
+        public static FBoolean operator == (FComplex c1, FComplex c2) => new FBoolean(c1.Real == c2.Real && c1.Imaginary == c2.Imaginary);
+        public static FBoolean operator != (FComplex c1, FComplex c2) => new FBoolean(c1.Real != c2.Real || c1.Imaginary != c2.Imaginary);
+        public static FBoolean operator < (FComplex c1, FComplex c2) => new FBoolean(c1.Modulo() < c2.Modulo());
+        public static FBoolean operator <= (FComplex c1, FComplex c2) => new FBoolean(c1.Modulo() <= c2.Modulo());
+        public static FBoolean operator > (FComplex c1, FComplex c2) => new FBoolean(c1.Modulo() > c2.Modulo());
+        public static FBoolean operator >= (FComplex c1, FComplex c2) => new FBoolean(c1.Modulo() >= c2.Modulo());
 
         public static FComplex operator -(FComplex c1) => new FComplex(-c1.Real, c1.Imaginary);
 

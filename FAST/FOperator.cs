@@ -50,7 +50,8 @@ namespace FFC.FAST
             //to handle recursion
             if(t1 == null || t2 == null) return null;
 
-            if(!(t1 is NumericType && t2 is NumericType))
+            // if operator is not EqualOperator nor NotEqualOperator then it can be applied only to NumericType
+            if(!(this is EqualOperator || this is NotEqualOperator) && !(t1 is NumericType && t2 is NumericType))
                 throw new FCompilationException($"{this.Span.Begin} - Can't compare non numeric types");
             if(t1 is ComplexType || t2 is ComplexType)
             {
