@@ -17,9 +17,12 @@ namespace FFC.FAST
             }
             catch (Exception)
             {
-                throw new FCompilationException($"{Span} - No conversion from {this.GetType().Name} to {target.GetType().Name}");
+                throw new FCompilationException($"{Span} - No conversion from {this} to {target}");
             }
         }
+
+        //To ensure all FTypes have a proper ToString method, as we don't want ugly error messages
+        public override abstract string ToString();
         
         public virtual Type GetRunTimeType() => throw new FCompilationException($"{Span} - RunTimeType not available for {GetType().Name}");
         
@@ -85,7 +88,7 @@ namespace FFC.FAST
                 //check params
                 return SameType(ta.ParamsList, tb.ParamsList);
             }
-            throw new FCompilationException($"FType comparison for {a.GetType().Name} is not implemented");
+            throw new FCompilationException($"FType comparison for {a} is not implemented");
         }
     }
 
@@ -261,6 +264,7 @@ namespace FFC.FAST
     {
         public EllipsisType() => Type = new IntegerType();
         public override Type GetRunTimeType() => typeof(FEllipsis);
+        public override string ToString() => "EllipsisType";
     }
     public class ArrayType : IterableType
     {

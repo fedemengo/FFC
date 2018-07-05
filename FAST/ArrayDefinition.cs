@@ -48,7 +48,7 @@ namespace FFC.FAST
             ValueType = ExprsList.Exprs[0].GetValueType(st);
             foreach(var z in ExprsList.Exprs)
                 if(FType.SameType(z.GetValueType(st), ValueType) == false)
-                    throw new FCompilationException($"{Span} - Can't handle arrays with multiple types {ValueType.GetType().Name} - {z.GetValueType(st).GetType().Name}");
+                    throw new FCompilationException($"{Span} - Can't handle arrays with multiple types {ValueType} - {z.GetValueType(st)}");
             ValueType = new ArrayType(ValueType);
         }
     }

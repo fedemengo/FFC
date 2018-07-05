@@ -380,21 +380,23 @@ namespace FFC.FAST
 
         public override void BuildValueType(SymbolTable st)
         {
+            //get type returned by if, else ifs and else
             FType t = Then.GetValueType(st);
             FType ei = ElseIfs.GetValueType(st);
             FType e = Else.GetValueType(st);
+            //they must all be compatible
             ValueType = t;
             if(ei != null)
                 if(ValueType == null || FType.SameType(ValueType, ei))
                     ValueType = ei;
                 else
-                    throw new FCompilationException($"{Span} - If type {t.GetType().Name} doesn't match ElseIf type {ei.GetType().Name}");
+                    throw new FCompilationException($"{Span} - If type {t} doesn't match ElseIf type {ei}");
             
             if(e != null)
                 if(ValueType == null || FType.SameType(ValueType, e))
                     ValueType = e;
                 else
-                    throw new FCompilationException($"{Span} - If type {t.GetType().Name} doesn't match Else type {e.GetType().Name}");
+                    throw new FCompilationException($"{Span} - If type {t} doesn't match Else type {e}");
         }
     }
 

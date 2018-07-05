@@ -134,7 +134,9 @@ namespace FFC.FAST
         }
         public override void BuildValueType(SymbolTable st)
         {
-            if(From.GetValueType(st).GetType() != typeof(IntegerType) || To.GetValueType(st).GetType() != typeof(IntegerType))
+            //Only integers are allowed for ellipsis
+            if(FType.SameType(From.GetValueType(st), To.GetValueType(st)) == false ||
+               FType.SameType(From.GetValueType(st), new IntegerType()) == false)
                 throw new FCompilationException($"{Span} - Can't use ellipsis with {From.GetValueType(st)}-{To.GetValueType(st)}");
             ValueType = new EllipsisType();
         }

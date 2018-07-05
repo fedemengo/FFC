@@ -37,7 +37,7 @@ namespace FFC.FAST
 
                 ValueType = (ValueType as TupleType).GetIndexType(Index as DotIndexer);
             }
-            else throw new FCompilationException($"{Span} - Can't use indexers on type {ValueType.GetType().Name}");
+            else throw new FCompilationException($"{Span} - Can't use indexers on type {ValueType}");
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {

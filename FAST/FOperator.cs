@@ -29,6 +29,7 @@ namespace FFC.FAST
             PrintTabs(tabs);
             var prev = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.DarkYellow;
+            //todo : fix this using proper way to get operator name
             Console.WriteLine(this.GetType().ToString().Substring(9));
             Console.ForegroundColor = prev;
         }
@@ -160,7 +161,7 @@ namespace FFC.FAST
             if(t1 == null || t2 == null) return null;
 
             if(!(t1 is NumericType && t2 is NumericType))
-                throw new FCompilationException($"{this.Span.Begin} - Can't apply operator {this.GetType().Name} to non-numeric type {(t1 is NumericType ? t2.GetType().Name : t1.GetType().Name)}");
+                throw new FCompilationException($"{this.Span.Begin} - Can't apply operator {this.GetType().Name} to non-numeric type {(t1 is NumericType ? t2 : t1)}");
             if(t1 is ComplexType || t2 is ComplexType)
             {
                 if(t1 is RationalType || t2 is RationalType)
@@ -235,7 +236,7 @@ namespace FFC.FAST
             if(t1 == null || t2 == null) return null;
 
             if(!(t1 is NumericType && t2 is NumericType))
-                throw new FCompilationException($"{this.Span.Begin} - Can't use {this.GetType().Name} with non-numeric type {(t1 is NumericType ? t2.GetType().Name : t1.GetType().Name)}");
+                throw new FCompilationException($"{this.Span.Begin} - Can't use {this.GetType().Name} with non-numeric type {(t1 is NumericType ? t2 : t1)}");
             if(t1 is ComplexType || t2 is ComplexType)
             {
                 if(t1 is RationalType || t2 is RationalType)
@@ -265,7 +266,7 @@ namespace FFC.FAST
 
             if(t1 is IntegerType && t2 is IntegerType)
                 return new IntegerType();
-            throw new FCompilationException($"{this.Span.Begin} - Can't use {this.GetType().Name} with {(t1 is IntegerType ? t2.GetType().Name : t1.GetType().Name)} values");
+            throw new FCompilationException($"{this.Span.Begin} - Can't use {this.GetType().Name} with {(t1 is IntegerType ? t2 : t1)} values");
         }
     }
 }
