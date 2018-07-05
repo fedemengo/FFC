@@ -193,7 +193,7 @@ namespace FFC.FAST
 
             if(t1 is StringType && t2 is StringType)
                 return new StringType();
-            if(t1 is ArrayType && t2 is ArrayType && ((ArrayType) t1).Type.GetType() == ((ArrayType) t2).Type.GetType())
+            if(t1 is ArrayType && t2 is ArrayType && FType.SameType((t1 as ArrayType).Type, (t2 as ArrayType).Type))
                 return new ArrayType(((ArrayType) t1).Type);
             if(t1 is ArrayType && FType.SameType((t1 as ArrayType).Type, t2))
                 return new ArrayType(((ArrayType) t1).Type);

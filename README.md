@@ -4,7 +4,8 @@ A compiler for the F language (and it's definition)
 ## TODOs
 
 * Core features
-	* Standard library names can't be reused
+	* Standard library
+		* Names can't be reused
 	* Fix Type checking in declaration when both are specified
 	* Add support to maps
 	* Catch exception when using a variable that is not declared
