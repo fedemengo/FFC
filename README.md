@@ -30,7 +30,7 @@ A compiler for the F language (and it's definition)
 		* Consider assignment support
 
 * Check if it's done / done correctly
-	* Add proper ToString method to FTypes, and maybe even more nodes
+	* GetTarget / Comparisons of non-NumericTypes
 	* Check how we deal with types in declaration / indexed access
 	* GetValueType in ParameterList / TypeList
 	* Type check in recursive functions, error right now for wrong deduction is not very clear, also I don't like setting the type to null, so maybe we should have a RecursionType or something like that - even if null is particularly handy as it gets already recalculated (but we can make recursiontype to be recalculated too!)

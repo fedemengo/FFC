@@ -29,10 +29,11 @@ namespace FFC.FAST
             PrintTabs(tabs);
             var prev = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            //todo : fix this using proper way to get operator name
-            Console.WriteLine(this.GetType().ToString().Substring(9));
+            //Operator name from ToString
+            Console.WriteLine(this);
             Console.ForegroundColor = prev;
         }
+        public override string ToString() => GetType().Name.Replace("Operator", "");
         public abstract FType GetTarget(FType t1, FType t2);
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
@@ -50,7 +51,8 @@ namespace FFC.FAST
         {
             //to handle recursion
             if(t1 == null || t2 == null) return null;
-
+            
+            //todo 
             // if operator is not EqualOperator nor NotEqualOperator then it can be applied only to NumericType
             if(!(this is EqualOperator || this is NotEqualOperator) && !(t1 is NumericType && t2 is NumericType))
                 throw new FCompilationException($"{this.Span.Begin} - Can't compare non numeric types");
