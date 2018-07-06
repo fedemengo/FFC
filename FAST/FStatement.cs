@@ -157,9 +157,22 @@ namespace FFC.FAST
                 if(FType.SameType(Right.GetValueType(st), definedSymbol.Type) == false) 
                     throw new FCompilationException($"{Span} - Can't assign type {Right.GetValueType(st)} to variable of type {definedSymbol.Type}"); 
                 
-                //Empty array on identifier
-                Right.Generate(generator, currentType, st, exitLabel, conditionLabel);
-                Generator.EmitStore(generator, definedSymbol.Builder);
+                //TODO: extend to all types
+                //This is a test meant to track changes on objects,
+                //right now implemented oly for integers
+                //I think it shoud work on almost anything,
+                //except maybe extra work for functions
+                if(definedSymbol.Type is IntegerType)
+                {
+                    Generator.EmitLoad(generator, definedSymbol.Builder);
+                    Right.Generate(generator, currentType, st, exitLabel, conditionLabel);
+                    generator.Emit(OpCodes.Callvirt, typeof(FInteger).GetMethod("Assign"));
+                }
+                else
+                {
+                    Right.Generate(generator, currentType, st, exitLabel, conditionLabel);
+                    Generator.EmitStore(generator, definedSymbol.Builder);
+                }
             }
             else if(Left is IndexedAccess)
             {

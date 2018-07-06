@@ -38,6 +38,9 @@ namespace FFC.FRunTime
         //A better idea to have clean c++ like input could be
         //to have some input buffer class to use that gets loaded
         //on Console.ReadLine()
-        public static FInteger Read() => new FInteger(int.Parse(Console.ReadLine()));          
+        public static FInteger Read() => new FInteger(int.Parse(Console.ReadLine()));
+
+        //temporary approach to assignments
+        public void Assign(FInteger other) => Value = other.Value;
     }
 }
