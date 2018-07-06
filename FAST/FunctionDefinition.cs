@@ -49,24 +49,84 @@ namespace FFC.FAST
                 st = st.Assign(ParamsList.Params[i].Id.Name, new NameInfo(paramBuilder, ParamsList.Params[i].Type));
             }
 
+            /*
+            before generating the body, we need to capture all local variables:
+                - before body generation, create a list of "names" that will need to
+                  be created as Fields in the function type
+                - this names will need to be updated on the symbol table!
+                - after body generation, store locals in newly created fields
+                
+            we dont':
+                - use old symbol table to track "untracked variables", as this would
+                    (or i think it would) require to modifiy st structure
+                - delete useless symbols from newSt, as they shouldnt take so much memory
+                    and would probably take even more if removed because of persistent implementation
+            */
+
+            SymbolTable newSt = st;
+            SortedSet<string> paramNames = new SortedSet<string>();
+            ParamsList.Params.ForEach(x => paramNames.Add(x.Id.Name));
+            SortedSet<string> toCapture = Generator.GetUndeclared(Body, paramNames);
+            //Names to be skipped
+            SortedSet<string> toSkip = new SortedSet<string>();
+            //Add field builders to symboltable
+            foreach(string s in toCapture)
+            {
+                if(st.Contains(s) == false)
+                    throw new FCompilationException($"{Span} - Can't capture not-declarated variable {s}");
+                var z = st.Find(s);
+                //we skip static fields are they are global variables which can be captured anyway
+                if(z.Builder is FieldBuilder)
+                    if((z.Builder as FieldBuilder).IsStatic)
+                    {
+                        toSkip.Add(s);
+                        continue;
+                    }
+                //create a field and assign to new symbol table
+                FieldBuilder f = function.DefineField(s, z.Type.GetRunTimeType(), FieldAttributes.Public);
+                newSt = newSt.Assign(s, new NameInfo(f, z.Type));
+            }
+
+            //remove globals
+            foreach(string s in toSkip)
+                toCapture.Remove(s);
+
             //just generate code inside the method
             var funcGen = funcMeth.GetILGenerator();
-            Body.Generate(funcGen, function, st, exitLabel, conditionLabel);
+            //we use the updated symbol table this time
+            Body.Generate(funcGen, function, newSt, exitLabel, conditionLabel);
 
             //Function class is now ready to be created
-            function.CreateType();
+            var fType = function.CreateType();
 
             //create instance of function
             generator.Emit(OpCodes.Newobj, function.GetConstructors()[0]);
 
-            //put function on the stack
+            //put function on tmp variable, store and load fields
+
+            var tmpF = generator.DeclareLocal(fType);
+            Generator.EmitStore(generator, tmpF);
+
+
+            //load fields
+            foreach(string s in toCapture)
+            {
+                Generator.EmitLoad(generator, tmpF);
+                Generator.EmitLoad(generator, st.Find(s).Builder);
+                Generator.EmitStore(generator, newSt.Find(s).Builder);
+            }
+
+            //put function back on the stack to create actual delegate
+            Generator.EmitLoad(generator, tmpF);
             generator.Emit(OpCodes.Ldftn, funcMeth);
+
 
             //get delegate type
             var delegateType = Generator.FunctionTypes[ValueType as FunctionType];
 
             //emits delegate
             generator.Emit(OpCodes.Newobj, delegateType.GetConstructors()[0]);
+            
         }
         public override void BuildValueType(SymbolTable st)
         {

@@ -31,6 +31,7 @@ A compiler for the F language (and it's definition)
 
 * Check if it's done / done correctly
 	* GetTarget / Comparisons of non-NumericTypes
+	* Capturing variable is now kinda immutable, can be made more dynamic (like C#) just by changing reassignments behaviour to change object value instead of creating a new object
 	* Check how we deal with types in declaration / indexed access
 	* GetValueType in ParameterList / TypeList
 	* Type check in recursive functions, error right now for wrong deduction is not very clear, also I don't like setting the type to null, so maybe we should have a RecursionType or something like that - even if null is particularly handy as it gets already recalculated (but we can make recursiontype to be recalculated too!)

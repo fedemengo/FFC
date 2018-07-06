@@ -88,8 +88,12 @@ namespace FFC.FGen
                 generator.Emit(OpCodes.Ldarg, (builder as ParameterBuilder).Position);
             else if (builder is FieldBuilder)
             {
-                var code = (builder as FieldBuilder).IsStatic ? OpCodes.Ldsfld : OpCodes.Ldfld;
-                generator.Emit(code, builder as FieldBuilder);
+                var b = builder as FieldBuilder;
+                var code = b.IsStatic ? OpCodes.Ldsfld : OpCodes.Ldfld;
+                //load this
+                if(b.IsStatic == false)
+                    generator.Emit(OpCodes.Ldarg_0);
+                generator.Emit(code, b);
             }
             else throw new FCompilationException($"Cannot load {builder.GetType()}");
         }
