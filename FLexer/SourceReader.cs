@@ -10,59 +10,53 @@ namespace FFC.FLexer
         private bool isFinished;
         private Position position;
         public Position GetPosition() => new Position(position);
+        
         public SourceReader(string filePath)
         {
-            this.buffer = File.ReadAllLines(filePath);
-            this.isFinished = false;
-            this.position = new Position();
+            buffer = File.ReadAllLines(filePath);
+            isFinished = false;
+            position = new Position();
         }
+        
         public void SkipLine()
         {
             char x = GetChar();
+            Advance();
             if(x == '\n' || x == '\0')
-            {
-                Advance();
                 return;
-            }
-            else
-            {
-                Advance();
-                SkipLine();
-            }
+            SkipLine();
         }
 
+        
         public bool Empty() => isFinished;
+        
         public void SkipBlank()
         {
             char x = GetChar();
+            Advance();
             if(x == ' ' || x == '\n' || x == '\t' || x == '\0')
-            {
-                Advance();
                 return;
-            }
-            else
-            {
-                Advance();
-                SkipBlank();
-            }
+            SkipBlank();
         }
+        
         public char GetChar()
         {
-            if(this.isFinished)
+            if(isFinished)
                 return '\0';
-            if(this.position.Column == this.buffer[this.position.Row].Length)
+            if(position.Column == buffer[position.Row].Length)
                 return '\n';
-            return this.buffer[this.position.Row][this.position.Column];
+            return buffer[position.Row][position.Column];
         }
+        
         public void Advance()
         {
-            if(this.position.Column == this.buffer[this.position.Row].Length)
+            if(position.Column == buffer[position.Row].Length)
                 position.NextLine();
             else
                 position.NextChar();
 
-            if(this.position.Row == this.buffer.Length)
-                this.isFinished = true;
+            if(position.Row == buffer.Length)
+                isFinished = true;
         }
     }
 }

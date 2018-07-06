@@ -23,18 +23,19 @@ namespace FFC.FLexer
     }
     class Token
     {
-        public ETokens type{get; set;}
+        public ETokens Type {get; set;}
         public TokenValue values = new TokenValue();
         //Position is in a [L, R) format
-        public Position begin, end;
+        public Position Begin {get; set;}
+        public Position End {get; set;}
         public Token(ETokens tokenType, Position begin, Position end)
         {
             #if DBG_TOKEN
                 Console.WriteLine("Token : " + tokenType);
             #endif
-            this.type = tokenType;
-            this.begin = begin;
-            this.end = end;
+            Type = tokenType;
+            Begin = begin;
+            End = end;
             values.Span = new TextSpan(begin, end);
         }
 
@@ -52,7 +53,7 @@ namespace FFC.FLexer
 
         override public string ToString()
         {
-            string ans = type.ToString();
+            string ans = Type.ToString();
             for(int i = 0; i < values.Count; i++)
             {
                 if(i == 0)
@@ -63,7 +64,7 @@ namespace FFC.FLexer
                 if(i == values.Count - 1)
                     ans += ")";
             }
-            return ans + $"[{begin.ToString()}, {end.ToString()}";
+            return ans + $"[{Begin.ToString()}, {End.ToString()}";
         }
     }
 }

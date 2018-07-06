@@ -36,10 +36,10 @@ namespace FFC.FLexer
         {
             List<Token> ans = new List<Token>();
             Token current = null;
-            while((current = NextToken(sr)).type != ETokens.EOF)
+            while((current = NextToken(sr)).Type != ETokens.EOF)
             {
                 ans.Add(current);
-                if(current.type == ETokens.ERROR)
+                if(current.Type == ETokens.ERROR)
                     sr.SkipBlank();
             }
             ans.Add(current);
@@ -57,8 +57,8 @@ namespace FFC.FLexer
             else
                 t = _NextToken(sr);
             // to avoid blank before ellipsis
-            if(t.type == ETokens.ELLIPSIS && (blank || IsBlank(sr.GetChar())))
-                t.type = ETokens.ERROR;
+            if(t.Type == ETokens.ELLIPSIS && (blank || IsBlank(sr.GetChar())))
+                t.Type = ETokens.ERROR;
             else
                 blank = false;
             return t;

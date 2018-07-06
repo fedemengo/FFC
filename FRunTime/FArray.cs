@@ -55,7 +55,7 @@ namespace FFC.FRunTime
         {
             private FArray<V> collection;
             private int index = -1;
-            public VIterator (FArray<V> collection) => this.collection = collection;
+            public VIterator (FArray<V> coll) => collection = coll;
             public V GetCurrent() => collection.Values[index];
             public bool MoveNext() => ++index < collection.Length;
         }

@@ -13,7 +13,7 @@ namespace FFC.FAST
         {
             try
             {
-                generator.Emit(OpCodes.Newobj, target.GetRunTimeType().GetConstructor(new Type[]{this.GetRunTimeType()}));
+                generator.Emit(OpCodes.Newobj, target.GetRunTimeType().GetConstructor(new Type[]{GetRunTimeType()}));
             }
             catch (Exception)
             {
@@ -31,10 +31,10 @@ namespace FFC.FAST
             FType type = o as FType;
             if (Object.ReferenceEquals(type, null))
                 return false;
-            return this.ToString() == type.ToString();
+            return ToString() == type.ToString();
         }
         
-        public override int GetHashCode() => this.ToString().GetHashCode();
+        public override int GetHashCode() => ToString().GetHashCode();
         
         public static bool SameType(FType a, FType b)
         {
@@ -126,7 +126,7 @@ namespace FFC.FAST
             TypeList typeList = o as TypeList;
             if (Object.ReferenceEquals(typeList, null))
                 return false;
-            return this.ToString() == typeList.ToString();
+            return ToString() == typeList.ToString();
         }
         public override int GetHashCode() => Types.ToString().GetHashCode();
     }
@@ -211,7 +211,7 @@ namespace FFC.FAST
 
     public class BooleanType : FType
     {
-        public BooleanType(TextSpan span = null) => this.Span = span;
+        public BooleanType(TextSpan span = null) => Span = span;
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
@@ -246,11 +246,11 @@ namespace FFC.FAST
             FunctionType ft = o as FunctionType;
             if (Object.ReferenceEquals(ft, null))
                 return false;
-            if (this.ToString() != ft.ToString())
+            if (ToString() != ft.ToString())
                 return false;
-            if(this.ReturnType.ToString() != ft.ReturnType.ToString())
+            if(ReturnType.ToString() != ft.ReturnType.ToString())
                 return false;
-            return this.ParamsList.Equals(ft.ParamsList);
+            return ParamsList.Equals(ft.ParamsList);
         }
         public override int GetHashCode() => ParamsList.ToString().GetHashCode() ^ ReturnType.ToString().GetHashCode();
     }
@@ -346,9 +346,9 @@ namespace FFC.FAST
             TupleType ft = o as TupleType;
             if (Object.ReferenceEquals(ft, null))
                 return false;
-            if (this.ToString() != ft.ToString())
+            if (ToString() != ft.ToString())
                 return false;
-            return this.TypesList.ToString() == ft.TypesList.ToString();
+            return TypesList.ToString() == ft.TypesList.ToString();
         }
         public override int GetHashCode() => TypesList.ToString().GetHashCode();
     }

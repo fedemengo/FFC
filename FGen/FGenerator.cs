@@ -34,7 +34,7 @@ namespace FFC.FGen
 
         //might we need to store more stuff globally ?
 
-        public static bool Generate(string filePath, DeclarationStatementList stms, string start)
+        public static void Generate(string filePath, DeclarationStatementList stms, string start)
         {
             string name = filePath.Split('/')[1].Split('.')[0];
             //name of function to invoke in Program.Main
@@ -49,7 +49,6 @@ namespace FFC.FGen
             moduleBuilder.CreateGlobalFunctions();
 
             /* Class 'Program' that will run all the statements */
-            
             programType = moduleBuilder.DefineType("Program", TypeAttributes.Public);
             ConstructorBuilder progConstr = programType.DefineConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName,
                                                         CallingConventions.Standard,
@@ -67,8 +66,6 @@ namespace FFC.FGen
             
             //generates all the statements in main
             stms.Generate(mainGen, programType, new SymbolTable());
-
-            //end of main
             
             // set assembly entry point
             asmBuilder.SetEntryPoint(mainMeth);
@@ -76,8 +73,6 @@ namespace FFC.FGen
             programType.CreateType();
 
             asmBuilder.Save(name + ".exe");
-
-            return true;
         }
 
         public static void EmitLoad(ILGenerator generator, object builder)
@@ -97,6 +92,7 @@ namespace FFC.FGen
             }
             else throw new FCompilationException($"Cannot load {builder.GetType()}");
         }
+
         public static void EmitStore(ILGenerator generator, object builder)
         {
             if(builder is LocalBuilder)
@@ -127,15 +123,12 @@ namespace FFC.FGen
                                                                         MethodAttributes.SpecialName | 
                                                                         MethodAttributes.RTSpecialName,
                                                                         CallingConventions.Standard, Type.EmptyTypes);
-
             delegateConstr.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
 
             Type retType = f.ReturnType.GetRunTimeType();
             Type[] paramTypesArray = new Type[f.ParamsList.Types.Count];
             for(int i = 0; i < f.ParamsList.Types.Count; i++)
-            {
                 paramTypesArray[i] = f.ParamsList.Types[i].GetRunTimeType();
-            }
             
             MethodBuilder methodInvoke = tdelegate.DefineMethod("Invoke", MethodAttributes.Public |
                                                                       MethodAttributes.HideBySig |
@@ -150,14 +143,12 @@ namespace FFC.FGen
             paramTypesArrayBeginInvoke[paramTypesArray.Length] = typeof(AsyncCallback);
             paramTypesArrayBeginInvoke[paramTypesArray.Length + 1] = typeof(object);
 
-
             MethodBuilder methodBeginInvoke = tdelegate.DefineMethod("BeginInvoke", MethodAttributes.Public |
                                                                                     MethodAttributes.HideBySig |
                                                                                     MethodAttributes.NewSlot |
                                                                                     MethodAttributes.Virtual,
                                                                                     typeof(IAsyncResult), 
                                                                                     paramTypesArrayBeginInvoke);
-
             methodBeginInvoke.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
 
             MethodBuilder methodEndInvoke = tdelegate.DefineMethod("EndInvoke", MethodAttributes.Public | 
@@ -198,7 +189,6 @@ namespace FFC.FGen
             FieldBuilder funcFField = funcClass.DefineField("outerClass", funcClass.DeclaringType, FieldAttributes.Public);
             
             //Define (empty) constructor
-
             ConstructorBuilder funcClassCtor = funcClass.DefineConstructor(MethodAttributes.Public | 
                                                                         MethodAttributes.HideBySig | 
                                                                         MethodAttributes.SpecialName | 
@@ -212,7 +202,6 @@ namespace FFC.FGen
             
             //Type is now ready to emit everything
             return funcClass;
-
         }
     }
 }

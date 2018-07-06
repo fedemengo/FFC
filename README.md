@@ -7,6 +7,7 @@ A compiler for the F language (and it's definition)
 	* Standard library
 		* Names can't be reused
 	* Fix Type checking in declaration when both are specified
+		* Probably just void functions and maps once implemented
 	* Add support to maps
 	* Catch exception when using a variable that is not declared
 
@@ -89,7 +90,7 @@ A compiler for the F language (and it's definition)
 		- [ ] Capturing used variables
 
 
-- [ ] Debugging and Testing
+- [ ] Debugging and Testing (consider developing robust tests for all part of the compiler)
 	- [ ] Lexer error handling support
 	- [ ] Parsing error handling support
 	- [x] Compilation error handling support

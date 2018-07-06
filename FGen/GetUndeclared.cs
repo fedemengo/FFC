@@ -137,10 +137,10 @@ namespace FFC.FGen
             }
             else if(e is MapDefinition)
             {
-                foreach(var x in (e as MapDefinition).entries.pairs)
+                foreach(var x in (e as MapDefinition).Entries.pairs)
                 {
-                    AddUndeclared(x.first, declared, ans);
-                    AddUndeclared(x.second, declared, ans);       
+                    AddUndeclared(x.First, declared, ans);
+                    AddUndeclared(x.Second, declared, ans);       
                 }
             }
             else if(e is TupleDefinition)

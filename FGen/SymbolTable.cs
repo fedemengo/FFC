@@ -256,10 +256,10 @@ namespace FFC.FGen
     {
         public object Builder {get; set;}
         public FType Type {get; set;}
-        public NameInfo(object Builder, FType type)
+        public NameInfo(object builder, FType type)
         {
-            this.Builder = Builder;
-            this.Type = type;
+            Builder = builder;
+            Type = type;
         }
     }   
 

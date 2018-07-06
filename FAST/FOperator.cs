@@ -37,11 +37,11 @@ namespace FFC.FAST
         public abstract FType GetTarget(FType t1, FType t2);
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            throw new FCompilationException($"{this.Span} - Operators are not meant to be directly generated.");
+            throw new FCompilationException($"{Span} - Operators are not meant to be directly generated.");
         }
         public virtual string GetMethodName()
         {
-            throw new FCompilationException($"{this.Span} - GetMethodName not implemented for {this.GetType().Name}");
+            throw new FCompilationException($"{Span} - GetMethodName not implemented for {GetType().Name}");
         }
     }
 
@@ -55,15 +55,15 @@ namespace FFC.FAST
             //todo 
             // if operator is not EqualOperator nor NotEqualOperator then it can be applied only to NumericType
             if(!(this is EqualOperator || this is NotEqualOperator) && !(t1 is NumericType && t2 is NumericType))
-                throw new FCompilationException($"{this.Span.Begin} - Can't compare non numeric types");
+                throw new FCompilationException($"{Span.Begin} - Can't compare non numeric types");
             if(t1 is ComplexType || t2 is ComplexType)
             {
                 if(!(t1 is ComplexType && t2 is ComplexType))
-                    throw new FCompilationException($"{this.Span.Begin} - Can't compare complex numbers to other numeric values");
+                    throw new FCompilationException($"{Span.Begin} - Can't compare complex numbers to other numeric values");
             }
             if(t1 is RationalType || t2 is RationalType){
                 if(t1 is RealType || t2 is RealType)
-                    throw new FCompilationException($"{this.Span.Begin} - Can't compare rationals to reals");
+                    throw new FCompilationException($"{Span.Begin} - Can't compare rationals to reals");
             }
             return new BooleanType();
         }
@@ -127,7 +127,7 @@ namespace FFC.FAST
 
             if(t1 is BooleanType && t2 is BooleanType)
                 return new BooleanType();
-            throw new FCompilationException($"{this.Span.Begin} - Can't use boolean operator {this.GetType().Name} on non-boolean values");            
+            throw new FCompilationException($"{Span.Begin} - Can't use boolean operator {GetType().Name} on non-boolean values");            
         }
     }
     public class AndOperator : BooleanOperator
@@ -163,17 +163,17 @@ namespace FFC.FAST
             if(t1 == null || t2 == null) return null;
 
             if(!(t1 is NumericType && t2 is NumericType))
-                throw new FCompilationException($"{this.Span.Begin} - Can't apply operator {this.GetType().Name} to non-numeric type {(t1 is NumericType ? t2 : t1)}");
+                throw new FCompilationException($"{Span.Begin} - Can't apply operator {GetType().Name} to non-numeric type {(t1 is NumericType ? t2 : t1)}");
             if(t1 is ComplexType || t2 is ComplexType)
             {
                 if(t1 is RationalType || t2 is RationalType)
-                    throw new FCompilationException($"{this.Span.Begin} - Can't use operator {this.GetType().Name} mixing complex and rational numbers");
+                    throw new FCompilationException($"{Span.Begin} - Can't use operator {GetType().Name} mixing complex and rational numbers");
                 return new ComplexType();
             }
             if(t1 is RationalType || t2 is RationalType)
             {
                 if(t1 is RealType || t2 is RealType)
-                    throw new FCompilationException($"{this.Span.Begin} - Can't use operator {this.GetType().Name} mixing real and rational numbers");
+                    throw new FCompilationException($"{Span.Begin} - Can't use operator {GetType().Name} mixing real and rational numbers");
                 return new RationalType();
             }
             if(t1 is RealType || t2 is RealType)
@@ -201,7 +201,7 @@ namespace FFC.FAST
             if(t1 is ArrayType && FType.SameType((t1 as ArrayType).Type, t2))
                 return new ArrayType(((ArrayType) t1).Type);
             if(t1 is ArrayType && !FType.SameType((t1 as ArrayType).Type, t2))
-                throw new FCompilationException($"{this.Span.Begin} - Can't append type {t2} to Array of type {(t1 as ArrayType).Type}");
+                throw new FCompilationException($"{Span.Begin} - Can't append type {t2} to Array of type {(t1 as ArrayType).Type}");
             return base.GetTarget(t1, t2);
         }
     }
@@ -238,17 +238,17 @@ namespace FFC.FAST
             if(t1 == null || t2 == null) return null;
 
             if(!(t1 is NumericType && t2 is NumericType))
-                throw new FCompilationException($"{this.Span.Begin} - Can't use {this.GetType().Name} with non-numeric type {(t1 is NumericType ? t2 : t1)}");
+                throw new FCompilationException($"{Span.Begin} - Can't use {GetType().Name} with non-numeric type {(t1 is NumericType ? t2 : t1)}");
             if(t1 is ComplexType || t2 is ComplexType)
             {
                 if(t1 is RationalType || t2 is RationalType)
-                    throw new FCompilationException($"{this.Span.Begin} - Can't use {this.GetType().Name} mixing complex and rational values");
+                    throw new FCompilationException($"{Span.Begin} - Can't use {GetType().Name} mixing complex and rational values");
                 return new ComplexType();
             }
             if(t1 is RationalType || t2 is RationalType)
             {
                 if(t1 is RealType || t2 is RealType)
-                    throw new FCompilationException($"{this.Span.Begin} - Can't use {this.GetType().Name} mixing real and rational values");
+                    throw new FCompilationException($"{Span.Begin} - Can't use {GetType().Name} mixing real and rational values");
                 return new RationalType();
             }
             return new RealType();
@@ -268,7 +268,7 @@ namespace FFC.FAST
 
             if(t1 is IntegerType && t2 is IntegerType)
                 return new IntegerType();
-            throw new FCompilationException($"{this.Span.Begin} - Can't use {this.GetType().Name} with {(t1 is IntegerType ? t2 : t1)} values");
+            throw new FCompilationException($"{Span.Begin} - Can't use {GetType().Name} with {(t1 is IntegerType ? t2 : t1)} values");
         }
     }
 }

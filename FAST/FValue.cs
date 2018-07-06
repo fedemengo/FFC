@@ -96,8 +96,8 @@ namespace FFC.FAST
 
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            generator.Emit(OpCodes.Ldc_I4, this.Num);
-            generator.Emit(OpCodes.Ldc_I4, this.Den);
+            generator.Emit(OpCodes.Ldc_I4, Num);
+            generator.Emit(OpCodes.Ldc_I4, Den);
             generator.Emit(OpCodes.Newobj, typeof(FRational).GetConstructor(new Type[]{typeof(int), typeof(int)}));
         }
     }
@@ -154,8 +154,8 @@ namespace FFC.FAST
 
         public Identifier(string name, TextSpan span)
         {
-            this.Name = name;
-            this.Span = span;
+            Name = name;
+            Span = span;
         }
         public override void Print(int tabs)
         {

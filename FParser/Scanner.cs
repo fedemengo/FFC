@@ -1,34 +1,28 @@
 using System;
 using FFC.FLexer;
 using FFC.FGen;
+using QUT.Gppg;
 
 namespace FFC.FParser
 {
-    internal class Scanner : QUT.Gppg.AbstractScanner<TValue, QUT.Gppg.LexLocation>
+    internal class Scanner : AbstractScanner<TValue, LexLocation>
     {
-        public Tokenizer lex;
-        public SourceReader sr;
+        public Tokenizer tokenizer;
+        public SourceReader reader;
         public Token current;
-        public Scanner(Tokenizer lex, SourceReader sr)
+        
+        public Scanner(Tokenizer tokz, SourceReader rd)
         {
-            this.sr = sr;
-            this.lex = lex;
+            tokenizer = tokz;
+            reader = rd;
         }
+        
         public override int yylex()
         {
-            current = lex.NextToken(sr);
+            current = tokenizer.NextToken(reader);
             yylval = current.values;
-            yylloc = new QUT.Gppg.LexLocation(current.begin.Row, current.begin.Column, current.end.Row, current.end.Column);
-            return (int)current.type;
-        }
-        public static void Test(string path)
-        {
-            Tokenizer l = new Tokenizer();
-            SourceReader sr = new SourceReader(path);
-            Scanner s = new Scanner(l, sr);
-            for(int i = 0; i < 10; i++)
-                s.yylex();
-
+            yylloc = new LexLocation(current.Begin.Row, current.Begin.Column, current.End.Row, current.End.Column);
+            return (int) current.Type;
         }
     }
 }

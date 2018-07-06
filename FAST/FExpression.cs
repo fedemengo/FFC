@@ -70,16 +70,16 @@ namespace FFC.FAST
         {
             GetValueType(st);
             if(ValueType is MapType)
-                throw new FCompilationException(this.Span + " - Operations on maps are not yet implemented.");
+                throw new FCompilationException(Span + " - Operations on maps are not yet implemented.");
             if(ValueType is TupleType)
-                throw new FCompilationException(this.Span + " - Operations on tuples are not yet implemented.");
+                throw new FCompilationException(Span + " - Operations on tuples are not yet implemented.");
             
             FType targetType = ValueType;
             
             if(BinOperator is RelationalOperator)
             {
                 //we need to cast to the 2same type they would get summed to
-                if(Left.GetValueType(st) is BooleanType || Right.GetValueType(st) is BooleanType)
+                if(Left.GetValueType(st) is BooleanType && Right.GetValueType(st) is BooleanType)
                     targetType = new EqualOperator(null).GetTarget(Left.GetValueType(st), Right.GetValueType(st));
                 else
                     targetType = new PlusOperator(null).GetTarget(Left.GetValueType(st), Right.GetValueType(st));

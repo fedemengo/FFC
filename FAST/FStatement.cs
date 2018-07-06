@@ -282,7 +282,7 @@ namespace FFC.FAST
                 sameType = d1 == d2;
             }
             if(!sameType)
-                throw new FCompilationException($"{Span} - Type mismatch in variable {Id.Name}, {Expr.GetValueType(st).GetRunTimeType().Name} is not {Type.GetRunTimeType().Name}");
+                throw new FCompilationException($"{Span} - Type mismatch in variable {Id.Name}, {Expr.GetValueType(st)} is not {Type}");
         }
     }
     public class DeclarationStatementList : FASTNode
@@ -476,7 +476,7 @@ namespace FFC.FAST
             Value = value;
             Span = span;
         }
-        public ReturnStatement(TextSpan span) => this.Span = span;
+        public ReturnStatement(TextSpan span) => Span = span;
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
@@ -493,7 +493,7 @@ namespace FFC.FAST
     }
     public class BreakStatement : FStatement
     {
-        public BreakStatement(TextSpan span) => this.Span = span;
+        public BreakStatement(TextSpan span) => Span = span;
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
@@ -506,7 +506,7 @@ namespace FFC.FAST
     }
     public class ContinueStatement : FStatement
     {
-        public ContinueStatement(TextSpan span) => this.Span = span;
+        public ContinueStatement(TextSpan span) => Span = span;
         public override void Print(int tabs)
         {
             PrintTabs(tabs);

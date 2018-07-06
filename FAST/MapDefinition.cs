@@ -7,18 +7,18 @@ namespace FFC.FAST
 {
     public class MapDefinition : FPrimary
     {
-        public ExpressionPairList entries;
+        public ExpressionPairList Entries {get; set;}
 
         public MapDefinition(ExpressionPairList entries, TextSpan span = null)
         {
-            this.Span = span;
-            this.entries = entries;
+            Span = span;
+            Entries = entries;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Map definition");
-            entries.Print(tabs + 1);
+            Entries.Print(tabs + 1);
         }
     }
     public class ExpressionPairList : FASTNode
@@ -26,12 +26,12 @@ namespace FFC.FAST
         public List<ExpressionPair> pairs;
         public ExpressionPairList(ExpressionPair pair, TextSpan span = null)
         {
-            this.Span = span;
+            Span = span;
             pairs = new List<ExpressionPair>{pair};
         }
         public ExpressionPairList(TextSpan span = null)
         {
-            this.Span = span;
+            Span = span;
             pairs = new List<ExpressionPair>();
         }
         public override void Print(int tabs)
@@ -44,21 +44,21 @@ namespace FFC.FAST
     }
     public class ExpressionPair : FASTNode
     {
-        public FExpression first;
-        public FExpression second;
+        public FExpression First {get; set;}
+        public FExpression Second {get; set;}
 
         public ExpressionPair(FExpression first, FExpression second, TextSpan span = null)
         {
-            this.Span = span;
-            this.first = first;
-            this.second = second;
+            First = first;
+            Second = second;
+            Span = span;
         }
         public override void Print(int tabs)
         {
             PrintTabs(tabs);
             Console.WriteLine("Expression pair");
-            first.Print(tabs +1 );
-            second.Print(tabs +1 );
+            First.Print(tabs +1 );
+            Second.Print(tabs +1 );
         }
     }
 }
