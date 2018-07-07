@@ -12,7 +12,7 @@ main is func() do
         add(a);
     end
 
-    less is func(a : integer, b : integer) => (a < b)
+    beh is func(a : integer, b : integer) => (a < b)
     
     swap is func(a : integer, b : integer) do
         c is v[a];
@@ -23,17 +23,20 @@ main is func() do
     //iterative in-place insertion sort, should capture swap only
     sort is func(v : [integer], from : integer, to : integer, cmp : func(integer, integer) : boolean) do
         for i in 1..to loop
-            print "currently at", i;
             while i > 0 & cmp(v[i], v[i-1]) loop
-                print "swappin'", i, i-1;
                 swap(i, i-1);
-                print "swapped";
                 i := i-1;
             end
         end
     end
 
-    sort(v, 0, n-1, less);
+    sort(v, 0, n-1, beh);
+    print v;
+
+    //should sort in ascending order (once we change assignments for functions to),
+    //but doesn't even compile
+    //beh := func(a : integer, b : integer) => (a > b);
+    sort(v, 0, n-1, beh);
     print v;
 
 end

@@ -88,9 +88,45 @@ namespace FFC.FAST
             if(FType.SameType(Left.GetValueType(st), targetType) == false)
                 Left.GetValueType(st).ConvertTo(targetType, generator);
             
+            Label right = generator.DefineLabel();
+            Label skip = generator.DefineLabel();
+
+            //For AndOperator, we need to add conditional jump to the end if result was False
+            if(BinOperator is AndOperator)
+            {
+                //if true, valuate right
+                generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("GetBool"));
+                generator.Emit(OpCodes.Brtrue, right);
+                //if false, re-emit FBoolean(false) and skip
+                generator.Emit(OpCodes.Ldc_I4_0);
+                generator.Emit(OpCodes.Newobj, typeof(FBoolean).GetConstructor(new Type[]{typeof(bool)}));
+                generator.Emit(OpCodes.Br, skip);
+            }
+            //For OrOperator, we can skip if result is True
+            else if(BinOperator is OrOperator)
+            {
+                //if false, valuate right
+                generator.Emit(OpCodes.Callvirt, typeof(FBoolean).GetMethod("GetBool"));
+                generator.Emit(OpCodes.Brtrue, right);
+                //if true, re-emit FBoolean(true) and skip
+                generator.Emit(OpCodes.Ldc_I4_1);
+                generator.Emit(OpCodes.Newobj, typeof(FBoolean).GetConstructor(new Type[]{typeof(bool)}));
+                generator.Emit(OpCodes.Br, skip);
+            }
+
+            //Label to valuate second
+            generator.MarkLabel(right);
+
             Right.Generate(generator, currentType, st, exitLabel, conditionLabel);
             if(FType.SameType(Right.GetValueType(st),targetType) == false)
                 Right.GetValueType(st).ConvertTo(targetType, generator);
+
+            //Label to end statement
+            generator.MarkLabel(skip);
+
+            //We implicitly solved operator already
+            if(BinOperator is AndOperator || BinOperator is OrOperator)
+                return;
 
             string op_name = BinOperator.GetMethodName();
             Type rtt = targetType.GetRunTimeType();

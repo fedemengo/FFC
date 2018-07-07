@@ -37,7 +37,7 @@ namespace FFC.FAST
         public abstract FType GetTarget(FType t1, FType t2);
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            throw new FCompilationException($"{Span} - Operators are not meant to be directly generated.");
+            throw new FCompilationException($"{Span} - Operator nodes are not meant to be directly generated.");
         }
         public virtual string GetMethodName()
         {
@@ -70,50 +70,32 @@ namespace FFC.FAST
     }
     public class LessOperator : RelationalOperator
     {
-        public LessOperator(TextSpan span)
-        {
-            Span = span;
-        }
+        public LessOperator(TextSpan span) => Span = span;
         public override string GetMethodName() => "op_LessThan";
     }
     public class LessEqualOperator : RelationalOperator
     {
-        public LessEqualOperator(TextSpan span)
-        {
-            Span = span;
-        }
+        public LessEqualOperator(TextSpan span) => Span = span;
         public override string GetMethodName() => "op_LessThanOrEqual";
     }
     public class GreaterOperator : RelationalOperator
     {
-        public GreaterOperator(TextSpan span)
-        {
-            Span = span;
-        }
+        public GreaterOperator(TextSpan span) => Span = span;
         public override string GetMethodName() => "op_GreaterThan";
     }
     public class GreaterEqualOperator : RelationalOperator
     {
-        public GreaterEqualOperator(TextSpan span)
-        {
-            Span = span;
-        }
+        public GreaterEqualOperator(TextSpan span) => Span = span;
         public override string GetMethodName() => "op_GreaterThanOrEqual";
     }
     public class EqualOperator : RelationalOperator
     {
-        public EqualOperator(TextSpan span)
-        {
-            Span = span;
-        }
+        public EqualOperator(TextSpan span) => Span = span;
         public override string GetMethodName() => "op_Equality";
     }
     public class NotEqualOperator : RelationalOperator
     {
-        public NotEqualOperator(TextSpan span)
-        {
-            Span = span;
-        }
+        public NotEqualOperator(TextSpan span) => Span = span;
 
         public override string GetMethodName() => "op_Inequality";
     }
@@ -132,26 +114,17 @@ namespace FFC.FAST
     }
     public class AndOperator : BooleanOperator
     {
-        public AndOperator(TextSpan span)
-        {
-            Span = span;
-        }
+        public AndOperator(TextSpan span) => Span = span;
         public override string GetMethodName() => "op_BitwiseAnd";
     }
     public class OrOperator : BooleanOperator
     {
-        public OrOperator(TextSpan span)
-        {
-            Span = span;
-        }
+        public OrOperator(TextSpan span) => Span = span;
         public override string GetMethodName() => "op_BitwiseOr";
     }
     public class XorOperator : BooleanOperator
     {
-        public XorOperator(TextSpan span)
-        {
-            Span = span;
-        }
+        public XorOperator(TextSpan span) => Span = span;
         public override string GetMethodName() => "op_ExclusiveOr";
     }
 
@@ -183,10 +156,7 @@ namespace FFC.FAST
     }
     public class PlusOperator : MathOperator
     {
-        public PlusOperator(TextSpan span)
-        {
-            Span = span;
-        }
+        public PlusOperator(TextSpan span) => Span = span;
         public override string GetMethodName() => "op_Addition";
 
         public override FType GetTarget(FType t1, FType t2)
@@ -207,28 +177,19 @@ namespace FFC.FAST
     }
     public class MinusOperator : MathOperator
     {
-        public MinusOperator(TextSpan span)
-        {
-            Span = span;
-        }
+        public MinusOperator(TextSpan span) => Span = span;
 
         public override string GetMethodName() => "op_Subtraction";
     }
     public class StarOperator : MathOperator
     {
-        public StarOperator(TextSpan span)
-        {
-            Span = span;
-        }
+        public StarOperator(TextSpan span) => Span = span;
 
         public override string GetMethodName() => "op_Multiply";
     }
     public class SlashOperator : MathOperator
     {
-        public SlashOperator(TextSpan span)
-        {
-            Span = span;
-        }
+        public SlashOperator(TextSpan span) => Span = span;
 
         public override string GetMethodName() => "op_Division";
 
@@ -256,10 +217,7 @@ namespace FFC.FAST
     }
     public class ModuloOperator : MathOperator
     {
-        public ModuloOperator(TextSpan span)
-        {
-            Span = span;
-        }
+        public ModuloOperator(TextSpan span) => Span = span;
         public override string GetMethodName() => "op_Modulus";
         public override FType GetTarget(FType t1, FType t2)
         {

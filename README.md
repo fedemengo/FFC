@@ -4,6 +4,7 @@ A compiler for the F language (and it's definition)
 ## TODOs
 
 * Core features
+	* Function reassignements are apparently broken, look for a fix (samples/capture.f)
 	* Standard library
 		* Names can't be reused
 	* Fix Type checking in declaration when both are specified [?]
