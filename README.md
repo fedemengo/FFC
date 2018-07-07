@@ -6,30 +6,25 @@ A compiler for the F language (and it's definition)
 * Core features
 	* Standard library
 		* Names can't be reused
-	* Fix Type checking in declaration when both are specified [?]
-		* Probably just void functions and maps once implemented [?]
 	* Add support to maps [!]
-	* Catch exception when using a variable that is not declared [done?]
+	* Add void type keyword in both Lexer and Parser
 
-* Minor stuff
-	* Add void type keyword to lexical analysis/grammar
-	* Create a proper note section, maybe with known bugs?
-	* Organize FAST code better in files
-	* Move Generate as Generator static method + overload
-	* Split Generator class in multiple files ?
-	
 * Extra features
-	* Add := Read ?
-	* Load external library from another folder
+	* Add := Read (?)
 	* Add warning when declaring variables overriding an existing name
 	* Print tuple names when specified
-	* Improve Read() run time function
+	* Improve Read() RunTime function
 		* Consider Buffer approach
 		* More precise "type checking"
 		* Consider reading advanced types (arrays, tuples, maps)
 		* Allow `\`-escaped characters in string read ?
-		* Consider assignment support
+	* Load external library from another folder
 
+* Code organization
+	* Split Generator class in multiple files
+	* Organize FAST code better in files
+	* Move Generate as Generator static method + overload
+	
 * Check if it's done correctly
 	* GetTarget / Comparisons of non-NumericTypes
 	* Check how we deal with types in declaration / indexed access
@@ -101,3 +96,6 @@ A compiler for the F language (and it's definition)
 - [ ] Writing a report
 
 ## Notes
+
+* Known bugs:
+	1. Nothing that is not already mentioned as not done

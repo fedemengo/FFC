@@ -73,7 +73,7 @@ namespace FFC.FAST
             foreach(string s in toCapture)
             {
                 if(st.Contains(s) == false)
-                    throw new FCompilationException($"{Span} - Can't capture not-declarated variable {s}");
+                    throw new FCompilationException($"{Span} - Couldn't resolve name {s}");
                 var z = st.Find(s);
                 //we skip static fields are they are global variables which can be captured anyway
                 if(z.Builder is FieldBuilder)
