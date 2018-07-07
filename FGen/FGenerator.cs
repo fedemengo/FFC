@@ -109,9 +109,11 @@ namespace FFC.FGen
 
         public static Dictionary<FunctionType, TypeBuilder> FunctionTypes = new Dictionary<FunctionType, TypeBuilder>();
         
-        //we shall probably split this in many files and abuse of mr partial class
-        public static void AddFunctionType(FunctionType f)
+        public static void AddDelegate(FunctionType f)
         {
+            //Avoids creating already existing delegates
+            if(FunctionTypes.ContainsKey(f))
+                return;
             string name = GetNextDelName();
             TypeBuilder tdelegate = programType.DefineNestedType(name, TypeAttributes.AutoClass | 
                                                                           TypeAttributes.AnsiClass |
@@ -170,14 +172,13 @@ namespace FFC.FGen
 
         public static TypeBuilder GetDelegate(FunctionType funcType)
         {
-            if(FunctionTypes.ContainsKey(funcType) == false)
-                AddFunctionType(funcType);
+            AddDelegate(funcType);
             return FunctionTypes[funcType];
         }
         public static TypeBuilder GetFunction(TypeBuilder parentType, FunctionType funcType)
         {
-            if(FunctionTypes.ContainsKey(funcType) == false)
-                AddFunctionType(funcType);
+            //Make sure we have the delegate
+            AddDelegate(funcType);
 
             //Emit nested function type
             TypeBuilder funcClass = parentType.DefineNestedType(GetNextFuncName(), TypeAttributes.AutoClass | 

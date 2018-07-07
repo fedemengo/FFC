@@ -4,7 +4,6 @@ A compiler for the F language (and it's definition)
 ## TODOs
 
 * Core features
-	* Function reassignements are apparently broken, look for a fix (samples/capture.f)
 	* Standard library
 		* Names can't be reused
 	* Fix Type checking in declaration when both are specified [?]
@@ -33,7 +32,6 @@ A compiler for the F language (and it's definition)
 
 * Check if it's done correctly
 	* GetTarget / Comparisons of non-NumericTypes
-	* "Dynamic" variable capturing for functionTypes
 	* Check how we deal with types in declaration / indexed access
 	* GetValueType in ParameterList / TypeList
 	* Type check in recursive functions, error right now for wrong deduction is not very clear, also I don't like setting the type to null, so maybe we should have a RecursionType or something like that - even if null is particularly handy as it gets already recalculated (but we can make recursiontype to be recalculated too!)
@@ -47,7 +45,7 @@ A compiler for the F language (and it's definition)
 	* Handling error token
 
 * Parsing
-	* Remove parentheses from (), or determine it's impossible
+	* Remove parentheses from `func => ()`, or determine it's impossible
 
 ## Progress
 

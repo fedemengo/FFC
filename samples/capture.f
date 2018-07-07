@@ -12,8 +12,6 @@ main is func() do
         add(a);
     end
 
-    beh is func(a : integer, b : integer) => (a < b)
-    
     swap is func(a : integer, b : integer) do
         c is v[a];
         v[a] := v[b];
@@ -30,13 +28,15 @@ main is func() do
         end
     end
 
+    sort(v, 0, n-1, func(a : integer, b : integer) => (a > b));
+    print v;
+
+    beh is func(a : integer, b : integer) => (a < b)
     sort(v, 0, n-1, beh);
     print v;
 
-    //should sort in ascending order (once we change assignments for functions to),
-    //but doesn't even compile
-    //beh := func(a : integer, b : integer) => (a > b);
+   
+    beh := func(a : integer, b : integer) => (a > b);
     sort(v, 0, n-1, beh);
     print v;
-
 end

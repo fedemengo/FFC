@@ -164,8 +164,6 @@ namespace FFC.FAST
             
             //assign function value type
             ValueType = t;
-
-            Generator.AddFunctionType(t);
         }
     }
 
