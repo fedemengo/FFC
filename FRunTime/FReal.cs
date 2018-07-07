@@ -38,6 +38,7 @@ namespace FFC.FRunTime
 
         //Refer to FInteger Read function
         public static FReal Read() => new FReal(double.Parse(Console.ReadLine()));          
+        public void Assign(FReal other) => Value = other.Value;
 
     }
 }

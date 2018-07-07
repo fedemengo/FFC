@@ -37,5 +37,8 @@ namespace FFC.FRunTime
             if(l == "false") return new FBoolean(false);
             throw new FormatException($"\"{l}\" is not a valid boolean value (true, false)");
         }
+
+        public void Assign(FBoolean other) => Value = other.Value;
+
     }
 }

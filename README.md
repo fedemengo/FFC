@@ -6,10 +6,10 @@ A compiler for the F language (and it's definition)
 * Core features
 	* Standard library
 		* Names can't be reused
-	* Fix Type checking in declaration when both are specified
-		* Probably just void functions and maps once implemented
-	* Add support to maps
-	* Catch exception when using a variable that is not declared
+	* Fix Type checking in declaration when both are specified [?]
+		* Probably just void functions and maps once implemented [?]
+	* Add support to maps [!]
+	* Catch exception when using a variable that is not declared [done?]
 
 * Minor stuff
 	* Add void type keyword to lexical analysis/grammar
@@ -30,12 +30,14 @@ A compiler for the F language (and it's definition)
 		* Allow `\`-escaped characters in string read ?
 		* Consider assignment support
 
-* Check if it's done / done correctly
+* Check if it's done correctly
 	* GetTarget / Comparisons of non-NumericTypes
-	* Capturing variable is now kinda immutable, can be made more dynamic (like C#) just by changing reassignments behaviour to change object value instead of creating a new object
+	* "Dynamic" variable capturing for functionTypes
 	* Check how we deal with types in declaration / indexed access
 	* GetValueType in ParameterList / TypeList
 	* Type check in recursive functions, error right now for wrong deduction is not very clear, also I don't like setting the type to null, so maybe we should have a RecursionType or something like that - even if null is particularly handy as it gets already recalculated (but we can make recursiontype to be recalculated too!)
+	* Check behaviours of iterators/ellipsis to see if they are well integrated with last features (functions and capturing in particular)
+	* Loops without header (?)
 
 * Lexical analysis
 	* Think if more `\`-escaped character are needed (currently support `\n`, `\t`, `\\`, `\"`)
@@ -58,7 +60,7 @@ A compiler for the F language (and it's definition)
 - [x] Mappings (main constructs, nested functions)
 	- Refer to code generation progress
 
-- [ ] Code generation (while creating mappings)
+- [x] Code generation (while creating mappings)
 	- [x] Expressions
 	- [x] Print
 	- [x] Read
@@ -83,11 +85,11 @@ A compiler for the F language (and it's definition)
 	- [x] Loop statements
 		- [x] While loops
 		- [x] For loops
-		- [ ] Just loop ?
+		- [x] Just loop
 	- [x] Ellipsis
 	- [x] Functions
 		- [x] Nested functions
-		- [ ] Capturing used variables
+		- [x] Capturing used variables
 
 
 - [ ] Debugging and Testing (consider developing robust tests for all part of the compiler)

@@ -71,5 +71,10 @@ namespace FFC.FRunTime
             if(p.Length != 2) throw new FormatException("Input is not long enough to be a rational value");
             return new FRational(int.Parse(p[0]), int.Parse(p[1]));
         }
+        public void Assign(FRational other)
+        {
+            Numerator = other.Numerator;
+            Denominator = other.Denominator;
+        }
     }
 }

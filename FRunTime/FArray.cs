@@ -60,5 +60,7 @@ namespace FFC.FRunTime
             public bool MoveNext() => ++index < collection.Length;
         }
         public FIterator<V> GetIterator() => new VIterator(this);
+        public void Assign(FArray<V> other) => Values = other.Values;
+
     }
 }

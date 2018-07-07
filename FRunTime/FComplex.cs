@@ -68,5 +68,11 @@ namespace FFC.FRunTime
                 throw new FormatException("Wrong complex format, should be NUMiNUM");
             return new FComplex(double.Parse(p[0]), double.Parse(p[1]));
         }
+        public void Assign(FComplex other)
+        {
+            Imaginary = other.Imaginary;
+            Real = other.Real;
+        }
+
     }
 }

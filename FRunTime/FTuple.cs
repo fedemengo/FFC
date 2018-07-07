@@ -24,5 +24,7 @@ namespace FFC.FRunTime
                 ans = ans.Remove(ans.Length-2);
             return ans + "}";
         }
+        public void Assign(FTuple other) => Elements = other.Elements;
+
     }
 }

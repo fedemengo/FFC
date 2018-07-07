@@ -5,26 +5,28 @@ namespace FFC.FRunTime
 {
     public class FString : FRTType
     {
-        public string Text;
-        public FString(string s) => Text = s;
+        public string Value;
+        public FString(string s) => Value = s;
 
-        public override string ToString() => Text;
+        public override string ToString() => Value;
         //Refer to FInteger Read function
         public static FString Read() => new FString(Console.ReadLine());
         //Immutable concatenation
         public static FString operator+(FString a, FString b) => new FString(String.Concat(a, b));  
-        public static FBoolean operator ==(FString a, FString b) => new FBoolean(a.Text == b.Text);  
-        public static FBoolean operator !=(FString a, FString b) => new FBoolean(a.Text != b.Text);
+        public static FBoolean operator ==(FString a, FString b) => new FBoolean(a.Value == b.Value);  
+        public static FBoolean operator !=(FString a, FString b) => new FBoolean(a.Value != b.Value);
 
         public override bool Equals(object obj)
         {
             FString fs = obj as FString;
             if (Object.ReferenceEquals(fs, null))
                 return false;
-            return Text == fs.Text;
+            return Value == fs.Value;
         }
 
-        public override int GetHashCode() => Text.GetHashCode(); 
+        public override int GetHashCode() => Value.GetHashCode(); 
+        public void Assign(FString other) => Value = other.Value;
+
 
     }
 }

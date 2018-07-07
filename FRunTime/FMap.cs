@@ -47,5 +47,7 @@ namespace FFC.FRunTime
             public FPair<K, V> GetCurrent() => new FPair<K, V>(iterator.Current);
         }
         public FIterator<FPair<K, V>> GetIterator() => new KVIterator(this);
+        public void Assign(FMap<K, V> other) => Values = other.Values;
+
     }
 }

@@ -40,7 +40,6 @@ namespace FFC.FRunTime
         //on Console.ReadLine()
         public static FInteger Read() => new FInteger(int.Parse(Console.ReadLine()));
 
-        //temporary approach to assignments
         public void Assign(FInteger other) => Value = other.Value;
     }
 }
