@@ -12,7 +12,7 @@ main is func() do
     print a1 * 2, b1 * 2, c1 * 2, d1 * 2;
     print a * b, c * d;
     print a * b / c * d;
-    
+
     i: integer is 1;
     d: real is -3.57;
     r: rational is -7\3;

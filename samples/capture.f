@@ -6,7 +6,7 @@ main is func() do
     add is func(n : integer) do
         v := v + n;
     end
-
+    
     for i in 1..n loop
         a : integer is read;
         add(a);

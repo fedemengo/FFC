@@ -1,0 +1,97 @@
+%YAML 1.2
+---
+file_extensions:
+  - f
+scope: source.f
+
+contexts:
+  prototype:
+    - include: comments
+
+  main:
+    - include: numbers
+    - include: strings
+    - include: types
+    - include: symbols
+    - include: commas
+    - include: parens
+    - include: keywords
+    - include: variables
+
+  parens:
+    - match: '[\{|\[|\(|\)|\]|\}]'
+      scope: string.f
+
+  types:
+    - match: '\b(integer)|(real)|(rational)|(complex)|(string)|(func)\b'
+      scope: storage.type.f
+
+  keywords:
+    - match: '\b(is|in|do|loop|then|end)\b'
+      scope: keyword.control.f
+    - match: '\b(if|for|while|else|print|read)\b'
+      scope: keyword.f
+
+
+  variables:
+    - match: '\b[a-z|A-Z|\_][a-z|A-Z|0-9|\_]*\b'
+      scope: variable.language.f
+
+  commas:
+    - match: \,|\;
+      scope: keyword.operator.logical.f
+
+  symbols:
+    - match: \*
+      scope: keyword.operator.arithmetic.f
+    - match: '\+|\-|\/|\%'
+      scope: keyword.operator.arithmetic.f
+    - match: '[<|>|=]'
+      scope: keyword.operator.logical.f
+    - match: '\b[.|..]\b'
+      scope: keyword.operator.logical.f
+    - match: \&|\!|\||\^
+      scope: keyword.operator.bitwise.f
+    - match: '(:=)'
+      scope: keyword.operator.assignment.f
+    - match: '(:)'
+      scope: keyword.operator.assignment.f
+
+  numbers:
+    - match: '\b[0-9]+\\[-]?[0-9]+\b'
+      scope: constant.numeric.f
+    - match: '\b[0-9]+([.][0-9]+)?(i[-]?[0-9]+([.][0-9]+)?)?\b'
+      scope: constant.numeric.f
+
+  strings:
+    - match: '"'
+      scope: punctuation.definition.string.begin.f
+      push: inside_string
+
+  inside_string:
+    - meta_include_prototype: false
+    - meta_scope: string.quoted.double.f
+    - match: '\.'
+      scope: constant.character.escape.f
+    - match: '"'
+      scope: punctuation.definition.string.end.f
+      pop: true
+
+  comments:
+    # Comments begin with a '//' and finish at the end of the line.
+    - match: '//'
+      scope: punctuation.definition.comment.f
+      push:
+        # This is an anonymous context push for brevity.
+        - meta_scope: comment.line.double-slash.f
+        - match: $\n?
+          pop: true
+    # Comments begin with a '//' and finish at the end of the line.
+    
+    - match: '\/\*'
+      scope: punctuation.definition.comment.f
+      push:
+        # This is an anonymous context push for brevity.
+        - meta_scope: comment.line.double-slash.f
+        - match: '.*(\*)(\/)'
+          pop: true
