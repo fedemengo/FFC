@@ -61,6 +61,6 @@ namespace FFC.FRunTime
         }
         public FIterator<V> GetIterator() => new VIterator(this);
         public void Assign(FArray<V> other) => Values = other.Values;
-
+        public FInteger GetLength() => new FInteger(Values.Count);
     }
 }

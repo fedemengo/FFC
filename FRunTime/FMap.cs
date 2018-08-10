@@ -48,6 +48,6 @@ namespace FFC.FRunTime
         }
         public FIterator<FPair<K, V>> GetIterator() => new KVIterator(this);
         public void Assign(FMap<K, V> other) => Values = other.Values;
-
+        public FInteger GetLength() => new FInteger(Values.Count);
     }
 }
