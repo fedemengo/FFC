@@ -26,6 +26,13 @@ namespace FFC.FAST
         }
         public override void BuildValueType(SymbolTable st)
         {
+            //Handles calls to standard functions
+            if(ToCall is Identifier && StandardFunctions.Funcs.ContainsKey((ToCall as Identifier).Name))
+            {
+                ValueType = StandardFunctions.Funcs[(ToCall as Identifier).Name];
+                return;
+            }
+            //Calls to source defined functions
             var t = ToCall.GetValueType(st);
             if(t is null) return;
             else if(t is FunctionType) ValueType = (t as FunctionType).ReturnType;
@@ -34,6 +41,20 @@ namespace FFC.FAST
 
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
+            //Handles calls to standard functions
+            if(ToCall is Identifier && StandardFunctions.Funcs.ContainsKey((ToCall as Identifier).Name))
+            {
+                switch((ToCall as Identifier).Name)
+                {
+                    case "length":
+                        StandardFunctions.EmitLength(ExprsList, generator, currentType, st);
+                        break;
+                    default:
+                        throw new FCompilationException($"{Span} - Standard function {(ToCall as Identifier).Name} not implemented yet");
+                }
+                return;
+            }
+            //Calls to source defined functions
             if(ToCall.GetValueType(st) is FunctionType == false)
                 throw new FCompilationException($"{Span} - Can't call function on {ToCall.GetValueType(st)}.");
 

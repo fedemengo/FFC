@@ -109,9 +109,9 @@ namespace FFC.FGen
             }
             else if(e is FValue)
             {
-                //if this Identifier was never used, add it to ans
+                //if this Identifier was never used and isn't a standard function
                 if(e is Identifier)
-                    if(declared.Contains((e as Identifier).Name) == false)
+                    if(declared.Contains((e as Identifier).Name) == false && StandardFunctions.Funcs.ContainsKey((e as Identifier).Name) == false)
                         ans.Add((e as Identifier).Name);
             }
             else if(e is Conditional)

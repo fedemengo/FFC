@@ -72,6 +72,7 @@ namespace FFC.FAST
             //Add field builders to symboltable
             foreach(string s in toCapture)
             {
+                //If name isn't in SymTable
                 if(st.Contains(s) == false)
                     throw new FCompilationException($"{Span} - Couldn't resolve name {s}");
                 var z = st.Find(s);
