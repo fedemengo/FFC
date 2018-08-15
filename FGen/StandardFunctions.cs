@@ -35,5 +35,21 @@ namespace FFC.FGen
 			generator.Emit(OpCodes.Callvirt, (t.GetRunTimeType()).GetMethod("GetLength"));
 			//Length is now on the stack, ready to be used
 		}
+
+		public static void EmitRound(ExpressionList expr, ILGenerator generator, TypeBuilder currentType, SymbolTable st)
+		{
+			if(expr.Exprs.Count > 1)
+				throw new FCompilationException($"{expr.Span} - Standard function round takes a single parameter");
+
+			var e = expr.Exprs[0];
+			var t = e.GetValueType(st);
+			if(t is RealType == false && t is RationalType == false)			
+				throw new FCompilationException($"{expr.Span} - Standard function round cannot be used on type {t}");
+			// emit the object
+			e.Generate(generator, currentType, st);
+			// call Round on the type
+			generator.Emit(OpCodes.Callvirt, (t.GetRunTimeType()).GetMethod("Round"));
+			// the correct integer type is now on the stack
+		}
 	}
 }

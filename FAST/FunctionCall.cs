@@ -49,6 +49,9 @@ namespace FFC.FAST
                     case "length":
                         StandardFunctions.EmitLength(ExprsList, generator, currentType, st);
                         break;
+                    case "round":
+                        StandardFunctions.EmitRound(ExprsList, generator, currentType, st);
+                        break;
                     default:
                         throw new FCompilationException($"{Span} - Standard function {(ToCall as Identifier).Name} not implemented yet");
                 }

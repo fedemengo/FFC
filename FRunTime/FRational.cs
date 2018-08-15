@@ -50,6 +50,8 @@ namespace FFC.FRunTime
         public static FBoolean operator >=(FRational r1, FRational r2) => r1.Value() >= r2.Value();
     
         public static FRational operator-(FRational r1) => new FRational(-r1.Numerator, r1.Denominator);
+        
+        public FInteger Round() => new FInteger((int) Math.Round(Numerator / (double) Denominator));
 
         public override bool Equals(object obj)
         {

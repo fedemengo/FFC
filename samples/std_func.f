@@ -10,7 +10,7 @@ main is func() do
     e is 2\3;   // 0.6666
 
     print x + round(b);     // 1 + 1
-    print x + round(c);     // 1 + 2
+    print x + round(b + c);     // 1 + 3
     print x + round(d);     // 1 + 0
     print x + round(e);     // 1 + 1    
 end
