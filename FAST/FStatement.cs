@@ -495,9 +495,16 @@ namespace FFC.FAST
             PrintTabs(tabs);
             Console.WriteLine("Break statement");
         }
-        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel, Label conditionLabel)
+        public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel = default(Label), Label conditionLabel = default(Label))
         {
-            generator.Emit(OpCodes.Br, exitLabel);
+            try
+            {
+                generator.Emit(OpCodes.Br, exitLabel);
+            }
+            catch
+            {
+                throw new FCompilationException($"{Span} - Can't emit break statement outside a loop");
+            }
         }
     }
     public class ContinueStatement : FStatement
@@ -510,7 +517,15 @@ namespace FFC.FAST
         }
         public override void Generate(ILGenerator generator, TypeBuilder currentType, SymbolTable st, Label exitLabel, Label conditionLabel)
         {
-            generator.Emit(OpCodes.Br, conditionLabel);
+            try
+            {
+                generator.Emit(OpCodes.Br, conditionLabel);
+            }
+            catch
+            {
+                throw new FCompilationException($"{Span} - Can't emit break statement outside a loop");
+            }
+
         }
     }
     public class PrintStatement : FStatement
