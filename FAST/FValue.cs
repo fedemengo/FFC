@@ -58,7 +58,7 @@ namespace FFC.FAST
     {
         public double Value {get; set;}
 
-        public RealValue(double value, TextSpan span)
+        public RealValue(double value, TextSpan span = null)
         {
             ValueType = new RealType();
             Value = value;

@@ -54,7 +54,22 @@ namespace FFC.FRunTime
         }
 
         public override int GetHashCode() => ((PRIME1 * Real.GetHashCode() + Imaginary.GetHashCode()) % PRIME2);
-        
+
+        public static FComplex Compl(object r, object i)
+        {
+            double real, img;
+            if(r is FInteger)
+                real = (r as FInteger).Value;
+            else
+                real = (r as FReal).Value;
+            
+            if(i is FInteger)
+                img = (i as FInteger).Value;
+            else
+                img = (i as FReal).Value;
+            
+            return new FComplex(real, img);
+        }
         //Refer to FInteger Read function
         //I no longer like that we need to have REAL i REAL, I think we should also support INT i INT
         public static FComplex Read()

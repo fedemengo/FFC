@@ -55,6 +55,9 @@ namespace FFC.FAST
                     case "rat":
                         StandardFunctions.EmitRat(ExprsList, generator, currentType, st);
                         break;
+                    case "compl":
+                        StandardFunctions.EmitCompl(ExprsList, generator, currentType, st);
+                        break;
                     default:
                         throw new FCompilationException($"{Span} - Standard function {(ToCall as Identifier).Name} not implemented yet");
                 }

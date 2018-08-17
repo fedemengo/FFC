@@ -1,5 +1,7 @@
 a is [1, 2, 3, 4];
 
+aReal is func() => (3.5)
+
 main is func() do
     print length(a);
 
@@ -12,7 +14,7 @@ main is func() do
     print x + round(b);     // 1 + 1
     print x + round(b + c);     // 1 + 3
     print x + round(d);     // 1 + 0
-    print x + round(e);     // 1 + 1    
+    print x + round(e);     // 1 + 1
 
     print rat(1);
     print rat(0);
@@ -22,4 +24,12 @@ main is func() do
     z is rat(3, 2) + rat(1, 3);
     print z + rat(2, 9);
     print rat(x, 1);
+
+    print compl(1);
+    print compl(2.0);
+    print compl(2, 3.2);
+    print compl(3.1, 4.3);
+    print compl(x, b);
+    print compl(round(aReal()));
+
 end

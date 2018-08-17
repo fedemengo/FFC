@@ -72,5 +72,24 @@ namespace FFC.FGen
             generator.Emit(OpCodes.Call, typeof(FRational).GetMethod("Rat"));
 		}
 
+		public static void EmitCompl(ExpressionList expr, ILGenerator generator, TypeBuilder currentType, SymbolTable st)
+		{
+			if(expr.Exprs.Count != 1 && expr.Exprs.Count != 2)
+				throw new FCompilationException($"{expr.Span} - Standard function compl takes one or two parameter");
+			
+			var real = expr.Exprs[0];
+			var img = expr.Exprs.Count == 2 ? expr.Exprs[1] : new RealValue(0);
+		
+			FType realType = real.GetValueType(st);
+			FType imgType = img.GetValueType(st);
+
+			// the type is expected to be corrected at run time (Integer or Real)
+			if(!((realType is RealType || realType is IntegerType) && (imgType is RealType || imgType is IntegerType)))
+				throw new FCompilationException($"{expr.Span} -  Standard function compl cannot be used on type {realType} and {imgType}");
+
+			real.Generate(generator, currentType, st);
+			img.Generate(generator, currentType, st);
+			generator.Emit(OpCodes.Call, typeof(FComplex).GetMethod("Compl"));
+		}
 	}
 }
