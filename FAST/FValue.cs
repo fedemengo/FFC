@@ -36,7 +36,7 @@ namespace FFC.FAST
     {
         public int Value {get; set;}
 
-        public IntegerValue(int value, TextSpan span)
+        public IntegerValue(int value, TextSpan span = null)
         {
             ValueType = new IntegerType();
             Value = value;

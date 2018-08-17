@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using FFC.FAST;
+using FFC.FRunTime;
 
 namespace FFC.FGen
 {
@@ -22,7 +24,7 @@ namespace FFC.FGen
 		//List of methods to Emit all custom functions
 		public static void EmitLength(ExpressionList expr, ILGenerator generator, TypeBuilder currentType, SymbolTable st)
 		{
-			if(expr.Exprs.Count > 1)
+			if(expr.Exprs.Count != 1)
 				throw new FCompilationException($"{expr.Span} - Standard function length takes a single parameter");
 			//The object we need to get length of
 			var e = expr.Exprs[0];
@@ -38,7 +40,7 @@ namespace FFC.FGen
 
 		public static void EmitRound(ExpressionList expr, ILGenerator generator, TypeBuilder currentType, SymbolTable st)
 		{
-			if(expr.Exprs.Count > 1)
+			if(expr.Exprs.Count != 1)
 				throw new FCompilationException($"{expr.Span} - Standard function round takes a single parameter");
 
 			var e = expr.Exprs[0];
@@ -51,5 +53,24 @@ namespace FFC.FGen
 			generator.Emit(OpCodes.Callvirt, (t.GetRunTimeType()).GetMethod("Round"));
 			// the correct integer type is now on the stack
 		}
+
+		public static void EmitRat(ExpressionList expr, ILGenerator generator, TypeBuilder currentType, SymbolTable st)
+		{
+			if(expr.Exprs.Count != 1 && expr.Exprs.Count != 2)
+				throw new FCompilationException($"{expr.Span} - Standard function rat takes one or two parameter");
+			
+			var num = expr.Exprs[0];
+			var den = expr.Exprs.Count == 2 ? expr.Exprs[1] : new IntegerValue(1);	
+			FType numType = num.GetValueType(st);
+			FType denType = den.GetValueType(st);
+
+			if(numType is IntegerType == false || denType is IntegerType == false)
+				throw new FCompilationException($"{expr.Span} -  Standard function ran cannot be used on type {numType} and {denType}");
+
+			num.Generate(generator, currentType, st);
+			den.Generate(generator, currentType, st);
+            generator.Emit(OpCodes.Call, typeof(FRational).GetMethod("Rat"));
+		}
+
 	}
 }

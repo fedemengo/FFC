@@ -17,6 +17,8 @@ namespace FFC.FRunTime
         private static FRational Inverse(FRational r1) => new FRational(r1.Denominator, r1.Numerator);
         private FReal Value() => new FReal(Numerator / (double)Denominator);
 
+        public static FRational Rat(FInteger n, FInteger d) => new FRational(n.Value, d.Value);
+
         public static FRational operator +(FRational r1, FRational r2)
         {
             int gcd = GCD(r1.Denominator, r2.Denominator);

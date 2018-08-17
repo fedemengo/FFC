@@ -13,4 +13,13 @@ main is func() do
     print x + round(b + c);     // 1 + 3
     print x + round(d);     // 1 + 0
     print x + round(e);     // 1 + 1    
+
+    print rat(1);
+    print rat(0);
+    print rat(3);
+    print rat(3, 1);
+    print rat(6, 2);
+    z is rat(3, 2) + rat(1, 3);
+    print z + rat(2, 9);
+    print rat(x, 1);
 end
