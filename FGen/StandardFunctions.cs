@@ -18,7 +18,7 @@ namespace FFC.FGen
 			{"denom", new IntegerType()},   //Denominator of a rational
 			{"compl", new ComplexType()},   //Creates complex from two or one integer/real
 			{"rat", new RationalType()},    //Creates a rational from two or one integer
-			{"norm", new RationalType()}    //Normalizes the rational number
+			//{"norm", new RationalType()}    //As rational are normalized at each step, this function would be useless
 		};
 
 		//List of methods to Emit all custom functions
@@ -90,6 +90,30 @@ namespace FFC.FGen
 			real.Generate(generator, currentType, st);
 			img.Generate(generator, currentType, st);
 			generator.Emit(OpCodes.Call, typeof(FComplex).GetMethod("Compl"));
+		}
+
+		public static void EmitRe(ExpressionList expr, ILGenerator generator, TypeBuilder currentType, SymbolTable st)
+		{
+			if(expr.Exprs.Count > 1)
+				throw new FCompilationException($"{expr.Span} - Standard function re takes a single parameter");
+			var e = expr.Exprs[0];
+			var t = e.GetValueType(st);
+			if(t is ComplexType == false)			
+				throw new FCompilationException($"{expr.Span} - Standard function re cannot be used on type {t}");
+			e.Generate(generator, currentType, st);
+			generator.Emit(OpCodes.Callvirt, (t.GetRunTimeType()).GetMethod("Re"));
+		}
+
+		public static void EmitIm(ExpressionList expr, ILGenerator generator, TypeBuilder currentType, SymbolTable st)
+		{
+			if(expr.Exprs.Count > 1)
+				throw new FCompilationException($"{expr.Span} - Standard function im takes a single parameter");
+			var e = expr.Exprs[0];
+			var t = e.GetValueType(st);
+			if(t is ComplexType == false)			
+				throw new FCompilationException($"{expr.Span} - Standard function im cannot be used on type {t}");
+			e.Generate(generator, currentType, st);
+			generator.Emit(OpCodes.Callvirt, (t.GetRunTimeType()).GetMethod("Im"));
 		}
 	}
 }

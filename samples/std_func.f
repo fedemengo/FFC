@@ -32,4 +32,8 @@ main is func() do
     print compl(x, b);
     print compl(round(aReal()));
 
+    print re(compl(4, -3));
+    print im(compl(3.3, -2.5));
+    print im(compl(0));
+
 end

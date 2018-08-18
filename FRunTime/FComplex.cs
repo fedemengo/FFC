@@ -71,7 +71,6 @@ namespace FFC.FRunTime
             return new FComplex(real, img);
         }
         //Refer to FInteger Read function
-        //I no longer like that we need to have REAL i REAL, I think we should also support INT i INT
         public static FComplex Read()
         {
             string l = Console.ReadLine();
@@ -89,5 +88,7 @@ namespace FFC.FRunTime
             Real = other.Real;
         }
 
+        public FReal Re() => new FReal(Real);
+        public FReal Im() => new FReal(Imaginary);
     }
 }
