@@ -15,7 +15,7 @@ A compiler for the F language (and it's definition)
 	* Print tuple names when specified
 	* Improve Read() RunTime function
 		* Consider Buffer approach
-		* More precise "type checking"
+		* More flexible "type checking" (trim whitespaces and the like)
 		* Consider reading advanced types (arrays, tuples, maps)
 		* Allow `\`-escaped characters in string read ?
 	* Load external library from another folder
@@ -64,7 +64,7 @@ A compiler for the F language (and it's definition)
 	- [x] Assignments
 	- [x] Numeric types
 		- [x] Operators
-	- [ ] Standard library functions
+	- [x] Standard library functions
 	- [x] Arrays
 		- [x] Empty arrays
 		- [x] Concatenation
