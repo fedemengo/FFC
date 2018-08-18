@@ -36,4 +36,7 @@ main is func() do
     print im(compl(3.3, -2.5));
     print im(compl(0));
 
+    print num(rat(3, 4));
+    print denom(3\4);
+
 end

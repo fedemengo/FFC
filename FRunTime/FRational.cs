@@ -80,5 +80,8 @@ namespace FFC.FRunTime
             Numerator = other.Numerator;
             Denominator = other.Denominator;
         }
+
+        public FInteger Num() => new FInteger(Numerator);
+        public FInteger Denom() => new FInteger(Denominator);
     }
 }

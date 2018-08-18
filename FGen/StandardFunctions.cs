@@ -115,5 +115,28 @@ namespace FFC.FGen
 			e.Generate(generator, currentType, st);
 			generator.Emit(OpCodes.Callvirt, (t.GetRunTimeType()).GetMethod("Im"));
 		}
+		public static void EmitNum(ExpressionList expr, ILGenerator generator, TypeBuilder currentType, SymbolTable st)
+		{
+			if(expr.Exprs.Count > 1)
+				throw new FCompilationException($"{expr.Span} - Standard function num takes a single parameter");
+			var e = expr.Exprs[0];
+			var t = e.GetValueType(st);
+			if(t is RationalType == false)			
+				throw new FCompilationException($"{expr.Span} - Standard function num cannot be used on type {t}");
+			e.Generate(generator, currentType, st);
+			generator.Emit(OpCodes.Callvirt, (t.GetRunTimeType()).GetMethod("Num"));
+		}
+
+		public static void EmitDenom(ExpressionList expr, ILGenerator generator, TypeBuilder currentType, SymbolTable st)
+		{
+			if(expr.Exprs.Count > 1)
+				throw new FCompilationException($"{expr.Span} - Standard function denom takes a single parameter");
+			var e = expr.Exprs[0];
+			var t = e.GetValueType(st);
+			if(t is RationalType == false)			
+				throw new FCompilationException($"{expr.Span} - Standard function denom cannot be used on type {t}");
+			e.Generate(generator, currentType, st);
+			generator.Emit(OpCodes.Callvirt, (t.GetRunTimeType()).GetMethod("Denom"));
+		}
 	}
 }

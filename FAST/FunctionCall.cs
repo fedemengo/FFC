@@ -64,6 +64,12 @@ namespace FFC.FAST
                     case "im":
                         StandardFunctions.EmitIm(ExprsList, generator, currentType, st);
                         break;
+                    case "num":
+                        StandardFunctions.EmitNum(ExprsList, generator, currentType, st);
+                        break;
+                    case "denom":
+                        StandardFunctions.EmitDenom(ExprsList, generator, currentType, st);
+                        break;
                     default:
                         throw new FCompilationException($"{Span} - Standard function {(ToCall as Identifier).Name} not implemented yet");
                 }
