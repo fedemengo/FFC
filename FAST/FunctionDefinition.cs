@@ -146,7 +146,7 @@ namespace FFC.FAST
             t.ReturnType = Body.GetValueType(st);
 
             //if there is not a type caught, we either can't resolve it or it's a void function
-            //i think it's ok to tag it as void and let other built in exception find possible problems
+            //I think it's ok to tag it as void and let other built in exception find possible problems
             //TODO: check all cases
             //also, we append a return at the end of the function
             if(t.ReturnType == null)

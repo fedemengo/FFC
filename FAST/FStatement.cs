@@ -235,6 +235,11 @@ namespace FFC.FAST
             
             FType t = Expr.GetValueType(st);
 
+            //Voids cannot be assigned
+            if(t is VoidType || t is DeducedVoidType)
+                throw new FCompilationException($"{Span} - Variables of type {t} cannot be declared.");
+
+
             if(Type != null && FType.SameType(Type, t) == false)
                 throw new FCompilationException($"{Span} - Type {t.GetRunTimeType().Name} doesn't match declaration {Type.GetRunTimeType().Name}");
             

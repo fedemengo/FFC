@@ -367,6 +367,6 @@ namespace FFC.FAST
     }
     public class DeducedVoidType : VoidType
     {
-        public override string ToString() => "VoidType";
+        public override string ToString() => "DeducedVoidType";
     }
 }

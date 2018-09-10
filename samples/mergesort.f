@@ -51,4 +51,3 @@ main is func() do
 	s is mergesort(v);
 	print s;
 end
-
